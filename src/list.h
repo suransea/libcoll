@@ -25,6 +25,8 @@ size_t list_len(List *list);
 
 int list_index_of(List *list, void *data);
 
+int list_find(List *list, bool (*pred)(void *));
+
 void *list_remove(List *list, void *data);
 
 size_t list_remove_all(List *list, void *data);
@@ -48,6 +50,8 @@ void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *));
 void list_foreach(List *list, void(*visit)(void *));
 
 void list_sort(List *list, int(*cmp)(void *, void *));
+
+void list_reverse(List *list);
 
 void list_clear(List *list);
 

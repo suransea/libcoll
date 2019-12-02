@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "../src/list.h"
 #include "../src/queue.h"
 
@@ -69,6 +70,15 @@ void test_list() {
     print_list(list);
 
     printf("count:%u ", list_remove_all(list, "b"));
+    print_list(list);
+
+    printf("index:%d ", list_find(list, equal_1d));
+    printf("index:%d ", list_index_of(list, "g"));
+
+    list_sort(list, cmp_str);
+    print_list(list);
+
+    list_reverse(list);
     print_list(list);
 
     list_free(list);
