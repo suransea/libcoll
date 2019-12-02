@@ -16,7 +16,7 @@ Set *set_new() {
     return set;
 }
 
-bool set_put(Set *set, void *data) {
+bool set_insert(Set *set, void *data) {
     if (set_contains(set, data)) {
         return false;
     }
@@ -25,6 +25,6 @@ bool set_put(Set *set, void *data) {
 }
 
 bool set_contains(Set *set, void *data) {
-    Node *node = list_find(set->list, data);
-    return node != NULL;
+    int index = list_index_of(set->list, data);
+    return index >= 0;
 }

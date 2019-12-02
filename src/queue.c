@@ -20,11 +20,11 @@ void queue_enqueue(Queue *queue, void *data) {
 }
 
 void *queue_dequeue(Queue *queue) {
-    if (queue->list->len == 0) {
+    if (list_len(queue->list) == 0) {
         return NULL;
     }
-    void *data = list_front(queue->list)->data;
-    list_remove(queue->list, data);
+    void *data = list_front(queue->list);
+    list_remove_front(queue->list);
     return data;
 }
 
@@ -37,5 +37,5 @@ void *queue_back(Queue *queue) {
 }
 
 bool queue_empty(Queue *queue) {
-    return queue->list->len == 0;
+    return list_len(queue->list) == 0;
 }

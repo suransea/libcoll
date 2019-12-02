@@ -7,4 +7,4 @@ aux_source_directory(src SOURCE)
 
 add_library(${PROJECT_NAME} ${SOURCE})
 
-add_executable(test ${SOURCE})
+add_executable(tests tests/test.c ${SOURCE})

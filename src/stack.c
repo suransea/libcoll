@@ -21,21 +21,21 @@ void stack_push(Stack *stack, void *data) {
 }
 
 void *stack_pop(Stack *stack) {
-    if (stack->list->len == 0) {
+    if (list_len(stack->list) == 0) {
         return NULL;
     }
-    void *data = list_front(stack->list)->data;
-    list_remove(stack->list, data);
+    void *data = list_front(stack->list);
+    list_remove_front(stack->list);
     return data;
 }
 
 void *stack_peek(Stack *stack) {
-    if (stack->list->len == 0) {
+    if (list_len(stack->list) == 0) {
         return NULL;
     }
-    return list_front(stack->list)->data;
+    return list_front(stack->list);
 }
 
 bool stack_empty(Stack *stack) {
-    return stack->list == NULL;
+    return list_len(stack->list) == 0;
 }

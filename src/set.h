@@ -11,7 +11,7 @@ typedef struct _set Set;
 
 Set *set_new();
 
-bool set_put(Set *set, void *data);
+bool set_insert(Set *set, void *data);
 
 bool set_contains(Set *set, void *data);
 
