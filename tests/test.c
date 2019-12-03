@@ -101,12 +101,12 @@ void print_dict(Dict *dict) {
 void test_dict() {
     Dict *dict = dict_new_custom(0, hash_str, equal_str);
     print_dict(dict);
-    dict_insert(dict, "name", "Alice");
-    dict_insert(dict, "age", "10");
-    dict_insert(dict, "age", "11");
-    dict_insert(dict, "a", "d");
-    dict_insert(dict, "b", "e");
-    dict_insert(dict, "c", "f");
+    dict_add(dict, "name", "Alice");
+    dict_add(dict, "age", "10");
+    dict_add(dict, "age", "11");
+    dict_add(dict, "a", "d");
+    dict_add(dict, "b", "e");
+    dict_add(dict, "c", "f");
     print_dict(dict);
     print_str(dict_value_of(dict, "name"));
     print_str(dict_value_of(dict, "not_exist"));

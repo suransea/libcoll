@@ -15,7 +15,7 @@ Dict *dict_new(size_t cap);
 
 Dict *dict_new_custom(size_t cap, unsigned (*hash)(void *key), bool (*equal)(void *, void *));
 
-void *dict_insert(Dict *dict, void *key, void *value);
+void *dict_add(Dict *dict, void *key, void *value);
 
 void *dict_value_of(Dict *dict, void *key);
 
@@ -27,7 +27,9 @@ size_t dict_size(Dict *dict);
 
 bool dict_empty(Dict *dict);
 
-bool dict_contains(Dict *dict, void *key);
+bool dict_contains_key(Dict *dict, void *key);
+
+bool dict_contains_value(Dict *dict, void *value);
 
 void *dict_remove(Dict *dict, void *key);
 
