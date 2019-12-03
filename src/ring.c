@@ -91,7 +91,7 @@ Ring *ring_remove_all(Ring *ring, void *data) {
     return ring;
 }
 
-Ring *list_remove_if(Ring *ring, bool (*pred)(void *)) {
+Ring *ring_remove_if(Ring *ring, bool (*pred)(void *)) {
     if (!ring) {
         return NULL;
     }

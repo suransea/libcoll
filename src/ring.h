@@ -23,7 +23,7 @@ Ring *ring_remove(Ring *ring, void *data);
 
 Ring *ring_remove_all(Ring *ring, void *data);
 
-Ring *list_remove_if(Ring *ring, bool (*pred)(void *));
+Ring *ring_remove_if(Ring *ring, bool (*pred)(void *));
 
 size_t ring_len(Ring *ring);
 
