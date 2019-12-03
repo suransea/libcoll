@@ -3,7 +3,6 @@
 //
 
 #include <stdlib.h>
-#include <assert.h>
 #include "vector.h"
 
 struct _vector {
@@ -13,7 +12,9 @@ struct _vector {
 };
 
 Vector *vector_new(size_t cap) {
-    assert(cap > 0);
+    if (cap <= 0) {
+        cap = 1;
+    }
     Vector *vector = malloc(sizeof(Vector));
     vector->data = malloc(cap * sizeof(void *));
     vector->cap = cap;
