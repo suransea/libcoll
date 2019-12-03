@@ -11,8 +11,18 @@ typedef struct _set Set;
 
 Set *set_new();
 
-bool set_insert(Set *set, void *data);
+bool set_add(Set *set, void *data);
 
 bool set_contains(Set *set, void *data);
+
+size_t set_size(Set *set);
+
+bool set_empty(Set *set);
+
+void set_foreach(Set *set, void(*visit)(void *));
+
+void set_clear(Set *set);
+
+void set_free(Set *set);
 
 #endif //LIBCOLL_SET_H

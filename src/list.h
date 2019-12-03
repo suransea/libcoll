@@ -23,6 +23,8 @@ void *list_at(List *list, int index);
 
 size_t list_len(List *list);
 
+bool list_empty(List *list);
+
 int list_index_of(List *list, void *data);
 
 int list_find(List *list, bool (*pred)(void *));

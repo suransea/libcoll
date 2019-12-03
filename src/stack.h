@@ -19,4 +19,8 @@ void *stack_peek(Stack *stack);
 
 bool stack_empty(Stack *stack);
 
+void stack_clear(Stack*stack);
+
+void stack_free(Stack*stack);
+
 #endif //LIBCOLL_STACK_H

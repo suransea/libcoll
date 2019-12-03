@@ -16,7 +16,7 @@ Set *set_new() {
     return set;
 }
 
-bool set_insert(Set *set, void *data) {
+bool set_add(Set *set, void *data) {
     if (set_contains(set, data)) {
         return false;
     }
@@ -27,4 +27,25 @@ bool set_insert(Set *set, void *data) {
 bool set_contains(Set *set, void *data) {
     int index = list_index_of(set->list, data);
     return index >= 0;
+}
+
+size_t set_size(Set *set) {
+    return list_len(set->list);
+}
+
+bool set_empty(Set *set) {
+    return set_size(set) == 0;
+}
+
+void set_foreach(Set *set, void(*visit)(void *)) {
+    list_foreach(set->list, visit);
+}
+
+void set_clear(Set *set) {
+    list_clear(set->list);
+}
+
+void set_free(Set *set) {
+    list_free(set->list);
+    free(set);
 }

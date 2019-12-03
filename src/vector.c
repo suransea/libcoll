@@ -46,15 +46,30 @@ void *vector_at(Vector *vector, int index) {
     return vector->data[index];
 }
 
-void vector_assign(Vector *vector, int index, void *data) {
+void *vector_assign(Vector *vector, int index, void *data) {
     if (index >= vector->len) {
-        return;
+        return NULL;
     }
+    void *old = vector->data[index];
     vector->data[index] = data;
+    return old;
 }
 
 void vector_foreach(Vector *vector, void(*visit)(void *)) {
     for (int i = 0; i < vector->len; ++i) {
         visit(vector->data[i]);
     }
+}
+
+bool vector_empty(Vector *vector) {
+    return vector->len == 0;
+}
+
+void vector_clear(Vector *vector) {
+    vector->len = 0;
+}
+
+void vector_free(Vector *vector) {
+    free(vector->data);
+    free(vector);
 }

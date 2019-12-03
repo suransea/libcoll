@@ -37,5 +37,14 @@ void *stack_peek(Stack *stack) {
 }
 
 bool stack_empty(Stack *stack) {
-    return list_len(stack->list) == 0;
+    return list_empty(stack->list);
+}
+
+void stack_clear(Stack *stack) {
+    list_clear(stack->list);
+}
+
+void stack_free(Stack *stack) {
+    list_free(stack->list);
+    free(stack);
 }

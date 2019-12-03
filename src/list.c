@@ -103,6 +103,10 @@ size_t list_len(List *list) {
     return list->len;
 }
 
+bool list_empty(List *list) {
+    return list_len(list) == 0;
+}
+
 int list_index_of(List *list, void *data) {
     int index = 0;
     LNode *cur = list->head->next;

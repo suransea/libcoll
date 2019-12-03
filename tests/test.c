@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "../src/list.h"
+#include "../src/dict.h"
 #include "../src/queue.h"
 
 void print_str(void *data) {
@@ -81,10 +82,39 @@ void test_list() {
     list_reverse(list);
     print_list(list);
 
+    printf("empty:%d ", list_empty(list));
+    list_clear(list);
+    printf("empty:%d ", list_empty(list));
+
     list_free(list);
 }
 
+void print_kv(void *k, void *v) {
+    printf("\n%s: %s\n", k, v);
+}
+
+void print_dict(Dict *dict) {
+    printf("\nempty: %d, size: %u\n", dict_empty(dict), dict_size(dict));
+    dict_foreach(dict, print_kv);
+}
+
+void test_dict() {
+    Dict *dict = dict_new_custom(0, hash_str, equal_str);
+    print_dict(dict);
+    dict_insert(dict, "name", "Alice");
+    dict_insert(dict, "age", "10");
+    dict_insert(dict, "age", "11");
+    dict_insert(dict, "a", "d");
+    dict_insert(dict, "b", "e");
+    dict_insert(dict, "c", "f");
+    print_dict(dict);
+    print_str(dict_value_of(dict, "name"));
+    print_str(dict_value_of(dict, "not_exist"));
+}
+
+#define test test_dict();
+
 int main() {
-    test_list();
+    test
     return 0;
 }
