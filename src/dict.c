@@ -241,7 +241,7 @@ void dict_free(Dict *dict) {
     free(dict);
 }
 
-// hash and equal function
+// hash and equal functions
 
 unsigned hash_ptr(void *val) {
     return (unsigned) val;

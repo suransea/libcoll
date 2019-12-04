@@ -40,7 +40,7 @@ void dict_foreach(Dict *dict, void(*visit)(void *key, void *value));
 void dict_free(Dict *dict);
 
 
-// hash and equal function
+// hash and equal functions
 
 unsigned hash_ptr(void *);
 
