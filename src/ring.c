@@ -112,7 +112,7 @@ Ring *ring_remove_if(Ring *ring, bool (*pred)(void *)) {
     return ring;
 }
 
-size_t ring_len(Ring *ring) {
+size_t ring_size(Ring *ring) {
     if (!ring) {
         return 0;
     }

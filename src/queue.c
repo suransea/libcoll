@@ -15,12 +15,12 @@ Queue *queue_new() {
     return queue;
 }
 
-void queue_enqueue(Queue *queue, void *data) {
+void queue_push(Queue *queue, void *data) {
     list_append(queue->list, data);
 }
 
-void *queue_dequeue(Queue *queue) {
-    if (list_len(queue->list) == 0) {
+void *queue_pop(Queue *queue) {
+    if (list_size(queue->list) == 0) {
         return NULL;
     }
     void *data = list_front(queue->list);
@@ -37,5 +37,14 @@ void *queue_back(Queue *queue) {
 }
 
 bool queue_empty(Queue *queue) {
-    return list_len(queue->list) == 0;
+    return list_size(queue->list) == 0;
+}
+
+size_t queue_size(Queue *queue) {
+    return list_size(queue->list);
+}
+
+void queue_free(Queue *queue) {
+    list_free(queue->list);
+    free(queue);
 }

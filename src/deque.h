@@ -16,7 +16,7 @@ void deque_append(Deque *deque, void *data);
 
 void deque_prepend(Deque *deque, void *data);
 
-size_t deque_len(Deque *deque);
+size_t deque_size(Deque *deque);
 
 void *deque_at(Deque *deque, int index);
 

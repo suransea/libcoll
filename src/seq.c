@@ -32,7 +32,7 @@ Seq *seq_last(Seq *seq) {
     return seq;
 }
 
-size_t seq_len(Seq *seq) {
+size_t seq_size(Seq *seq) {
     if (!seq)return 0;
     int len = 0;
     while (seq) {

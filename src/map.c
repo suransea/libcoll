@@ -418,7 +418,6 @@ void *map_remove(Map *map, void *key) {
             } else if (entry == entry->parent->right) {
                 entry->parent->right = NULL;
             }
-            entry->parent = NULL;
         }
     }
     free(entry);

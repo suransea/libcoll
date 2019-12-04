@@ -12,14 +12,18 @@ typedef struct _queue Queue;
 
 Queue *queue_new();
 
-void queue_enqueue(Queue *queue, void *data);
+void queue_push(Queue *queue, void *data);
 
-void *queue_dequeue(Queue *queue);
+void *queue_pop(Queue *queue);
 
 void *queue_front(Queue *queue);
 
 void *queue_back(Queue *queue);
 
 bool queue_empty(Queue *queue);
+
+size_t queue_size(Queue *queue);
+
+void queue_free(Queue *queue);
 
 #endif //LIBCOLL_QUEUE_H

@@ -21,7 +21,7 @@ void *list_back(List *list);
 
 void *list_at(List *list, int index);
 
-size_t list_len(List *list);
+size_t list_size(List *list);
 
 bool list_empty(List *list);
 

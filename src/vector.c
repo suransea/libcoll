@@ -36,7 +36,7 @@ void vector_append(Vector *vector, void *data) {
     ++(vector->len);
 }
 
-size_t vector_len(Vector *vector) {
+size_t vector_size(Vector *vector) {
     return vector->len;
 }
 

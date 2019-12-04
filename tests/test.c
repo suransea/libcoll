@@ -21,7 +21,7 @@ bool equal_1d(void *data) {
 }
 
 void print_list(List *list) {
-    printf("\n\nlen: %u\n", list_len(list));
+    printf("\n\nlen: %u\n", list_size(list));
     list_foreach(list, print_str);
     printf("\n\n");
 }
@@ -41,7 +41,7 @@ void test_list() {
     print_str(list_at(list, 3));
     print_str(list_front(list));
     print_str(list_back(list));
-    for (int i = 0; i < list_len(list); ++i) {
+    for (int i = 0; i < list_size(list); ++i) {
         print_str(list_at(list, i));
     }
 
@@ -118,7 +118,7 @@ void test_ring() {
     Ring *ring = ring_new(5);
     ring->data = "a";
     ring_insert(ring, "b");
-    printf(" %u ", ring_len(ring));
+    printf(" %u ", ring_size(ring));
     ring_foreach(ring_move(ring, 0), print_str);
     ring = ring_remove(ring, "a");
     ring_foreach(ring_move(ring, 0), print_str);
@@ -163,7 +163,7 @@ void test_set() {
 int main() {
     //test_list();
     //test_dict();
-    //test_map();
-    test_set();
+    test_map();
+    //test_set();
     return 0;
 }

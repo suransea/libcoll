@@ -25,7 +25,7 @@ Ring *ring_remove_all(Ring *ring, void *data);
 
 Ring *ring_remove_if(Ring *ring, bool (*pred)(void *));
 
-size_t ring_len(Ring *ring);
+size_t ring_size(Ring *ring);
 
 Ring *ring_move(Ring *ring, int n);
 

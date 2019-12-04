@@ -21,7 +21,7 @@ Seq *seq_prepend(Seq *seq, void *data);
 
 Seq *seq_last(Seq *seq);
 
-size_t seq_len(Seq *seq);
+size_t seq_size(Seq *seq);
 
 Seq *seq_next(Seq *seq);
 

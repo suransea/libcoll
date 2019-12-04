@@ -96,7 +96,7 @@ void *list_at(List *list, int index) {
     return _list_at(list, index)->data;
 }
 
-size_t list_len(List *list) {
+size_t list_size(List *list) {
     if (!list) {
         return 0;
     }
@@ -104,7 +104,7 @@ size_t list_len(List *list) {
 }
 
 bool list_empty(List *list) {
-    return list_len(list) == 0;
+    return list_size(list) == 0;
 }
 
 int list_index_of(List *list, void *data) {

@@ -14,7 +14,7 @@ Vector *vector_new(size_t cap);
 
 void vector_append(Vector *vector, void *data);
 
-size_t vector_len(Vector *vector);
+size_t vector_size(Vector *vector);
 
 void *vector_at(Vector *vector, int index);
 

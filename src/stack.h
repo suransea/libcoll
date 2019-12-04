@@ -17,10 +17,12 @@ void *stack_pop(Stack *stack);
 
 void *stack_peek(Stack *stack);
 
+size_t stack_size(Stack *stack);
+
 bool stack_empty(Stack *stack);
 
-void stack_clear(Stack*stack);
+void stack_clear(Stack *stack);
 
-void stack_free(Stack*stack);
+void stack_free(Stack *stack);
 
 #endif //LIBCOLL_STACK_H
