@@ -434,7 +434,7 @@ void map_clear(Map *map) {
         cur = _entry_prev(cur);
     }
     seq_foreach(seq, free);
-    free(seq);
+    seq_free(seq);
     map->root = NULL;
     map->size = 0;
 }
