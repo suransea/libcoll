@@ -100,12 +100,12 @@ void print_dict(Dict *dict) {
 void test_dict() {
     Dict *dict = dict_new_custom(0, hash_str, equal_str);
     print_dict(dict);
-    dict_add(dict, "name", "Alice");
-    dict_add(dict, "age", "10");
-    dict_add(dict, "age", "11");
-    dict_add(dict, "a", "d");
-    dict_add(dict, "b", "e");
-    dict_add(dict, "c", "f");
+    dict_insert(dict, "name", "Alice");
+    dict_insert(dict, "age", "10");
+    dict_insert(dict, "age", "11");
+    dict_insert(dict, "a", "d");
+    dict_insert(dict, "b", "e");
+    dict_insert(dict, "c", "f");
     print_dict(dict);
     print_str(dict_value_of(dict, "name"));
     print_str(dict_value_of(dict, "not_exist"));
@@ -133,12 +133,12 @@ void print_map(Map *map) {
 void test_map() {
     Map *map = map_new_custom(cmp_str);
     print_map(map);
-    map_add(map, "name", "Alice");
-    map_add(map, "age", "10");
-    map_add(map, "age", "11");
-    map_add(map, "a", "d");
-    map_add(map, "b", "e");
-    map_add(map, "c", "f");
+    map_insert(map, "name", "Alice");
+    map_insert(map, "age", "10");
+    map_insert(map, "age", "11");
+    map_insert(map, "a", "d");
+    map_insert(map, "b", "e");
+    map_insert(map, "c", "f");
     print_map(map);
     print_str(map_value_of(map, "name"));
     print_str(map_value_of(map, "not_exist"));

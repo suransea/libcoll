@@ -26,7 +26,7 @@ bool set_add(Set *set, void *data) {
     if (set_contains(set, data)) {
         return false;
     }
-    map_add(set->map, data, data);
+    map_insert(set->map, data, data);
     return true;
 }
 

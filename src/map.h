@@ -15,7 +15,7 @@ Map *map_new();
 
 Map *map_new_custom(int (*cmp)(void *, void *));
 
-void *map_add(Map *map, void *key, void *value);
+void *map_insert(Map *map, void *key, void *value);
 
 void *map_value_of(Map *map, void *key);
 

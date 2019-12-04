@@ -179,7 +179,7 @@ static inline void dye(Entry *entry, Color color) {
 
 // inline functions end
 
-static void _map_balance_add(Map *map, Entry *entry) {
+static void _map_balance_insert(Map *map, Entry *entry) {
     dye(entry, RED);
     while (entry && entry != map->root && entry->parent->color == RED) {
         if (parent(entry) == left(parent(parent(entry)))) {
@@ -292,7 +292,7 @@ Map *map_new_custom(int (*cmp)(void *, void *)) {
     return map;
 }
 
-void *map_add(Map *map, void *key, void *value) {
+void *map_insert(Map *map, void *key, void *value) {
     Entry *cur = map->root;
     if (!cur) {
         map->root = _entry_new(key, value, NULL);
@@ -320,7 +320,7 @@ void *map_add(Map *map, void *key, void *value) {
     } else {
         parent->right = entry;
     }
-    _map_balance_add(map, entry);
+    _map_balance_insert(map, entry);
     ++(map->size);
     return NULL;
 }

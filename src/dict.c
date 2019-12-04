@@ -72,7 +72,7 @@ static void _dict_resize(Dict *dict) {
     dict->cap = cap_new;
 }
 
-static void _dict_add_entry(Dict *dict, int index, void *key, void *value, unsigned hash) {
+static void _dict_insert_entry(Dict *dict, int index, void *key, void *value, unsigned hash) {
     Entry *old = dict->entries[index];
     Entry *entry = malloc(sizeof(Entry));
     entry->key = key;
@@ -113,7 +113,7 @@ Dict *dict_new_custom(size_t cap, unsigned (*hash)(void *), bool (*equal)(void *
     return dict;
 }
 
-void *dict_add(Dict *dict, void *key, void *value) {
+void *dict_insert(Dict *dict, void *key, void *value) {
     unsigned hash = _hash_key(key, dict->hash);
     size_t index = hash & (dict->cap - 1);
     Entry *entry = dict->entries[index];
@@ -126,7 +126,7 @@ void *dict_add(Dict *dict, void *key, void *value) {
         }
         entry = entry->next;
     }
-    _dict_add_entry(dict, index, key, value, hash);
+    _dict_insert_entry(dict, index, key, value, hash);
     return NULL;
 }
 

@@ -15,7 +15,7 @@ Dict *dict_new(size_t cap);
 
 Dict *dict_new_custom(size_t cap, unsigned (*hash)(void *key), bool (*equal)(void *, void *));
 
-void *dict_add(Dict *dict, void *key, void *value);
+void *dict_insert(Dict *dict, void *key, void *value);
 
 void *dict_value_of(Dict *dict, void *key);
 
