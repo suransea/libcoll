@@ -67,7 +67,7 @@ Ring *ring_remove(Ring *ring, void *data) {
         }
         cur = cur->next;
     }
-    return NULL;
+    return ring;
 }
 
 Ring *ring_remove_all(Ring *ring, void *data) {
@@ -140,11 +140,11 @@ Ring *ring_move(Ring *ring, int n) {
 }
 
 void ring_foreach(Ring *ring, void(*visit)(void *)) {
-    visit(ring);
+    visit(ring->data);
     Ring *cur = ring->next;
     while (cur != ring) {
         Ring *next = cur->next;
-        visit(cur);
+        visit(cur->data);
         cur = next;
     }
 }

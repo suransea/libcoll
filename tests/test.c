@@ -8,6 +8,7 @@
 #include "../src/list.h"
 #include "../src/dict.h"
 #include "../src/queue.h"
+#include "../src/ring.h"
 
 void print_str(void *data) {
     printf("%s ", (char *) data);
@@ -112,7 +113,18 @@ void test_dict() {
     print_str(dict_value_of(dict, "not_exist"));
 }
 
-#define test test_dict();
+void test_ring() {
+    Ring *ring = ring_new(5);
+    ring->data = "a";
+    ring_insert(ring, "b");
+    printf(" %u ", ring_len(ring));
+    ring_foreach(ring_move(ring, 0), print_str);
+    ring = ring_remove(ring, "a");
+    ring_foreach(ring_move(ring, 0), print_str);
+    ring_free(ring);
+}
+
+#define test test_ring();
 
 int main() {
     test
