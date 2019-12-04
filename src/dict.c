@@ -6,7 +6,7 @@
 #include <string.h>
 #include "dict.h"
 
-typedef struct _entry Entry;
+typedef struct _d_entry Entry;
 
 struct _dict {
   Entry **entries;
@@ -16,7 +16,7 @@ struct _dict {
   bool (*equal)(void *, void *);
 };
 
-struct _entry {
+struct _d_entry {
   void *key;
   void *val;
   Entry *next;

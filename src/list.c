@@ -5,20 +5,20 @@
 #include <stdlib.h>
 #include "list.h"
 
-typedef struct _l_node LNode;
+typedef struct _l_node Node;
 
 struct _l_node {
   void *data;
-  LNode *prev, *next;
+  Node *prev, *next;
 };
 
 struct _list {
-  LNode *head;
+  Node *head;
   size_t len;
 };
 
-static void _list_insert(List *list, LNode *node, LNode *pos) {
-    LNode *next = pos->next;
+static void _list_insert(List *list, Node *node, Node *pos) {
+    Node *next = pos->next;
     pos->next = node;
     node->prev = pos;
     node->next = next;
@@ -26,15 +26,15 @@ static void _list_insert(List *list, LNode *node, LNode *pos) {
     ++(list->len);
 }
 
-static void _list_remove(List *list, LNode *node) {
+static void _list_remove(List *list, Node *node) {
     node->prev->next = node->next;
     node->next->prev = node->prev;
     free(node);
     --(list->len);
 }
 
-static LNode *_list_pos(List *list, void *data) {
-    LNode *cur = list->head->next;
+static Node *_list_pos(List *list, void *data) {
+    Node *cur = list->head->next;
     while (cur != list->head) {
         if (cur->data == data) {
             return cur;
@@ -44,8 +44,8 @@ static LNode *_list_pos(List *list, void *data) {
     return NULL;
 }
 
-static LNode *_list_at(List *list, int index) {
-    LNode *cur = list->head->next;
+static Node *_list_at(List *list, int index) {
+    Node *cur = list->head->next;
     for (int i = 0; i < index; ++i) {
         cur = cur->next;
     }
@@ -55,21 +55,21 @@ static LNode *_list_at(List *list, int index) {
 List *list_new() {
     List *list = malloc(sizeof(List));
     list->len = 0;
-    LNode *node = malloc(sizeof(LNode));
+    Node *node = malloc(sizeof(Node));
     list->head = node->prev = node->next = node;
     node->data = NULL;
     return list;
 }
 
 void *list_append(List *list, void *data) {
-    LNode *node = malloc(sizeof(LNode));
+    Node *node = malloc(sizeof(Node));
     node->data = data;
     _list_insert(list, node, list->head->prev);
     return data;
 }
 
 void *list_prepend(List *list, void *data) {
-    LNode *node = malloc(sizeof(LNode));
+    Node *node = malloc(sizeof(Node));
     node->data = data;
     _list_insert(list, node, list->head);
     return data;
@@ -109,7 +109,7 @@ bool list_empty(List *list) {
 
 int list_index_of(List *list, void *data) {
     int index = 0;
-    LNode *cur = list->head->next;
+    Node *cur = list->head->next;
     while (cur != list->head) {
         if (cur->data == data) {
             return index;
@@ -122,7 +122,7 @@ int list_index_of(List *list, void *data) {
 
 int list_find(List *list, bool (*pred)(void *)) {
     int index = 0;
-    LNode *cur = list->head->next;
+    Node *cur = list->head->next;
     while (cur != list->head) {
         if (pred(cur->data)) {
             return index;
@@ -134,7 +134,7 @@ int list_find(List *list, bool (*pred)(void *)) {
 }
 
 void *list_remove(List *list, void *data) {
-    LNode *node = _list_pos(list, data);
+    Node *node = _list_pos(list, data);
     if (node) {
         _list_remove(list, node);
         return data;
@@ -143,7 +143,7 @@ void *list_remove(List *list, void *data) {
 }
 
 size_t list_remove_all(List *list, void *data) {
-    LNode *node;
+    Node *node;
     size_t count = 0;
     while ((node = _list_pos(list, data)) != NULL) {
         _list_remove(list, node);
@@ -154,9 +154,9 @@ size_t list_remove_all(List *list, void *data) {
 
 size_t list_remove_if(List *list, bool (*pred)(void *)) {
     size_t count = 0;
-    LNode *cur = list->head->next;
+    Node *cur = list->head->next;
     while (cur != list->head) {
-        LNode *next = cur->next;
+        Node *next = cur->next;
         if (pred(cur->data)) {
             _list_remove(list, cur);
             ++count;
@@ -185,7 +185,7 @@ void *list_remove_back(List *list) {
 }
 
 void *list_remove_at(List *list, int index) {
-    LNode *node = _list_at(list, index);
+    Node *node = _list_at(list, index);
     if (node) {
         _list_remove(list, node);
         return node->data;
@@ -194,46 +194,46 @@ void *list_remove_at(List *list, int index) {
 }
 
 void *list_insert_before(List *list, void *data, void *pos) {
-    LNode *p = _list_pos(list, pos);
+    Node *p = _list_pos(list, pos);
     if (!p) {
         return NULL;
     }
-    LNode *node = malloc(sizeof(LNode));
+    Node *node = malloc(sizeof(Node));
     node->data = data;
     _list_insert(list, node, p->prev);
     return node;
 }
 
 void *list_insert_after(List *list, void *data, void *pos) {
-    LNode *p = _list_pos(list, pos);
+    Node *p = _list_pos(list, pos);
     if (!p) {
         return NULL;
     }
-    LNode *node = malloc(sizeof(LNode));
+    Node *node = malloc(sizeof(Node));
     node->data = data;
     _list_insert(list, node, p);
     return node;
 }
 
 void *list_insert_at(List *list, void *data, int index) {
-    LNode *pos = _list_at(list, index);
+    Node *pos = _list_at(list, index);
     if (!pos) {
         return NULL;
     }
-    LNode *node = malloc(sizeof(LNode));
+    Node *node = malloc(sizeof(Node));
     node->data = data;
     _list_insert(list, node, pos->prev);
     return node;
 }
 
 void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *)) {
-    LNode *cur = list->head->next;
+    Node *cur = list->head->next;
 
     if (cur == list->head) {
         return list_append(list, data);
     }
 
-    LNode *node = malloc(sizeof(LNode));
+    Node *node = malloc(sizeof(Node));
     node->data = data;
 
     int result = cmp(data, cur->data);
@@ -252,7 +252,7 @@ void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *)) {
 }
 
 void list_foreach(List *list, void(*visit)(void *)) {
-    LNode *cur = list->head->next;
+    Node *cur = list->head->next;
     while (cur != list->head) {
         visit(cur->data);
         cur = cur->next;
@@ -261,9 +261,9 @@ void list_foreach(List *list, void(*visit)(void *)) {
 
 void list_sort(List *list, int(*cmp)(void *, void *)) {
     List *tmp = list_new();
-    LNode *cur = list->head->next;
+    Node *cur = list->head->next;
     while (cur != list->head) {
-        LNode *next = cur->next;
+        Node *next = cur->next;
         list_insert_sorted(tmp, cur->data, cmp);
         _list_remove(list, cur);
         cur = next;
@@ -278,7 +278,7 @@ void list_reverse(List *list) {
     if (list->len == 0 || list->len == 1) {
         return;
     }
-    LNode *cur = list->head->next, *next;
+    Node *cur = list->head->next, *next;
     while (cur != list->head) {
         next = cur->next;
         cur->next = cur->prev;
@@ -291,9 +291,9 @@ void list_reverse(List *list) {
 }
 
 void list_clear(List *list) {
-    LNode *cur = list->head->next;
+    Node *cur = list->head->next;
     while (cur != list->head) {
-        LNode *next = cur->next;
+        Node *next = cur->next;
         _list_remove(list, cur);
         cur = next;
     }
