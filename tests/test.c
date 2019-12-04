@@ -9,13 +9,11 @@
 #include "../src/dict.h"
 #include "../src/queue.h"
 #include "../src/ring.h"
+#include "../src/map.h"
+#include "../src/set.h"
 
 void print_str(void *data) {
     printf("%s ", (char *) data);
-}
-
-int cmp_str(void *x, void *y) {
-    return -strcmp(x, y);
 }
 
 bool equal_1d(void *data) {
@@ -111,6 +109,9 @@ void test_dict() {
     print_dict(dict);
     print_str(dict_value_of(dict, "name"));
     print_str(dict_value_of(dict, "not_exist"));
+    dict_remove(dict, "age");
+    print_dict(dict);
+    dict_free(dict);
 }
 
 void test_ring() {
@@ -124,9 +125,45 @@ void test_ring() {
     ring_free(ring);
 }
 
-#define test test_ring();
+void print_map(Map *map) {
+    printf("\nempty: %d, size: %u\n", map_empty(map), map_size(map));
+    map_foreach(map, print_kv);
+}
+
+void test_map() {
+    Map *map = map_new_custom(cmp_str);
+    print_map(map);
+    map_add(map, "name", "Alice");
+    map_add(map, "age", "10");
+    map_add(map, "age", "11");
+    map_add(map, "a", "d");
+    map_add(map, "b", "e");
+    map_add(map, "c", "f");
+    print_map(map);
+    print_str(map_value_of(map, "name"));
+    print_str(map_value_of(map, "not_exist"));
+    map_remove(map, "age");
+    print_map(map);
+    map_clear(map);
+    print_map(map);
+    map_free(map);
+}
+
+void test_set() {
+    Set *set = set_new();
+    set_add(set, "a");
+    set_add(set, "a");
+    set_add(set, "a");
+    set_add(set, "a");
+    set_add(set, "b");
+    set_foreach(set, print_str);
+    set_free(set);
+}
 
 int main() {
-    test
+    //test_list();
+    //test_dict();
+    //test_map();
+    test_set();
     return 0;
 }

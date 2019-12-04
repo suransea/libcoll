@@ -1,3 +1,3 @@
 # libcoll
 
-Tiny collections implemented in ANSI C.
+Collections implemented in ANSI C.
