@@ -21,7 +21,7 @@ Seq *seq_prepend(Seq *seq, void *data) {
     Seq *node = malloc(sizeof(Seq));
     node->data = data;
     node->next = seq;
-    return seq;
+    return node;
 }
 
 Seq *seq_last(Seq *seq) {

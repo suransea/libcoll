@@ -12,7 +12,7 @@ struct _vector {
 };
 
 Vector *vector_new(size_t cap) {
-    if (cap <= 0) {
+    if (cap == 0) {
         cap = 1;
     }
     Vector *vector = malloc(sizeof(Vector));

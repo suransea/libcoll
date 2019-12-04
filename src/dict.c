@@ -8,19 +8,18 @@
 
 typedef struct _d_entry Entry;
 
+struct _d_entry {
+  void *key, *val;
+  Entry *next;
+  unsigned hash;
+};
+
 struct _dict {
   Entry **entries;
   size_t size;
   size_t cap;
   unsigned (*hash)(void *key);
   bool (*equal)(void *, void *);
-};
-
-struct _d_entry {
-  void *key;
-  void *val;
-  Entry *next;
-  unsigned hash;
 };
 
 const static size_t MAX_CAP = 1u << 30u; // for unsigned, maximum of powers of 2
@@ -144,7 +143,7 @@ Seq *dict_keys(Dict *dict) {
     for (int i = 0; i < dict->cap; ++i) {
         Entry *entry = dict->entries[i];
         while (entry) {
-            seq_prepend(seq, entry->key);
+            seq = seq_prepend(seq, entry->key);
             entry = entry->next;
         }
     }
@@ -156,7 +155,7 @@ Seq *dict_values(Dict *dict) {
     for (int i = 0; i < dict->cap; ++i) {
         Entry *entry = dict->entries[i];
         while (entry) {
-            seq_prepend(seq, entry->val);
+            seq = seq_prepend(seq, entry->val);
             entry = entry->next;
         }
     }
