@@ -11,7 +11,11 @@ typedef struct _set Set;
 
 Set *set_new();
 
+Set *set_new_custom(int(*cmp)(void *, void *));
+
 bool set_add(Set *set, void *data);
+
+void *set_remove(Set *set, void *data);
 
 bool set_contains(Set *set, void *data);
 

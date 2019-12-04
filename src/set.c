@@ -4,15 +4,21 @@
 
 #include <stdlib.h>
 #include "set.h"
-#include "list.h"
+#include "map.h"
 
 struct _set {
-  List *list;
+  Map *map;
 };
 
 Set *set_new() {
     Set *set = malloc(sizeof(Set));
-    set->list = list_new();
+    set->map = map_new();
+    return set;
+}
+
+Set *set_new_custom(int(*cmp)(void *, void *)) {
+    Set *set = malloc(sizeof(Set));
+    set->map = map_new_custom(cmp);
     return set;
 }
 
@@ -20,17 +26,20 @@ bool set_add(Set *set, void *data) {
     if (set_contains(set, data)) {
         return false;
     }
-    list_prepend(set->list, data);
+    map_add(set->map, data, data);
     return true;
 }
 
+void *set_remove(Set *set, void *data) {
+    return map_remove(set->map, data);
+}
+
 bool set_contains(Set *set, void *data) {
-    int index = list_index_of(set->list, data);
-    return index >= 0;
+    return map_contains_key(set->map, data);
 }
 
 size_t set_size(Set *set) {
-    return list_len(set->list);
+    return map_size(set->map);
 }
 
 bool set_empty(Set *set) {
@@ -38,14 +47,16 @@ bool set_empty(Set *set) {
 }
 
 void set_foreach(Set *set, void(*visit)(void *)) {
-    list_foreach(set->list, visit);
+    Seq *seq = map_keys(set->map);
+    seq_foreach(seq, visit);
+    seq_free(seq);
 }
 
 void set_clear(Set *set) {
-    list_clear(set->list);
+    map_clear(set->map);
 }
 
 void set_free(Set *set) {
-    list_free(set->list);
+    map_free(set->map);
     free(set);
 }
