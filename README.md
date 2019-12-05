@@ -2,7 +2,22 @@
 
 Collections implemented in ANSI C.
 
-[TOC]
+- [Linearity](#linearity)
+  - [list](#list)
+  - [vector](#vector)
+  - [deque](#deque)
+  - [seq](#seq)
+  - [ring](#ring)
+- [Association](#association)
+  - [map](#map)
+  - [dict](#dict)
+  - [set](#set)
+  - [pair](#pair)
+- [Adapter](#adapter)
+  - [stack](#stack)
+  - [queue](#queue)
+  - [heap](#heap)
+
 ## Linearity
 
 ### list
@@ -41,7 +56,7 @@ A set implemented with map.
 
 ### pair
 
-A pair contains twe pointer.
+A pair contains two pointers.
 
 ## Adapter
 
