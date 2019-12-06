@@ -48,7 +48,7 @@ static Node *_list_at(List *list, size_t index) {
     size_t index_r = list->len - index - 1;
     if (index_r < index) {
         Node *cur = list->head->prev;
-        for (int i = 0; i < index_r; ++i) {
+        for (long i = 0; i < index_r; ++i) {
             cur = cur->prev;
         }
         return cur;
@@ -116,7 +116,7 @@ bool list_empty(List *list) {
 }
 
 long list_index_of(List *list, void *data) {
-    int index = 0;
+    long index = 0;
     Node *cur = list->head->next;
     while (cur != list->head) {
         if (cur->data == data) {
@@ -129,7 +129,7 @@ long list_index_of(List *list, void *data) {
 }
 
 long list_find(List *list, bool (*pred)(void *)) {
-    int index = 0;
+    long index = 0;
     Node *cur = list->head->next;
     while (cur != list->head) {
         if (pred(cur->data)) {
@@ -209,7 +209,7 @@ void *list_insert_before(List *list, void *data, void *pos) {
     Node *node = malloc(sizeof(Node));
     node->data = data;
     _list_insert(list, node, p->prev);
-    return node;
+    return node->data;
 }
 
 void *list_insert_after(List *list, void *data, void *pos) {
@@ -220,7 +220,7 @@ void *list_insert_after(List *list, void *data, void *pos) {
     Node *node = malloc(sizeof(Node));
     node->data = data;
     _list_insert(list, node, p);
-    return node;
+    return node->data;
 }
 
 void *list_insert_at(List *list, void *data, size_t index) {
@@ -231,7 +231,7 @@ void *list_insert_at(List *list, void *data, size_t index) {
     Node *node = malloc(sizeof(Node));
     node->data = data;
     _list_insert(list, node, pos->prev);
-    return node;
+    return node->data;
 }
 
 void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *)) {
