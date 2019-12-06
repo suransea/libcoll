@@ -53,8 +53,8 @@ O(1) | O(n-i) | O(n-i) | O(1) | O(n)
 
 * new, free
 * size, empty
-* at, index_of*, find*, foreach
-* append, prepend*, insert_at*, insert_before*, insert_after*, insert_sorted*
+* at, index_of, find, foreach
+* append, prepend, insert_at, insert_before, insert_after
 * remove*, remove_all*, remove_if*, remove_first*, remove_last, remove_at*, clear
 * assign
 

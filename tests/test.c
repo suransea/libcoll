@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "../src/list.h"
 #include "../src/dict.h"
 #include "../src/queue.h"
@@ -177,10 +178,10 @@ void test_heap() {
 }
 
 int main() {
-    //test_list();
+    test_list();
     //test_dict();
     //test_map();
     //test_set();
-    test_heap();
+    //test_heap();
     return 0;
 }
