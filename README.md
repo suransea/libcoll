@@ -24,6 +24,12 @@ Collections implemented in ANSI C.
 
 A doubly circular linked list.
 
+Time complexity: 
+
+| get | insert | remove | append | prepend |
+| - | - | - | - |
+| O(min(i, n-i)) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1) |
+
 ### vector
 
 A growable array.
