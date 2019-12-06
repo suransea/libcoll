@@ -11,6 +11,7 @@
 #include "../src/ring.h"
 #include "../src/map.h"
 #include "../src/set.h"
+#include "../src/heap.h"
 
 void print_str(void *data) {
     printf("%s ", (char *) data);
@@ -160,10 +161,26 @@ void test_set() {
     set_free(set);
 }
 
+void test_heap() {
+    Heap *heap = heap_new(cmp_str);
+    heap_push(heap, "s");
+    heap_push(heap, "c");
+    heap_push(heap, "a");
+    heap_push(heap, "r");
+    heap_push(heap, "f");
+    heap_push(heap, "c");
+
+    while (!heap_empty(heap)) {
+        printf("%s ", heap_pop(heap));
+    }
+    heap_free(heap);
+}
+
 int main() {
     //test_list();
     //test_dict();
-    test_map();
+    //test_map();
     //test_set();
+    test_heap();
     return 0;
 }
