@@ -115,7 +115,7 @@ bool list_empty(List *list) {
     return list_size(list) == 0;
 }
 
-size_t list_index_of(List *list, void *data) {
+long list_index_of(List *list, void *data) {
     int index = 0;
     Node *cur = list->head->next;
     while (cur != list->head) {
@@ -128,7 +128,7 @@ size_t list_index_of(List *list, void *data) {
     return -1;
 }
 
-size_t list_find(List *list, bool (*pred)(void *)) {
+long list_find(List *list, bool (*pred)(void *)) {
     int index = 0;
     Node *cur = list->head->next;
     while (cur != list->head) {

@@ -26,9 +26,9 @@ size_t list_size(List *list);
 
 bool list_empty(List *list);
 
-size_t list_index_of(List *list, void *data);
+long list_index_of(List *list, void *data);
 
-size_t list_find(List *list, bool (*pred)(void *));
+long list_find(List *list, bool (*pred)(void *));
 
 void *list_remove(List *list, void *data);
 

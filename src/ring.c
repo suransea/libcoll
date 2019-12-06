@@ -125,7 +125,7 @@ size_t ring_size(Ring *ring) {
     return len;
 }
 
-Ring *ring_move(Ring *ring, int n) {
+Ring *ring_move(Ring *ring, long n) {
     Ring *cur = ring;
     if (n < 0) {
         for (int i = 0; i > n; --i) {
