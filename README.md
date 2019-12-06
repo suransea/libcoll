@@ -3,77 +3,221 @@
 Collections implemented in ANSI C.
 
 - [Linearity](#linearity)
-  - [list](#list)
-  - [vector](#vector)
-  - [deque](#deque)
-  - [seq](#seq)
-  - [ring](#ring)
+  - [List](#list)
+  - [Vector](#vector)
+  - [Deque](#deque)
+  - [Seq](#seq)
+  - [Ring](#ring)
 - [Association](#association)
-  - [map](#map)
-  - [dict](#dict)
-  - [set](#set)
-  - [pair](#pair)
+  - [Map](#map)
+  - [Dict](#dict)
+  - [Set](#set)
+  - [Pair](#pair)
 - [Adapter](#adapter)
-  - [stack](#stack)
-  - [queue](#queue)
-  - [heap](#heap)
+  - [Stack](#stack)
+  - [Queue](#queue)
+  - [Heap](#heap)
 
 ## Linearity
 
-### list
+### List
 
 A doubly circular linked list.
 
-Time complexity: 
+#### Time Complexity
 
-| get | insert | remove | append | prepend |
-| - | - | - | - |
-| O(min(i, n-i)) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1) |
+get(i) | insert(i) | remove(i) | append | prepend
+------ | --------- | --------- | ------ | -------
+O(min(i, n-i)) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 
-### vector
+#### Operations
+
+* new, free
+* size, empty
+* at, first, last, index_of, find, foreach
+* append, prepend, insert_at, insert_before, insert_after, insert_sorted
+* remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
+* sort, reverse
+
+### Vector
 
 A growable array.
 
-### deque
+#### Time Complexity
+
+get | insert(i) | remove(i) | append | prepend
+--- | --------- | --------- | ------ | -------
+O(1) | O(n-i) | O(n-i) | O(1) | O(n)
+
+#### Operations
+
+* new, free
+* size, empty
+* at, index_of*, find*, foreach
+* append, prepend*, insert_at*, insert_before*, insert_after*, insert_sorted*
+* remove*, remove_all*, remove_if*, remove_first*, remove_last, remove_at*, clear
+* assign
+
+### Deque
 
 A double end queue supporting random access.
 
-### seq
+#### Time Complexity
 
-A sequence implements a singly linked list.
+get | insert(i) | remove(i) | append | prepend
+--- | --------- | --------- | ------ | -------
+O(1) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 
-### ring
+#### Operations
+
+* new, free
+* size, empty
+* at, index_of*, find*, foreach
+* append, prepend, insert_at*, insert_before*, insert_after*, insert_sorted*
+* remove*, remove_all*, remove_if*, remove_first, remove_last, remove_at*, clear
+* assign
+
+### Seq
+
+A sequence implements a singly linked list, without head.
+
+#### Time Complexity
+
+get(i) | insert(i) | remove(i) | append | prepend
+------ | --------- | --------- | ------ | -------
+O(i) | O(i) | O(i) | O(n) | O(1)
+
+#### Operations
+
+* free
+* size
+* at*, last, index_of*, find*, foreach
+* append, prepend, insert_at*, insert_before*, insert_after*, insert_sorted
+* remove*, remove_all*, remove_if*, next, remove_last, remove_at*
+* reverse*
+
+### Ring
 
 A doubly circular linked list, without head.
 
+#### Time Complexity
+
+get(i) | insert(i) | remove(i) | append | prepend
+------ | --------- | --------- | ------ | -------
+O(abs(i)) | O(abs(i)) | O(abs(i)) | O(1) | O(1)
+
+> "i" allow negative.
+
+#### Operations
+
+* new, free
+* size
+* index_of*, first*, last*, find*, foreach
+* insert, insert_at*, insert_before*, insert_after*, insert_sorted*
+* remove, remove_all, remove_if, remove_first*, remove_last*, remove_at*
+* reverse*
+
 ## Association
 
-### map
+### Map
 
 A map implemented with red-black tree.
 
-### dict
+#### Time Complexity
+
+get | insert | remove
+--- | ------ | ------
+O(log n) | O(log n) | O(log n)
+
+#### Operations
+
+* new, new_custom, free
+* size, empty
+* value_of, foreach, keys, values
+* insert
+* remove, clear
+* contains_key, contains_value
+
+### Dict
 
 A dictionary implemented with hash table.
 
-### set
+#### Time Complexity
+
+get | insert | remove
+--- | ------ | ------
+O(1) ~ O(n) | O(1) ~ O(n) | O(1) ~ O(n)
+
+#### Operations
+
+* new, new_custom, free
+* size, empty
+* value_of, foreach, keys, values
+* insert
+* remove, clear
+* contains_key, contains_value
+
+### Set
 
 A set implemented with map.
 
-### pair
+#### Time Complexity
+
+get | insert | remove
+--- | ------ | ------
+O(log n) | O(log n) | O(log n)
+
+#### Operations
+
+* new, new_custom, free
+* size, empty
+* foreach
+* insert
+* remove, clear
+* contains
+
+### Pair
 
 A pair contains two pointers.
 
+#### Operations
+
+* new, free
+
 ## Adapter
 
-### stack
+### Stack
 
 A stack implemented with list.
 
-### queue
+#### Operations
+
+* new, free
+* size, empty
+* peek, foreach*
+* push
+* pop, clear
+
+### Queue
 
 A queue implemented with list.
 
-### heap
+#### Operations
+
+* new, free
+* size, empty
+* front, back, foreach*
+* push
+* pop, clear*
+
+### Heap
 
 A binary heap implemented with vector.
+
+#### Operations
+
+* new, free
+* size, empty
+* top, foreach*
+* push
+* pop, clear
