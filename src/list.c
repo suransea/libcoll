@@ -75,14 +75,14 @@ void *list_prepend(List *list, void *data) {
     return data;
 }
 
-void *list_front(List *list) {
+void *list_first(List *list) {
     if (list->len == 0) {
         return NULL;
     }
     return list->head->next->data;
 }
 
-void *list_back(List *list) {
+void *list_last(List *list) {
     if (list->len == 0) {
         return NULL;
     }
@@ -107,7 +107,7 @@ bool list_empty(List *list) {
     return list_size(list) == 0;
 }
 
-int list_index_of(List *list, void *data) {
+size_t list_index_of(List *list, void *data) {
     int index = 0;
     Node *cur = list->head->next;
     while (cur != list->head) {
@@ -120,7 +120,7 @@ int list_index_of(List *list, void *data) {
     return -1;
 }
 
-int list_find(List *list, bool (*pred)(void *)) {
+size_t list_find(List *list, bool (*pred)(void *)) {
     int index = 0;
     Node *cur = list->head->next;
     while (cur != list->head) {
@@ -166,20 +166,20 @@ size_t list_remove_if(List *list, bool (*pred)(void *)) {
     return count;
 }
 
-void *list_remove_front(List *list) {
+void *list_remove_first(List *list) {
     if (list->len == 0) {
         return NULL;
     }
-    void *data = list_front(list);
+    void *data = list_first(list);
     _list_remove(list, list->head->next);
     return data;
 }
 
-void *list_remove_back(List *list) {
+void *list_remove_last(List *list) {
     if (list->len == 0) {
         return NULL;
     }
-    void *data = list_back(list);
+    void *data = list_last(list);
     _list_remove(list, list->head->prev);
     return data;
 }

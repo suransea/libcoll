@@ -22,7 +22,7 @@ Set *set_new_custom(int(*cmp)(void *, void *)) {
     return set;
 }
 
-bool set_add(Set *set, void *data) {
+bool set_insert(Set *set, void *data) {
     if (set_contains(set, data)) {
         return false;
     }

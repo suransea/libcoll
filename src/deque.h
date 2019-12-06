@@ -22,9 +22,9 @@ void *deque_at(Deque *deque, size_t index);
 
 void *deque_assign(Deque *deque, size_t index, void *data);
 
-void *deque_remove_front(Deque *deque);
+void *deque_remove_first(Deque *deque);
 
-void *deque_remove_back(Deque *deque);
+void *deque_remove_last(Deque *deque);
 
 void deque_foreach(Deque *deque, void(*visit)(void *));
 

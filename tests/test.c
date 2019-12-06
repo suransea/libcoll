@@ -40,16 +40,16 @@ void test_list() {
     print_list(list);
 
     print_str(list_at(list, 3));
-    print_str(list_front(list));
-    print_str(list_back(list));
+    print_str(list_first(list));
+    print_str(list_last(list));
     for (int i = 0; i < list_size(list); ++i) {
         print_str(list_at(list, i));
     }
 
-    print_str(list_remove_front(list));
+    print_str(list_remove_first(list));
     print_list(list);
 
-    print_str(list_remove_back(list));
+    print_str(list_remove_last(list));
     print_list(list);
 
     print_str(list_remove_at(list, 1));
@@ -152,11 +152,11 @@ void test_map() {
 
 void test_set() {
     Set *set = set_new();
-    set_add(set, "a");
-    set_add(set, "a");
-    set_add(set, "a");
-    set_add(set, "a");
-    set_add(set, "b");
+    set_insert(set, "a");
+    set_insert(set, "a");
+    set_insert(set, "a");
+    set_insert(set, "a");
+    set_insert(set, "b");
     set_foreach(set, print_str);
     set_free(set);
 }

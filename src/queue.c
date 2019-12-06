@@ -23,17 +23,17 @@ void *queue_pop(Queue *queue) {
     if (list_size(queue->list) == 0) {
         return NULL;
     }
-    void *data = list_front(queue->list);
-    list_remove_front(queue->list);
+    void *data = list_first(queue->list);
+    list_remove_first(queue->list);
     return data;
 }
 
 void *queue_front(Queue *queue) {
-    return list_front(queue->list);
+    return list_first(queue->list);
 }
 
 void *queue_back(Queue *queue) {
-    return list_back(queue->list);
+    return list_last(queue->list);
 }
 
 bool queue_empty(Queue *queue) {

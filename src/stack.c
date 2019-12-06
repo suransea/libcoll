@@ -24,8 +24,8 @@ void *stack_pop(Stack *stack) {
     if (list_size(stack->list) == 0) {
         return NULL;
     }
-    void *data = list_front(stack->list);
-    list_remove_front(stack->list);
+    void *data = list_first(stack->list);
+    list_remove_first(stack->list);
     return data;
 }
 
@@ -33,7 +33,7 @@ void *stack_peek(Stack *stack) {
     if (list_size(stack->list) == 0) {
         return NULL;
     }
-    return list_front(stack->list);
+    return list_first(stack->list);
 }
 
 size_t stack_size(Stack *stack) {

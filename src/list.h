@@ -16,9 +16,9 @@ void *list_append(List *list, void *data);
 
 void *list_prepend(List *list, void *data);
 
-void *list_front(List *list);
+void *list_first(List *list);
 
-void *list_back(List *list);
+void *list_last(List *list);
 
 void *list_at(List *list, size_t index);
 
@@ -26,9 +26,9 @@ size_t list_size(List *list);
 
 bool list_empty(List *list);
 
-int list_index_of(List *list, void *data);
+size_t list_index_of(List *list, void *data);
 
-int list_find(List *list, bool (*pred)(void *));
+size_t list_find(List *list, bool (*pred)(void *));
 
 void *list_remove(List *list, void *data);
 
@@ -36,9 +36,9 @@ size_t list_remove_all(List *list, void *data);
 
 size_t list_remove_if(List *list, bool (*pred)(void *));
 
-void *list_remove_front(List *list);
+void *list_remove_first(List *list);
 
-void *list_remove_back(List *list);
+void *list_remove_last(List *list);
 
 void *list_remove_at(List *list, size_t index);
 
