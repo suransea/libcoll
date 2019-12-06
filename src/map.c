@@ -456,7 +456,7 @@ void map_free(Map *map) {
 // compare functions
 
 int cmp_ptr(void *x, void *y) {
-    size_t m = *(size_t *) x, n = *(size_t *) y;
+    size_t m = (size_t) x, n = (size_t) y;
     return m < n ? -1 : (m > n ? 1 : 0);
 }
 

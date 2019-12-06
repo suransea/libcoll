@@ -5,6 +5,7 @@
 #ifndef LIBCOLL_LIST_H
 #define LIBCOLL_LIST_H
 
+#include <stddef.h>
 #include <stdbool.h>
 
 typedef struct _list List;
@@ -19,7 +20,7 @@ void *list_front(List *list);
 
 void *list_back(List *list);
 
-void *list_at(List *list, int index);
+void *list_at(List *list, size_t index);
 
 size_t list_size(List *list);
 
@@ -39,13 +40,13 @@ void *list_remove_front(List *list);
 
 void *list_remove_back(List *list);
 
-void *list_remove_at(List *list, int index);
+void *list_remove_at(List *list, size_t index);
 
 void *list_insert_before(List *list, void *data, void *pos);
 
 void *list_insert_after(List *list, void *data, void *pos);
 
-void *list_insert_at(List *list, void *data, int index);
+void *list_insert_at(List *list, void *data, size_t index);
 
 void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *));
 

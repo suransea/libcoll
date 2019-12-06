@@ -5,6 +5,7 @@
 #ifndef LIBCOLL_SET_H
 #define LIBCOLL_SET_H
 
+#include <stddef.h>
 #include <stdbool.h>
 
 typedef struct _set Set;

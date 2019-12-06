@@ -15,7 +15,7 @@ struct _ring {
   Ring *next, *prev;
 };
 
-Ring *ring_new(size_t len);
+Ring *ring_new(size_t size);
 
 Ring *ring_insert(Ring *ring, void *data);
 

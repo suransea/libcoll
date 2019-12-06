@@ -5,6 +5,7 @@
 #ifndef LIBCOLL_STACK_H
 #define LIBCOLL_STACK_H
 
+#include <stddef.h>
 #include <stdbool.h>
 
 typedef struct _stack Stack;

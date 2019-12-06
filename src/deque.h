@@ -18,9 +18,9 @@ void deque_prepend(Deque *deque, void *data);
 
 size_t deque_size(Deque *deque);
 
-void *deque_at(Deque *deque, int index);
+void *deque_at(Deque *deque, size_t index);
 
-void *deque_assign(Deque *deque, int index, void *data);
+void *deque_assign(Deque *deque, size_t index, void *data);
 
 void *deque_remove_front(Deque *deque);
 

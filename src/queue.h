@@ -5,6 +5,7 @@
 #ifndef LIBCOLL_QUEUE_H
 #define LIBCOLL_QUEUE_H
 
+#include <stddef.h>
 #include <stdbool.h>
 #include "list.h"
 

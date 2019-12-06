@@ -16,13 +16,15 @@ void vector_append(Vector *vector, void *data);
 
 size_t vector_size(Vector *vector);
 
-void *vector_at(Vector *vector, int index);
+void *vector_at(Vector *vector, size_t index);
 
-void *vector_assign(Vector *vector, int index, void *data);
+void *vector_assign(Vector *vector, size_t index, void *data);
 
 void vector_foreach(Vector *vector, void(*visit)(void *));
 
 bool vector_empty(Vector *vector);
+
+void *vector_remove_last(Vector *vector);
 
 void vector_clear(Vector *vector);
 

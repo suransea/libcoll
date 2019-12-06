@@ -89,7 +89,7 @@ void *list_back(List *list) {
     return list->head->prev->data;
 }
 
-void *list_at(List *list, int index) {
+void *list_at(List *list, size_t index) {
     if (index >= list->len) {
         return NULL;
     }
@@ -184,7 +184,7 @@ void *list_remove_back(List *list) {
     return data;
 }
 
-void *list_remove_at(List *list, int index) {
+void *list_remove_at(List *list, size_t index) {
     Node *node = _list_at(list, index);
     if (node) {
         _list_remove(list, node);
@@ -215,7 +215,7 @@ void *list_insert_after(List *list, void *data, void *pos) {
     return node;
 }
 
-void *list_insert_at(List *list, void *data, int index) {
+void *list_insert_at(List *list, void *data, size_t index) {
     Node *pos = _list_at(list, index);
     if (!pos) {
         return NULL;

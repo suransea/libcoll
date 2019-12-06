@@ -20,14 +20,14 @@ static Ring *_ring_remove(Ring *node) {
     return next;
 }
 
-Ring *ring_new(size_t len) {
-    if (len == 0) {
+Ring *ring_new(size_t size) {
+    if (size == 0) {
         return NULL;
     }
     Ring *ring = malloc(sizeof(Ring));
     ring->data = NULL;
     Ring *cur = ring;
-    for (int i = 1; i < len; ++i) {
+    for (int i = 1; i < size; ++i) {
         cur->next = malloc(sizeof(Ring));
         cur->next->prev = cur;
         cur = cur->next;
