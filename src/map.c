@@ -183,10 +183,10 @@ static void _map_balance_insert(Map *map, Entry *entry) {
     dye(entry, RED);
     while (entry && entry != map->root && entry->parent->color == RED) {
         if (parent(entry) == left(parent(parent(entry)))) {
-            Entry *y = right(parent(parent(entry)));
-            if (color(y) == RED) {
+            Entry *e = right(parent(parent(entry)));
+            if (color(e) == RED) {
                 dye(parent(entry), BLACK);
-                dye(y, BLACK);
+                dye(e, BLACK);
                 dye(parent(parent(entry)), RED);
                 entry = parent(parent(entry));
             } else {
@@ -199,10 +199,10 @@ static void _map_balance_insert(Map *map, Entry *entry) {
                 _entry_rotate_right(map, parent(parent(entry)));
             }
         } else {
-            Entry *y = left(parent(parent(entry)));
-            if (color(y) == RED) {
+            Entry *e = left(parent(parent(entry)));
+            if (color(e) == RED) {
                 dye(parent(entry), BLACK);
-                dye(y, BLACK);
+                dye(e, BLACK);
                 dye(parent(parent(entry)), RED);
                 entry = parent(parent(entry));
             } else {
