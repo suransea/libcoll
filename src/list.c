@@ -44,7 +44,15 @@ static Node *_list_pos(List *list, void *data) {
     return NULL;
 }
 
-static Node *_list_at(List *list, int index) {
+static Node *_list_at(List *list, size_t index) {
+    size_t index_r = list->len - index - 1;
+    if (index_r < index) {
+        Node *cur = list->head->prev;
+        for (int i = 0; i < index_r; ++i) {
+            cur = cur->prev;
+        }
+        return cur;
+    }
     Node *cur = list->head->next;
     for (int i = 0; i < index; ++i) {
         cur = cur->next;
