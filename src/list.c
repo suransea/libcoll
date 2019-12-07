@@ -258,6 +258,16 @@ void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *)) {
     return data;
 }
 
+void *list_assign(List *list, size_t index, void *data) {
+    if (index >= list->len) {
+        return NULL;
+    }
+    Node *pos = _list_at(list, index);
+    void *old = pos->data;
+    pos->data = data;
+    return old;
+}
+
 void list_foreach(List *list, void(*visit)(void *)) {
     Node *cur = list->head->next;
     while (cur != list->head) {

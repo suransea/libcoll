@@ -37,7 +37,7 @@ O(min(i, n-i)) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 * at, first, last, index_of, find, foreach
 * append, prepend, insert_at, insert_before, insert_after, insert_sorted
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
-* sort, reverse
+* assign, sort, reverse
 
 ### Vector
 
@@ -56,7 +56,7 @@ O(1) | O(n-i) | O(n-i) | O(1) | O(n)
 * at, first, last, index_of, find, foreach
 * append, prepend, insert_at, insert_before, insert_after
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
-* assign, sort*
+* assign
 
 ### Deque
 
@@ -72,9 +72,9 @@ O(1) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 
 * new, free
 * size, empty
-* at, index_of*, find*, foreach
-* append, prepend, insert_at*, insert_before*, insert_after*, insert_sorted*
-* remove*, remove_all*, remove_if*, remove_first, remove_last, remove_at*, clear
+* at, first, last, index_of, find, foreach
+* append, prepend, insert_at, insert_before, insert_after
+* remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
 * assign
 
 ### Seq
@@ -91,10 +91,10 @@ O(i) | O(i) | O(i) | O(n) | O(1)
 
 * free
 * size
-* at*, last, index_of*, find*, foreach
-* append, prepend, insert_at*, insert_before*, insert_after*, insert_sorted
-* remove*, remove_all*, remove_if*, next, remove_last, remove_at*
-* reverse*
+* at, first, last, index_of, find, foreach
+* append, prepend, insert_at, insert_before, insert_after, insert_sorted
+* remove, remove_all, remove_if, remove_first, remove_last, remove_at*
+* assign, reverse*
 
 ### Ring
 
@@ -112,10 +112,10 @@ O(abs(i)) | O(abs(i)) | O(abs(i)) | O(1) | O(1)
 
 * new, free
 * size
-* index_of*, first*, last*, find*, foreach
-* insert, insert_at*, insert_before*, insert_after*, insert_sorted*
-* remove, remove_all, remove_if, remove_first*, remove_last*, remove_at*
-* reverse*
+* at*, index_of*, first*, last*, find*, foreach
+* append*, prepend*, insert_at*, insert_before*, insert_after*
+* remove, remove_all, remove_if, remove_first*, remove_last*, remove_at
+* assign*, reverse*
 
 ## Association
 

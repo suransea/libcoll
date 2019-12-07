@@ -24,12 +24,55 @@ Seq *seq_prepend(Seq *seq, void *data) {
     return node;
 }
 
-Seq *seq_last(Seq *seq) {
+void *seq_first(Seq *seq) {
     if (seq) {
-        while (seq->next)
-            seq = seq->next;
+        return seq->data;
     }
-    return seq;
+    return NULL;
+}
+
+void *seq_last(Seq *seq) {
+    if (!seq) {
+        return NULL;
+    }
+    while (seq->next) {
+        seq = seq->next;
+    }
+    return seq->data;
+}
+
+void *seq_at(Seq *seq, size_t index) {
+    for (size_t i = 0; i < index; ++i) {
+        if (!seq) {
+            return NULL;
+        }
+        seq = seq->next;
+    }
+    return seq ? seq->data : NULL;
+}
+
+size_t seq_index_of(Seq *seq, void *data) {
+    size_t index = 0;
+    while (seq) {
+        if (seq->data == data) {
+            return index;
+        }
+        seq = seq->next;
+        ++index;
+    }
+    return index;
+}
+
+size_t seq_find(Seq *seq, bool (*pred)(void *)) {
+    size_t index = 0;
+    while (seq) {
+        if (pred(seq->data)) {
+            return index;
+        }
+        seq = seq->next;
+        ++index;
+    }
+    return index;
 }
 
 size_t seq_size(Seq *seq) {
@@ -42,7 +85,85 @@ size_t seq_size(Seq *seq) {
     return len;
 }
 
-Seq *seq_next(Seq *seq) {
+Seq *seq_remove(Seq *seq, void *data) {
+    Seq *prev = NULL, *cur = seq;
+    while (cur) {
+        Seq *next = cur->next;
+        if (cur->data == data) {
+            if (!prev) {
+                free(cur);
+                return next;
+            }
+            prev->next = next;
+            free(cur);
+            break;
+        }
+        prev = cur;
+        cur = next;
+    }
+    return seq;
+}
+
+Seq *seq_remove_all(Seq *seq, void *data) {
+    Seq *prev = NULL, *cur = seq;
+    while (cur) {
+        Seq *next = cur->next;
+        if (cur->data == data) {
+            if (!prev) {
+                free(cur);
+                return next;
+            }
+            prev->next = next;
+            free(cur);
+        }
+        prev = cur;
+        cur = next;
+    }
+    return seq;
+}
+
+Seq *seq_remove_if(Seq *seq, bool (*pred)(void *)) {
+    Seq *prev = NULL, *cur = seq;
+    while (cur) {
+        Seq *next = cur->next;
+        if (pred(cur->data)) {
+            if (!prev) {
+                free(cur);
+                return next;
+            }
+            prev->next = next;
+            free(cur);
+            break;
+        }
+        prev = cur;
+        cur = next;
+    }
+    return seq;
+}
+
+Seq *seq_remove_at(Seq *seq, size_t index) {
+    Seq *prev = NULL, *cur = seq;
+    for (size_t i = 0; i < index; ++i) {
+        if (!cur) {
+            return seq;
+        }
+        prev = cur;
+        cur = cur->next;
+    }
+    if (!cur) {
+        return seq;
+    }
+    if (!prev) {
+        Seq *next = cur->next;
+        free(cur);
+        return next;
+    }
+    prev->next = cur->next;
+    free(cur);
+    return seq;
+}
+
+Seq *seq_remove_first(Seq *seq) {
     Seq *next = seq->next;
     free(seq);
     return next;
