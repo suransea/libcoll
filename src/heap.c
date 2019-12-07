@@ -35,8 +35,8 @@ static void _heapify_up(Heap *heap, size_t pos) {
 
 static void _heapify_down(Heap *heap, size_t pos) {
     size_t size = vector_size(heap->vector);
-    size_t l = pos * 2 + 1;
-    while (l < size) {
+    size_t l;
+    while ((l = pos * 2 + 1) < size) {
         if (l < size - 1 && _cmp(heap, l, l + 1) < 0) {
             ++l; // right child
         }
@@ -45,7 +45,6 @@ static void _heapify_down(Heap *heap, size_t pos) {
         }
         _swap(heap, pos, l);
         pos = l;
-        l = pos * 2 + 1;
     }
 }
 

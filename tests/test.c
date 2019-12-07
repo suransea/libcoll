@@ -13,9 +13,14 @@
 #include "../src/map.h"
 #include "../src/set.h"
 #include "../src/heap.h"
+#include "../src/vector.h"
 
 void print_str(void *data) {
     printf("%s ", (char *) data);
+}
+
+void print_ptr(void *ptr) {
+    printf("%u ", (unsigned) ptr);
 }
 
 bool equal_1d(void *data) {
@@ -68,7 +73,7 @@ void test_list() {
     list_insert_at(list, "f", 2);
     print_list(list);
 
-    printf("count:%u ", list_remove_if(list, equal_1d));
+    printf("remove:%s ", list_remove_if(list, equal_1d));
     print_list(list);
 
     printf("count:%u ", list_remove_all(list, "b"));
@@ -177,11 +182,29 @@ void test_heap() {
     heap_free(heap);
 }
 
+void test_vector() {
+    Vector *vector = vector_new(0);
+    vector_prepend(vector, "1");
+    vector_prepend(vector, "f");
+    vector_prepend(vector, "q");
+    vector_prepend(vector, "v");
+    vector_prepend(vector, "t");
+    vector_prepend(vector, "s");
+    vector_append(vector, "a");
+    vector_insert_at(vector, "g", 3);
+    vector_insert_after(vector, "afg", "g");
+    vector_insert_before(vector, "bfg", "g");
+    vector_remove_first(vector);
+    vector_foreach(vector, print_str);
+    printf("\n");
+}
+
 int main() {
-    test_list();
+    //test_list();
     //test_dict();
     //test_map();
     //test_set();
     //test_heap();
+    test_vector();
     return 0;
 }

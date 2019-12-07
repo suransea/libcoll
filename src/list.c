@@ -48,13 +48,13 @@ static Node *_list_at(List *list, size_t index) {
     size_t index_r = list->len - index - 1;
     if (index_r < index) {
         Node *cur = list->head->prev;
-        for (long i = 0; i < index_r; ++i) {
+        for (size_t i = 0; i < index_r; ++i) {
             cur = cur->prev;
         }
         return cur;
     }
     Node *cur = list->head->next;
-    for (int i = 0; i < index; ++i) {
+    for (size_t i = 0; i < index; ++i) {
         cur = cur->next;
     }
     return cur;
@@ -115,8 +115,8 @@ bool list_empty(List *list) {
     return list_size(list) == 0;
 }
 
-long list_index_of(List *list, void *data) {
-    long index = 0;
+size_t list_index_of(List *list, void *data) {
+    size_t index = 0;
     Node *cur = list->head->next;
     while (cur != list->head) {
         if (cur->data == data) {
@@ -125,11 +125,11 @@ long list_index_of(List *list, void *data) {
         cur = cur->next;
         ++index;
     }
-    return -1;
+    return index;
 }
 
-long list_find(List *list, bool (*pred)(void *)) {
-    long index = 0;
+size_t list_find(List *list, bool (*pred)(void *)) {
+    size_t index = 0;
     Node *cur = list->head->next;
     while (cur != list->head) {
         if (pred(cur->data)) {
@@ -138,7 +138,7 @@ long list_find(List *list, bool (*pred)(void *)) {
         cur = cur->next;
         ++index;
     }
-    return -1;
+    return index;
 }
 
 void *list_remove(List *list, void *data) {
@@ -160,18 +160,17 @@ size_t list_remove_all(List *list, void *data) {
     return count;
 }
 
-size_t list_remove_if(List *list, bool (*pred)(void *)) {
-    size_t count = 0;
+void *list_remove_if(List *list, bool (*pred)(void *)) {
     Node *cur = list->head->next;
     while (cur != list->head) {
-        Node *next = cur->next;
         if (pred(cur->data)) {
+            void *data = cur->data;
             _list_remove(list, cur);
-            ++count;
+            return data;
         }
-        cur = next;
+        cur = cur->next;
     }
-    return count;
+    return NULL;
 }
 
 void *list_remove_first(List *list) {

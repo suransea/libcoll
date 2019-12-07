@@ -26,15 +26,15 @@ size_t list_size(List *list);
 
 bool list_empty(List *list);
 
-long list_index_of(List *list, void *data);
+size_t list_index_of(List *list, void *data);
 
-long list_find(List *list, bool (*pred)(void *));
+size_t list_find(List *list, bool (*pred)(void *));
 
 void *list_remove(List *list, void *data);
 
 size_t list_remove_all(List *list, void *data);
 
-size_t list_remove_if(List *list, bool (*pred)(void *));
+void *list_remove_if(List *list, bool (*pred)(void *));
 
 void *list_remove_first(List *list);
 

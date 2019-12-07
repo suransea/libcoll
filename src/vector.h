@@ -20,9 +20,13 @@ size_t vector_size(Vector *vector);
 
 void *vector_at(Vector *vector, size_t index);
 
-long vector_index_of(Vector *vector, void *data);
+void *vector_first(Vector *vector);
 
-long vector_find(Vector *vector, bool (*pred)(void *));
+void *vector_last(Vector *vector);
+
+size_t vector_index_of(Vector *vector, void *data);
+
+size_t vector_find(Vector *vector, bool (*pred)(void *));
 
 void *vector_insert_at(Vector *vector, void *data, size_t index);
 
@@ -35,6 +39,16 @@ void *vector_assign(Vector *vector, size_t index, void *data);
 void vector_foreach(Vector *vector, void(*visit)(void *));
 
 bool vector_empty(Vector *vector);
+
+void *vector_remove(Vector *vector, void *data);
+
+size_t vector_remove_all(Vector *vector, void *data);
+
+void *vector_remove_if(Vector *vector, bool (*pred)(void *));
+
+void *vector_remove_at(Vector *vector, size_t index);
+
+void *vector_remove_first(Vector *vector);
 
 void *vector_remove_last(Vector *vector);
 
