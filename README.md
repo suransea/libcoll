@@ -7,7 +7,6 @@ Collections implemented in ANSI C.
   - [Vector](#vector)
   - [Deque](#deque)
   - [Seq](#seq)
-  - [Ring](#ring)
 - [Association](#association)
   - [Map](#map)
   - [Dict](#dict)

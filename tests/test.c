@@ -13,6 +13,7 @@
 #include "../src/set.h"
 #include "../src/heap.h"
 #include "../src/vector.h"
+#include "../src/deque.h"
 
 void print_str(void *data) {
     printf("%s ", (char *) data);
@@ -196,6 +197,19 @@ void test_seq() {
     seq_foreach(seq, print_str);
 }
 
+void test_deque() {
+    Deque *deque = deque_new(1);
+    deque_append(deque, "a");
+    deque_prepend(deque, "b");
+    deque_insert_at(deque, "c", 0);
+    deque_insert_at(deque, "d", 0);
+    deque_insert_at(deque, "e", 0);
+    deque_insert_after(deque, "g", "c");
+    deque_insert_before(deque, "f", "g");
+    deque_remove_at(deque, 5);
+    deque_foreach(deque, print_str);
+}
+
 int main() {
     //test_list();
     //test_dict();
@@ -203,6 +217,7 @@ int main() {
     //test_set();
     //test_heap();
     //test_vector();
-    test_seq();
+    //test_seq();
+    test_deque();
     return 0;
 }

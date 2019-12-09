@@ -10,11 +10,11 @@
 
 typedef struct _deque Deque;
 
-Deque *deque_new();
+Deque *deque_new(size_t cap);
 
-void deque_append(Deque *deque, void *data);
+void *deque_append(Deque *deque, void *data);
 
-void deque_prepend(Deque *deque, void *data);
+void *deque_prepend(Deque *deque, void *data);
 
 size_t deque_size(Deque *deque);
 
