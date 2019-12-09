@@ -248,8 +248,10 @@ void *seq_remove_last(Seq *seq) {
 }
 
 void *seq_insert_at(Seq *seq, void *data, size_t index) {
-    if (!seq || index >= seq->len) {
+    if (!seq || index > seq->len) {
         return NULL;
+    } else if (index == seq->len) {
+        return seq_append(seq, data);
     }
     Node *prev = NULL, *cur = seq->root;
     for (size_t i = 0; i < index; ++i) {

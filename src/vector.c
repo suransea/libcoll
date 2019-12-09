@@ -107,11 +107,10 @@ size_t vector_find(Vector *vector, bool (*pred)(void *)) {
 }
 
 void *vector_insert_at(Vector *vector, void *data, size_t index) {
-    if (!vector) {
+    if (!vector || index > vector->len) {
         return NULL;
-    }
-    if (index >= vector->len) {
-        return NULL;
+    } else if (index == vector->len) {
+        return vector_append(vector, data);
     }
     if (vector->cap == vector->len) {
         size_t cap_new = vector->cap * 2;
@@ -125,7 +124,7 @@ void *vector_insert_at(Vector *vector, void *data, size_t index) {
         ++(vector->len);
         return data;
     }
-    memmove(vector->data + index + 1, vector->data + index, vector->len * sizeof(void *));
+    memmove(vector->data + index + 1, vector->data + index, (vector->len - index) * sizeof(void *));
     vector->data[index] = data;
     ++(vector->len);
     return data;
@@ -143,9 +142,6 @@ void *vector_insert_after(Vector *vector, void *data, void *pos) {
     size_t index = vector_index_of(vector, pos);
     if (index >= vector->len) {
         return NULL;
-    }
-    if (index == vector->len - 1) {
-        return vector_append(vector, data);
     }
     return vector_insert_at(vector, data, index + 1);
 }

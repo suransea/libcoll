@@ -223,6 +223,11 @@ void *list_insert_after(List *list, void *data, void *pos) {
 }
 
 void *list_insert_at(List *list, void *data, size_t index) {
+    if (!list || index > list->len) {
+        return NULL;
+    } else if (index == list->len) {
+        return list_append(list, data);
+    }
     Node *pos = _list_at(list, index);
     if (!pos) {
         return NULL;
