@@ -54,8 +54,6 @@ void *list_assign(List *list, size_t index, void *data);
 
 void list_foreach(List *list, void(*visit)(void *));
 
-void list_sort(List *list, int(*cmp)(void *, void *));
-
 void list_reverse(List *list);
 
 void list_clear(List *list);

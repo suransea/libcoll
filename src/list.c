@@ -276,21 +276,6 @@ void list_foreach(List *list, void(*visit)(void *)) {
     }
 }
 
-void list_sort(List *list, int(*cmp)(void *, void *)) {
-    List *tmp = list_new();
-    Node *cur = list->head->next;
-    while (cur != list->head) {
-        Node *next = cur->next;
-        list_insert_sorted(tmp, cur->data, cmp);
-        _list_remove(list, cur);
-        cur = next;
-    }
-    free(list->head);
-    list->head = tmp->head;
-    list->len = tmp->len;
-    free(tmp);
-}
-
 void list_reverse(List *list) {
     if (list->len == 0 || list->len == 1) {
         return;
