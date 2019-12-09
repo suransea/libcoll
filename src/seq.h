@@ -10,14 +10,11 @@
 
 typedef struct _seq Seq;
 
-struct _seq {
-  void *data;
-  Seq *next;
-};
+Seq *seq_new();
 
-Seq *seq_append(Seq *seq, void *data);
+void *seq_append(Seq *seq, void *data);
 
-Seq *seq_prepend(Seq *seq, void *data);
+void *seq_prepend(Seq *seq, void *data);
 
 void *seq_first(Seq *seq);
 
@@ -31,29 +28,37 @@ size_t seq_find(Seq *seq, bool (*pred)(void *));
 
 size_t seq_size(Seq *seq);
 
-Seq *seq_remove(Seq *seq, void *data);
+bool seq_empty(Seq *seq);
 
-Seq *seq_remove_all(Seq *seq, void *data);
+void *seq_remove(Seq *seq, void *data);
 
-Seq *seq_remove_if(Seq *seq, bool (*pred)(void *));
+size_t seq_remove_all(Seq *seq, void *data);
 
-Seq *seq_remove_at(Seq *seq, size_t index);
+void *seq_remove_if(Seq *seq, bool (*pred)(void *));
 
-Seq *seq_remove_first(Seq *seq);
+void *seq_remove_at(Seq *seq, size_t index);
 
-Seq *seq_remove_last(Seq *seq);
+void *seq_remove_first(Seq *seq);
 
-Seq *seq_insert_at(Seq *seq, size_t index);
+void *seq_remove_last(Seq *seq);
 
-Seq *seq_insert_before(Seq *seq, void *data, void *pos);
+void *seq_insert_at(Seq *seq, void *data, size_t index);
 
-Seq *seq_insert_after(Seq *seq, void *data, void *pos);
+void *seq_insert_before(Seq *seq, void *data, void *pos);
 
-Seq *seq_insert_sorted(Seq *seq, void *data, int(*cmp)(void *, void *));
+void *seq_insert_after(Seq *seq, void *data, void *pos);
+
+void *seq_insert_sorted(Seq *seq, void *data, int(*cmp)(void *, void *));
 
 void *seq_assign(Seq *seq, size_t index, void *data);
 
 void seq_foreach(Seq *seq, void(*visit)(void *));
+
+void seq_clear(Seq *seq);
+
+void seq_sort(Seq *seq);
+
+void seq_reverse(Seq *seq);
 
 void seq_free(Seq *seq);
 

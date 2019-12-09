@@ -81,9 +81,6 @@ void test_list() {
     printf("index:%d ", list_find(list, equal_1d));
     printf("index:%d ", list_index_of(list, "g"));
 
-    list_sort(list, cmp_str);
-    print_list(list);
-
     list_reverse(list);
     print_list(list);
 
@@ -187,12 +184,25 @@ void test_vector() {
     printf("\n");
 }
 
+void test_seq() {
+    Seq *seq = seq_new();
+    seq_prepend(seq, "a");
+    seq_prepend(seq, "b");
+    seq_prepend(seq, "c");
+    seq_prepend(seq, "d");
+    seq_prepend(seq, "e");
+    seq_prepend(seq, "f");
+    seq_reverse(seq);
+    seq_foreach(seq, print_str);
+}
+
 int main() {
     //test_list();
     //test_dict();
     //test_map();
     //test_set();
     //test_heap();
-    test_vector();
+    //test_vector();
+    test_seq();
     return 0;
 }

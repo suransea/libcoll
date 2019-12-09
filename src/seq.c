@@ -5,59 +5,104 @@
 #include <stdlib.h>
 #include "seq.h"
 
-Seq *seq_append(Seq *seq, void *data) {
-    Seq *node = malloc(sizeof(Seq));
-    node->data = data;
-    node->next = NULL;
-    if (seq) {
-        Seq *last = seq_last(seq);
-        last->next = node;
-        return seq;
+typedef struct _s_node Node;
+
+struct _seq {
+  Node *root;
+  size_t len;
+};
+
+struct _s_node {
+  void *data;
+  Node *next;
+};
+
+static Node *_seq_last(Seq *seq) {
+    Node *cur = seq->root;
+    if (!cur) {
+        return NULL;
     }
-    return node;
+    while (cur->next) {
+        cur = cur->next;
+    }
+    return cur;
 }
 
-Seq *seq_prepend(Seq *seq, void *data) {
-    Seq *node = malloc(sizeof(Seq));
+static Node *_seq_at(Seq *seq, size_t index) {
+    Node *cur = seq->root;
+    for (size_t i = 0; i < index; ++i) {
+        cur = cur->next;
+    }
+    return cur;
+}
+
+Seq *seq_new() {
+    Seq *seq = malloc(sizeof(Seq));
+    seq->len = 0;
+    seq->root = NULL;
+    return seq;
+}
+
+void *seq_append(Seq *seq, void *data) {
+    if (!seq) {
+        return NULL;
+    }
+    Node *node = malloc(sizeof(Node));
     node->data = data;
-    node->next = seq;
-    return node;
+    node->next = NULL;
+    if (seq->root) {
+        Node *last = _seq_last(seq);
+        last->next = node;
+        ++(seq->len);
+        return data;
+    }
+    seq->root = node;
+    ++(seq->len);
+    return data;
+}
+
+void *seq_prepend(Seq *seq, void *data) {
+    if (!seq) {
+        return NULL;
+    }
+    Node *node = malloc(sizeof(Node));
+    node->data = data;
+    node->next = seq->root;
+    seq->root = node;
+    ++(seq->len);
+    return data;
 }
 
 void *seq_first(Seq *seq) {
-    if (seq) {
-        return seq->data;
+    if (seq && seq->root) {
+        return seq->root->data;
     }
     return NULL;
 }
 
 void *seq_last(Seq *seq) {
-    if (!seq) {
-        return NULL;
+    if (seq && seq->root) {
+        Node *last = _seq_last(seq);
+        return last->data;
     }
-    while (seq->next) {
-        seq = seq->next;
-    }
-    return seq->data;
+    return NULL;
 }
 
 void *seq_at(Seq *seq, size_t index) {
-    for (size_t i = 0; i < index; ++i) {
-        if (!seq) {
-            return NULL;
-        }
-        seq = seq->next;
+    if (index >= seq->len) {
+        return NULL;
     }
-    return seq ? seq->data : NULL;
+    return _seq_at(seq, index)->data;
 }
 
 size_t seq_index_of(Seq *seq, void *data) {
     size_t index = 0;
-    while (seq) {
-        if (seq->data == data) {
+    Node *cur = seq->root;
+    while (cur) {
+        if (cur->data == data) {
             return index;
         }
-        seq = seq->next;
+        cur = cur->next;
         ++index;
     }
     return index;
@@ -65,137 +110,220 @@ size_t seq_index_of(Seq *seq, void *data) {
 
 size_t seq_find(Seq *seq, bool (*pred)(void *)) {
     size_t index = 0;
-    while (seq) {
-        if (pred(seq->data)) {
+    Node *cur = seq->root;
+    while (cur) {
+        if (pred(cur->data)) {
             return index;
         }
-        seq = seq->next;
+        cur = cur->next;
         ++index;
     }
     return index;
 }
 
 size_t seq_size(Seq *seq) {
-    if (!seq)return 0;
-    int len = 0;
-    while (seq) {
-        ++len;
-        seq = seq->next;
+    if (!seq) {
+        return 0;
     }
-    return len;
+    return seq->len;
 }
 
-Seq *seq_remove(Seq *seq, void *data) {
-    Seq *prev = NULL, *cur = seq;
+bool seq_empty(Seq *seq) {
+    return seq->len == 0;
+}
+
+void *seq_remove(Seq *seq, void *data) {
+    Node *prev = NULL, *cur = seq->root;
     while (cur) {
-        Seq *next = cur->next;
+        Node *next = cur->next;
         if (cur->data == data) {
+            --(seq->len);
+            free(cur);
             if (!prev) {
-                free(cur);
-                return next;
+                seq->root = next;
+                return data;
             }
             prev->next = next;
-            free(cur);
-            break;
+            return data;
         }
         prev = cur;
         cur = next;
     }
-    return seq;
+    return NULL;
 }
 
-Seq *seq_remove_all(Seq *seq, void *data) {
-    Seq *prev = NULL, *cur = seq;
+size_t seq_remove_all(Seq *seq, void *data) {
+    size_t count = 0;
+    Node *prev = NULL, *cur = seq->root;
     while (cur) {
-        Seq *next = cur->next;
+        Node *next = cur->next;
         if (cur->data == data) {
             if (!prev) {
-                free(cur);
-                return next;
+                seq->root = next;
+            } else {
+                prev->next = next;
             }
-            prev->next = next;
             free(cur);
+            --(seq->len);
+            ++count;
+        } else {
+            prev = cur;
         }
-        prev = cur;
         cur = next;
     }
-    return seq;
+    return count;
 }
 
-Seq *seq_remove_if(Seq *seq, bool (*pred)(void *)) {
-    Seq *prev = NULL, *cur = seq;
+void *seq_remove_if(Seq *seq, bool (*pred)(void *)) {
+    Node *prev = NULL, *cur = seq->root;
     while (cur) {
-        Seq *next = cur->next;
+        Node *next = cur->next;
         if (pred(cur->data)) {
+            --(seq->len);
+            void *data = cur->data;
+            free(cur);
             if (!prev) {
-                free(cur);
-                return next;
+                seq->root = next;
+                return data;
             }
             prev->next = next;
-            free(cur);
-            break;
+            return data;
         }
         prev = cur;
         cur = next;
     }
-    return seq;
+    return NULL;
 }
 
-Seq *seq_remove_at(Seq *seq, size_t index) {
-    Seq *prev = NULL, *cur = seq;
+void *seq_remove_at(Seq *seq, size_t index) {
+    if (!seq || index >= seq->len) {
+        return NULL;
+    }
+    Node *prev = NULL, *cur = seq->root;
     for (size_t i = 0; i < index; ++i) {
-        if (!cur) {
-            return seq;
+        prev = cur;
+        cur = cur->next;
+    }
+    if (prev) {
+        prev->next = cur->next;
+    } else {
+        seq->root = cur->next;
+    }
+    void *data = cur->data;
+    free(cur);
+    --(seq->len);
+    return data;
+}
+
+void *seq_remove_first(Seq *seq) {
+    if (!seq || seq->len == 0) {
+        return NULL;
+    }
+    void *data = seq->root->data;
+    Node *next = seq->root->next;
+    free(seq->root);
+    seq->root = next;
+    --(seq->len);
+    return data;
+}
+
+void *seq_remove_last(Seq *seq) {
+    if (!seq || seq->len == 0) {
+        return NULL;
+    }
+    Node *prev = NULL, *cur = seq->root;
+    while (cur->next) {
+        prev = cur;
+        cur = cur->next;
+    }
+    if (prev) {
+        prev->next = NULL;
+    } else {
+        seq->root = NULL;
+    }
+    void *data = cur->data;
+    free(cur);
+    --(seq->len);
+    return data;
+}
+
+void *seq_insert_at(Seq *seq, void *data, size_t index) {
+    if (!seq || index >= seq->len) {
+        return NULL;
+    }
+    Node *prev = NULL, *cur = seq->root;
+    for (size_t i = 0; i < index; ++i) {
+        prev = cur;
+        cur = cur->next;
+    }
+    Node *node = malloc(sizeof(Node));
+    node->data = data;
+    node->next = cur;
+    if (prev) {
+        prev->next = node;
+    } else {
+        seq->root = node;
+    }
+    ++(seq->len);
+    return data;
+}
+
+void *seq_insert_before(Seq *seq, void *data, void *pos) {
+    if (!seq) {
+        return NULL;
+    }
+    Node *prev = NULL, *cur = seq->root;
+    while (cur) {
+        if (cur->data == pos) {
+            Node *node = malloc(sizeof(Node));
+            node->data = data;
+            node->next = cur;
+            if (prev) {
+                prev->next = node;
+            } else {
+                seq->root = node;
+            }
+            ++(seq->len);
+            return data;
         }
         prev = cur;
         cur = cur->next;
     }
-    if (!cur) {
-        return seq;
-    }
-    if (!prev) {
-        Seq *next = cur->next;
-        free(cur);
-        return next;
-    }
-    prev->next = cur->next;
-    free(cur);
-    return seq;
+    return NULL;
 }
 
-Seq *seq_remove_first(Seq *seq) {
-    Seq *next = seq->next;
-    free(seq);
-    return next;
-}
-
-Seq *seq_remove_last(Seq *seq) {
-    Seq *cur = seq, *prev = NULL;
-    if (cur) {
-        while (cur->next) {
-            prev = cur;
-            cur = cur->next;
-        }
-        free(cur);
-        if (prev) {
-            prev->next = NULL;
-        } else {
-            return NULL;
-        }
-    }
-    return seq;
-}
-
-Seq *seq_insert_sorted(Seq *seq, void *data, int(*cmp)(void *, void *)) {
-    Seq *cur = seq, *prev = NULL;
-
-    Seq *node = malloc(sizeof(Seq));
-    node->data = data;
-    node->next = NULL;
-
+void *seq_insert_after(Seq *seq, void *data, void *pos) {
     if (!seq) {
-        return node;
+        return NULL;
     }
+    Node *cur = seq->root;
+    while (cur) {
+        if (cur->data == pos) {
+            Node *node = malloc(sizeof(Node));
+            node->data = data;
+            node->next = cur->next;
+            cur->next = node;
+            ++(seq->len);
+            return data;
+        }
+        cur = cur->next;
+    }
+    return NULL;
+}
+
+void *seq_insert_sorted(Seq *seq, void *data, int(*cmp)(void *, void *)) {
+    if (!seq) {
+        return NULL;
+    }
+
+    Node *prev = NULL, *cur = seq->root;
+
+    if (!cur) {
+        return seq_prepend(seq, data);
+    }
+
+    Node *node = malloc(sizeof(Node));
+    node->data = data;
 
     int result = cmp(data, cur->data);
     while ((cur->next) && (result > 0)) {
@@ -207,31 +335,58 @@ Seq *seq_insert_sorted(Seq *seq, void *data, int(*cmp)(void *, void *)) {
 
     if ((!cur->next) && (result > 0)) {
         cur->next = node;
-        return seq;
+        node->next = NULL;
+        return data;
     }
 
     if (prev) {
         prev->next = node;
         node->next = cur;
-        return seq;
+        return data;
     } else {
-        node->next = seq;
-        return node;
+        seq->root = node;
+        node->next = seq->root;
+        return data;
     }
+}
+
+void *seq_assign(Seq *seq, size_t index, void *data) {
+    if (index >= seq->len) {
+        return NULL;
+    }
+    Node *pos = _seq_at(seq, index);
+    void *old = pos->data;
+    pos->data = data;
+    return old;
 }
 
 void seq_foreach(Seq *seq, void(*visit)(void *)) {
-    while (seq) {
-        Seq *next = seq->next;
-        visit(seq->data);
-        seq = next;
+    Node *cur = seq->root;
+    while (cur) {
+        Node *next = cur->next;
+        visit(cur->data);
+        cur = next;
     }
 }
 
-void seq_free(Seq *seq) {
-    while (seq) {
-        Seq *next = seq->next;
-        free(seq);
-        seq = next;
+void seq_clear(Seq *seq) {
+    while (seq->root) {
+        seq_remove_first(seq);
     }
+}
+
+void seq_reverse(Seq *seq) {
+    Node *prev = NULL, *cur = seq->root, *next;
+    while (cur) {
+        next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
+    }
+    seq->root = prev;
+}
+
+void seq_free(Seq *seq) {
+    seq_clear(seq);
+    free(seq);
 }

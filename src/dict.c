@@ -139,11 +139,11 @@ void *dict_value_of(Dict *dict, void *key) {
 }
 
 Seq *dict_keys(Dict *dict) {
-    Seq *seq = NULL;
+    Seq *seq = seq_new();
     for (int i = 0; i < dict->cap; ++i) {
         Entry *entry = dict->entries[i];
         while (entry) {
-            seq = seq_prepend(seq, entry->key);
+            seq_prepend(seq, entry->key);
             entry = entry->next;
         }
     }
@@ -151,11 +151,11 @@ Seq *dict_keys(Dict *dict) {
 }
 
 Seq *dict_values(Dict *dict) {
-    Seq *seq = NULL;
+    Seq *seq = seq_new();
     for (int i = 0; i < dict->cap; ++i) {
         Entry *entry = dict->entries[i];
         while (entry) {
-            seq = seq_prepend(seq, entry->val);
+            seq_prepend(seq, entry->val);
             entry = entry->next;
         }
     }

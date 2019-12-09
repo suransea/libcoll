@@ -37,7 +37,7 @@ O(min(i, n-i)) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 * at, first, last, index_of, find, foreach
 * append, prepend, insert_at, insert_before, insert_after, insert_sorted
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
-* assign, sort, reverse
+* assign, reverse
 
 ### Vector
 
@@ -89,12 +89,12 @@ O(i) | O(i) | O(i) | O(n) | O(1)
 
 #### Operations
 
-* free
-* size
+* new, free
+* size, empty
 * at, first, last, index_of, find, foreach
 * append, prepend, insert_at, insert_before, insert_after, insert_sorted
-* remove, remove_all, remove_if, remove_first, remove_last, remove_at*
-* assign, reverse*
+* remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
+* assign, reverse
 
 ## Association
 

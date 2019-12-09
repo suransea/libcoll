@@ -334,20 +334,20 @@ void *map_value_of(Map *map, void *key) {
 }
 
 Seq *map_keys(Map *map) {
-    Seq *seq = NULL;
+    Seq *seq = seq_new();
     Entry *cur = _entry_last(map->root);
     while (cur) {
-        seq = seq_prepend(seq, cur->key);
+        seq_prepend(seq, cur->key);
         cur = _entry_prev(cur);
     }
     return seq;
 }
 
 Seq *map_values(Map *map) {
-    Seq *seq = NULL;
+    Seq *seq = seq_new();
     Entry *cur = _entry_last(map->root);
     while (cur) {
-        seq = seq_prepend(seq, cur->val);
+        seq_prepend(seq, cur->val);
         cur = _entry_prev(cur);
     }
     return seq;
@@ -426,10 +426,10 @@ void *map_remove(Map *map, void *key) {
 }
 
 void map_clear(Map *map) {
-    Seq *seq = NULL;
+    Seq *seq = seq_new();
     Entry *cur = _entry_last(map->root);
     while (cur) {
-        seq = seq_prepend(seq, cur);
+        seq_prepend(seq, cur);
         cur = _entry_prev(cur);
     }
     seq_foreach(seq, free);
