@@ -56,8 +56,6 @@ void seq_foreach(Seq *seq, void(*visit)(void *));
 
 void seq_clear(Seq *seq);
 
-void seq_sort(Seq *seq);
-
 void seq_reverse(Seq *seq);
 
 void seq_free(Seq *seq);
