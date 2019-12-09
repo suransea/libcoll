@@ -79,7 +79,7 @@ O(1) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 
 ### Seq
 
-A sequence implements a singly linked list, without head.
+A sequence implements a singly linked list.
 
 #### Time Complexity
 
@@ -95,27 +95,6 @@ O(i) | O(i) | O(i) | O(n) | O(1)
 * append, prepend, insert_at, insert_before, insert_after, insert_sorted
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at*
 * assign, reverse*
-
-### Ring
-
-A doubly circular linked list, without head.
-
-#### Time Complexity
-
-get(i) | insert(i) | remove(i) | append | prepend
------- | --------- | --------- | ------ | -------
-O(abs(i)) | O(abs(i)) | O(abs(i)) | O(1) | O(1)
-
-> "i" allow negative.
-
-#### Operations
-
-* new, free
-* size
-* at*, index_of*, first*, last*, find*, foreach
-* append*, prepend*, insert_at*, insert_before*, insert_after*
-* remove, remove_all, remove_if, remove_first*, remove_last*, remove_at
-* assign*, reverse*
 
 ## Association
 

@@ -9,7 +9,6 @@
 #include "../src/list.h"
 #include "../src/dict.h"
 #include "../src/queue.h"
-#include "../src/ring.h"
 #include "../src/map.h"
 #include "../src/set.h"
 #include "../src/heap.h"
@@ -119,17 +118,6 @@ void test_dict() {
     dict_remove(dict, "age");
     print_dict(dict);
     dict_free(dict);
-}
-
-void test_ring() {
-    Ring *ring = ring_new(5);
-    ring->data = "a";
-    ring_insert(ring, "b");
-    printf(" %u ", ring_size(ring));
-    ring_foreach(ring_move(ring, 0), print_str);
-    ring = ring_remove(ring, "a");
-    ring_foreach(ring_move(ring, 0), print_str);
-    ring_free(ring);
 }
 
 void print_map(Map *map) {
