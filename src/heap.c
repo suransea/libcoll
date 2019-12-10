@@ -87,6 +87,10 @@ bool heap_empty(Heap *heap) {
     return vector_size(heap->vector) == 0;
 }
 
+void heap_foreach(Heap *heap, void(*visit)(void *)) {
+    vector_foreach(heap->vector, visit);
+}
+
 void heap_clear(Heap *heap) {
     vector_clear(heap->vector);
 }

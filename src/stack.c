@@ -44,6 +44,10 @@ bool stack_empty(Stack *stack) {
     return list_empty(stack->list);
 }
 
+void stack_foreach(Stack *stack, void(*visit)(void *)) {
+    list_foreach(stack->list, visit);
+}
+
 void stack_clear(Stack *stack) {
     list_clear(stack->list);
 }

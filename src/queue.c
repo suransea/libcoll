@@ -40,6 +40,14 @@ bool queue_empty(Queue *queue) {
     return list_size(queue->list) == 0;
 }
 
+void queue_foreach(Queue *queue, void(*visit)(void *)) {
+    list_foreach(queue->list, visit);
+}
+
+void queue_clear(Queue *queue) {
+    list_clear(queue->list);
+}
+
 size_t queue_size(Queue *queue) {
     return list_size(queue->list);
 }

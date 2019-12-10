@@ -23,6 +23,10 @@ void *queue_back(Queue *queue);
 
 bool queue_empty(Queue *queue);
 
+void queue_foreach(Queue *queue, void(*visit)(void *));
+
+void queue_clear(Queue *queue);
+
 size_t queue_size(Queue *queue);
 
 void queue_free(Queue *queue);

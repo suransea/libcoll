@@ -22,6 +22,8 @@ size_t stack_size(Stack *stack);
 
 bool stack_empty(Stack *stack);
 
+void stack_foreach(Stack *stack, void(*visit)(void *));
+
 void stack_clear(Stack *stack);
 
 void stack_free(Stack *stack);

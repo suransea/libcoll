@@ -22,6 +22,8 @@ size_t heap_size(Heap *heap);
 
 bool heap_empty(Heap *heap);
 
+void heap_foreach(Heap *heap, void(*visit)(void *));
+
 void heap_clear(Heap *heap);
 
 void heap_free(Heap *heap);

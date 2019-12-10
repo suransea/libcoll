@@ -172,7 +172,7 @@ A stack implemented with list.
 
 * new, free
 * size, empty
-* peek, foreach*
+* peek, foreach
 * push
 * pop, clear
 
@@ -184,9 +184,9 @@ A queue implemented with list.
 
 * new, free
 * size, empty
-* front, back, foreach*
+* front, back, foreach
 * push
-* pop, clear*
+* pop, clear
 
 ### Heap
 
@@ -196,6 +196,6 @@ A binary heap implemented with vector.
 
 * new, free
 * size, empty
-* top, foreach*
+* top, foreach
 * push
 * pop, clear
