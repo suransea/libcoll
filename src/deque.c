@@ -86,12 +86,12 @@ static void _deque_resize(Deque *deque) {
 
     if (deque->head < deque->tail) {
         // not crossed, copy middle
-        memcpy(tmp + deque->head, deque->data, (deque->tail - deque->head) * sizeof(void *));
+        memcpy(tmp + deque->head, deque->data + deque->head, (deque->tail - deque->head) * sizeof(void *));
     } else {
         size_t pos_head_new = cap_new - (deque->cap - deque->head);
 
         // copy end
-        memcpy(tmp + pos_head_new, deque->data, (deque->cap - deque->head) * sizeof(void *));
+        memcpy(tmp + pos_head_new, deque->data + deque->head, (deque->cap - deque->head) * sizeof(void *));
 
         // copy start
         memcpy(tmp, deque->data, deque->tail * sizeof(void *));
