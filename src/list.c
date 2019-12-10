@@ -194,8 +194,9 @@ void *list_remove_last(List *list) {
 void *list_remove_at(List *list, size_t index) {
     Node *node = _list_at(list, index);
     if (node) {
+        void *data = node->data;
         _list_remove(list, node);
-        return node->data;
+        return data;
     }
     return NULL;
 }
