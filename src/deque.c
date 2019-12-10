@@ -23,6 +23,63 @@ static inline size_t _index_to_pos(Deque *deque, size_t index) {
     return (deque->head + index) % deque->cap;
 }
 
+static void _deque_reserve(Deque *d, size_t p, char direct) {
+    if (direct == 'l') {
+        if (p >= d->head) {
+            // ---head---pos---tail--- || ---tail---head---pos---
+            if (d->head == 0) {
+                d->data[d->cap - 1] = d->data[0];
+                memmove(d->data, d->data + 1, p * sizeof(void *));
+            } else {
+                memmove(d->data + d->head - 1, d->data + d->head, (p - d->head + 1) * sizeof(void *));
+            }
+        } else {
+            // ---pos---tail---head---
+            memmove(d->data + d->head - 1, d->data + d->head, (d->cap - d->head) * sizeof(void *));
+            d->data[d->cap - 1] = d->data[0];
+            memmove(d->data, d->data + 1, p * sizeof(void *));
+        }
+        d->head = _pos_prev(d->head, d->cap);
+    } else if (direct == 'r') {
+        if (p < d->tail) {
+            // ---head---pos---tail--- || ---pos---tail---head---
+            memmove(d->data + p + 1, d->data + p, (d->tail - p) * sizeof(void *));
+        } else {
+            // ---tail---head---pos---
+            memmove(d->data + 1, d->data, d->tail * sizeof(void *));
+            d->data[0] = d->data[d->cap - 1];
+            memmove(d->data + p + 1, d->data + p, (d->cap - p - 1) * sizeof(void *));
+        }
+        d->tail = _pos_next(d->tail, d->cap);
+    }
+}
+
+static void _deque_release(Deque *d, size_t p, char direct) {
+    if (direct == 'l') {
+        if (p >= d->head) {
+            // ---head---pos---tail--- || ---tail---head---pos---
+            memmove(d->data + d->head + 1, d->data + d->head, (p - d->head) * sizeof(void *));
+        } else {
+            // ---pos---tail---head---
+            memmove(d->data + 1, d->data, (p - 1) * sizeof(void *));
+            d->data[0] = d->data[d->cap - 1];
+            memmove(d->data + d->head + 1, d->data + d->head, (d->cap - d->head - 1) * sizeof(void *));
+        }
+        d->head = _pos_next(d->head, d->cap);
+    } else if (direct == 'r') {
+        if (p < d->tail) {
+            // ---head---pos---tail--- || ---pos---tail---head---
+            memmove(d->data + p, d->data + p + 1, (d->tail - p - 1) * sizeof(void *));
+        } else {
+            // ---tail---head---pos---
+            memmove(d->data + p, d->data + p + 1, (d->cap - p - 1) * sizeof(void *));
+            d->data[d->cap - 1] = d->data[0];
+            memmove(d->data, d->data + 1, (d->tail - 1) * sizeof(void *));
+        }
+        d->tail = _pos_prev(d->tail, d->cap);
+    }
+}
+
 static void _deque_resize(Deque *deque) {
     size_t cap_new = deque->cap * 2;
     void **tmp = malloc(cap_new * sizeof(void *));
@@ -139,17 +196,16 @@ void *deque_insert_at(Deque *deque, void *data, size_t index) {
     if (deque->len == deque->cap) {
         _deque_resize(deque);
     }
-    Deque cp = *deque; // copy to stack to speed up access
+
     size_t pos = _index_to_pos(deque, index);
-    if (pos < cp.tail) {
-        memmove(cp.data + pos + 1, cp.data + pos, (cp.tail - pos) * sizeof(void *));
-        deque->tail = _pos_next(cp.tail, cp.cap);
-    } else if (pos >= cp.head) {
-        --pos;
-        memmove(cp.data + cp.head - 1, cp.data + cp.head, (pos - cp.head + 1) * sizeof(void *));
-        deque->head = _pos_prev(cp.head, cp.cap);
+
+    if (index < deque->len / 2) {
+        _deque_reserve(deque, pos, 'l');
+        deque->data[--pos] = data;
+    } else {
+        _deque_reserve(deque, pos, 'r');
+        deque->data[pos] = data;
     }
-    deque->data[pos] = data;
     ++(deque->len);
     return data;
 }
@@ -194,15 +250,14 @@ void *deque_remove_at(Deque *deque, size_t index) {
     if (!deque || index >= deque->len) {
         return NULL;
     }
-    Deque cp = *deque; // copy to stack to speed up access
+
     size_t pos = _index_to_pos(deque, index);
-    void *data = cp.data[pos];
-    if (pos < cp.tail) {
-        memmove(cp.data + pos, cp.data + pos + 1, (cp.tail - pos - 1) * sizeof(void *));
-        deque->tail = _pos_prev(cp.tail, cp.cap);
-    } else if (pos >= cp.head) {
-        memmove(cp.data + cp.head + 1, cp.data + cp.head, (pos - cp.head) * sizeof(void *));
-        deque->head = _pos_next(cp.head, cp.cap);
+    void *data = deque->data[pos];
+
+    if (index < deque->len / 2) {
+        _deque_release(deque, pos, 'l');
+    } else {
+        _deque_release(deque, pos, 'r');
     }
     --(deque->len);
     return data;
