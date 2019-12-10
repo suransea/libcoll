@@ -141,9 +141,9 @@ A set implemented with map.
 
 #### Time Complexity
 
-get | insert | remove
---- | ------ | ------
-O(log n) | O(log n) | O(log n)
+insert | remove
+------ | ------
+O(log n) | O(log n)
 
 #### Operations
 
