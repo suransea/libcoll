@@ -269,6 +269,7 @@ void *deque_remove_first(Deque *deque) {
     }
     void *data = deque->data[deque->head];
     deque->head = _pos_next(deque->head, deque->cap);
+    --(deque->len);
     return data;
 }
 
@@ -277,6 +278,7 @@ void *deque_remove_last(Deque *deque) {
         return NULL;
     }
     deque->tail = _pos_prev(deque->tail, deque->cap);
+    --(deque->len);
     return deque->data[deque->tail];
 }
 
