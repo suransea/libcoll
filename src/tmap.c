@@ -2,30 +2,31 @@
 // Created by sea on 2019/11/29.
 //
 
+#include "coll/tmap.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "map.h"
 
-typedef struct _m_entry Entry; // map entry, node of red-black tree
+typedef struct coll_tmap_entry Entry;  // map entry, node of red-black tree
 
-typedef unsigned char Color;   // map entry color
+typedef unsigned char Color;  // map entry color
 
-#define RED   0x01u
+#define RED 0x01u
 #define BLACK 0x00u
 
-struct _m_entry {
-  void *key, *val;
-  Entry *left, *right, *parent;
-  Color color;
+struct coll_tmap_entry {
+    void *key, *val;
+    Entry *left, *right, *parent;
+    Color color;
 };
 
-struct _map {
-  Entry *root;
-  size_t size;
-  int (*cmp)(void *, void *);
+struct coll_tmap {
+    Entry *root;
+    size_t size;
+    int (*cmp)(void *, void *);
 };
 
-static Entry *_map_entry_of(Map *map, void *key) {
+static Entry *tmap_entry_of(TMap *map, void *key) {
     Entry *cur = map->root;
     while (cur) {
         int result = map->cmp(key, cur->key);
@@ -40,7 +41,7 @@ static Entry *_map_entry_of(Map *map, void *key) {
     return NULL;
 }
 
-static Entry *_entry_new(void *key, void *value, void *parent) {
+static Entry *entry_new(void *key, void *value, void *parent) {
     Entry *entry = malloc(sizeof(Entry));
     entry->key = key;
     entry->val = value;
@@ -51,7 +52,7 @@ static Entry *_entry_new(void *key, void *value, void *parent) {
     return entry;
 }
 
-static Entry *_entry_first(Entry *entry) {
+static Entry *entry_first(Entry *entry) {
     if (!entry) {
         return NULL;
     }
@@ -61,7 +62,7 @@ static Entry *_entry_first(Entry *entry) {
     return entry;
 }
 
-static Entry *_entry_last(Entry *entry) {
+static Entry *entry_last(Entry *entry) {
     if (!entry) {
         return NULL;
     }
@@ -71,7 +72,7 @@ static Entry *_entry_last(Entry *entry) {
     return entry;
 }
 
-static Entry *_entry_prev(Entry *entry) {
+static Entry *entry_prev(Entry *entry) {
     if (!entry) {
         return NULL;
     }
@@ -91,7 +92,7 @@ static Entry *_entry_prev(Entry *entry) {
     return entry;
 }
 
-static Entry *_entry_next(Entry *entry) {
+static Entry *entry_next(Entry *entry) {
     if (!entry) {
         return NULL;
     }
@@ -111,7 +112,7 @@ static Entry *_entry_next(Entry *entry) {
     return entry;
 }
 
-static void _entry_rotate_left(Map *map, Entry *entry) {
+static void entry_rotate_left(TMap *map, Entry *entry) {
     if (!entry) {
         return;
     }
@@ -132,7 +133,7 @@ static void _entry_rotate_left(Map *map, Entry *entry) {
     entry->parent = r;
 }
 
-static void _entry_rotate_right(Map *map, Entry *entry) {
+static void entry_rotate_right(TMap *map, Entry *entry) {
     if (!entry) {
         return;
     }
@@ -179,7 +180,7 @@ static inline void dye(Entry *entry, Color color) {
 
 // inline functions end
 
-static void _map_balance_insert(Map *map, Entry *entry) {
+static void tmap_balance_insert(TMap *map, Entry *entry) {
     dye(entry, RED);
     while (entry && entry != map->root && entry->parent->color == RED) {
         if (parent(entry) == left(parent(parent(entry)))) {
@@ -192,11 +193,11 @@ static void _map_balance_insert(Map *map, Entry *entry) {
             } else {
                 if (entry == right(parent(entry))) {
                     entry = parent(entry);
-                    _entry_rotate_left(map, entry);
+                    entry_rotate_left(map, entry);
                 }
                 dye(parent(entry), BLACK);
                 dye(parent(parent(entry)), RED);
-                _entry_rotate_right(map, parent(parent(entry)));
+                entry_rotate_right(map, parent(parent(entry)));
             }
         } else {
             Entry *e = left(parent(parent(entry)));
@@ -208,44 +209,43 @@ static void _map_balance_insert(Map *map, Entry *entry) {
             } else {
                 if (entry == left(parent(entry))) {
                     entry = parent(entry);
-                    _entry_rotate_right(map, entry);
+                    entry_rotate_right(map, entry);
                 }
                 dye(parent(entry), BLACK);
                 dye(parent(parent(entry)), RED);
-                _entry_rotate_left(map, parent(parent(entry)));
+                entry_rotate_left(map, parent(parent(entry)));
             }
         }
     }
     dye(map->root, BLACK);
 }
 
-static void _map_balance_remove(Map *map, Entry *entry) {
+static void tmap_balance_remove(TMap *map, Entry *entry) {
     while (entry != map->root && color(entry) == BLACK) {
         if (entry == left(parent(entry))) {
-            Entry *sib = right(parent(entry)); // sibling
+            Entry *sib = right(parent(entry));  // sibling
 
             if (color(sib) == RED) {
                 dye(sib, BLACK);
                 dye(parent(entry), RED);
-                _entry_rotate_left(map, parent(entry));
+                entry_rotate_left(map, parent(entry));
                 sib = right(parent(entry));
             }
 
-            if (color(left(sib)) == BLACK &&
-                color(right(sib)) == BLACK) {
+            if (color(left(sib)) == BLACK && color(right(sib)) == BLACK) {
                 dye(sib, RED);
                 entry = parent(entry);
             } else {
                 if (color(right(sib)) == BLACK) {
                     dye(left(sib), BLACK);
                     dye(sib, RED);
-                    _entry_rotate_right(map, sib);
+                    entry_rotate_right(map, sib);
                     sib = right(parent(entry));
                 }
                 dye(sib, color(parent(entry)));
                 dye(parent(entry), BLACK);
                 dye(right(sib), BLACK);
-                _entry_rotate_left(map, parent(entry));
+                entry_rotate_left(map, parent(entry));
                 entry = map->root;
             }
         } else {
@@ -254,25 +254,24 @@ static void _map_balance_remove(Map *map, Entry *entry) {
             if (color(sib) == RED) {
                 dye(sib, BLACK);
                 dye(parent(entry), RED);
-                _entry_rotate_right(map, parent(entry));
+                entry_rotate_right(map, parent(entry));
                 sib = left(parent(entry));
             }
 
-            if (color(right(sib)) == BLACK &&
-                color(left(sib)) == BLACK) {
+            if (color(right(sib)) == BLACK && color(left(sib)) == BLACK) {
                 dye(sib, RED);
                 entry = parent(entry);
             } else {
                 if (color(left(sib)) == BLACK) {
                     dye(right(sib), BLACK);
                     dye(sib, RED);
-                    _entry_rotate_left(map, sib);
+                    entry_rotate_left(map, sib);
                     sib = left(parent(entry));
                 }
                 dye(sib, color(parent(entry)));
                 dye(parent(entry), BLACK);
                 dye(left(sib), BLACK);
-                _entry_rotate_right(map, parent(entry));
+                entry_rotate_right(map, parent(entry));
                 entry = map->root;
             }
         }
@@ -280,22 +279,22 @@ static void _map_balance_remove(Map *map, Entry *entry) {
     dye(entry, BLACK);
 }
 
-Map *map_new() {
-    return map_new_custom(cmp_ptr);
+TMap *tmap_new() {
+    return tmap_new_custom(cmp_ptr);
 }
 
-Map *map_new_custom(int (*cmp)(void *, void *)) {
-    Map *map = malloc(sizeof(Map));
+TMap *tmap_new_custom(int (*cmp)(void *, void *)) {
+    TMap *map = malloc(sizeof(TMap));
     map->size = 0;
     map->cmp = cmp;
     map->root = NULL;
     return map;
 }
 
-void *map_insert(Map *map, void *key, void *value) {
+void *tmap_insert(TMap *map, void *key, void *value) {
     Entry *cur = map->root;
     if (!cur) {
-        map->root = _entry_new(key, value, NULL);
+        map->root = entry_new(key, value, NULL);
         ++(map->size);
         return NULL;
     }
@@ -314,78 +313,78 @@ void *map_insert(Map *map, void *key, void *value) {
             return old;
         }
     }
-    Entry *entry = _entry_new(key, value, parent);
+    Entry *entry = entry_new(key, value, parent);
     if (result < 0) {
         parent->left = entry;
     } else {
         parent->right = entry;
     }
-    _map_balance_insert(map, entry);
+    tmap_balance_insert(map, entry);
     ++(map->size);
     return NULL;
 }
 
-void *map_value_of(Map *map, void *key) {
-    Entry *entry = _map_entry_of(map, key);
+void *tmap_value_of(TMap *map, void *key) {
+    Entry *entry = tmap_entry_of(map, key);
     if (entry) {
         return entry->val;
     }
     return NULL;
 }
 
-Seq *map_keys(Map *map) {
+Seq *tmap_keys(TMap *map) {
     Seq *seq = seq_new();
-    Entry *cur = _entry_last(map->root);
+    Entry *cur = entry_last(map->root);
     while (cur) {
         seq_prepend(seq, cur->key);
-        cur = _entry_prev(cur);
+        cur = entry_prev(cur);
     }
     return seq;
 }
 
-Seq *map_values(Map *map) {
+Seq *tmap_values(TMap *map) {
     Seq *seq = seq_new();
-    Entry *cur = _entry_last(map->root);
+    Entry *cur = entry_last(map->root);
     while (cur) {
         seq_prepend(seq, cur->val);
-        cur = _entry_prev(cur);
+        cur = entry_prev(cur);
     }
     return seq;
 }
 
-size_t map_size(Map *map) {
+size_t tmap_size(TMap *map) {
     return map->size;
 }
 
-bool map_empty(Map *map) {
+bool tmap_empty(TMap *map) {
     return map->size == 0;
 }
 
-bool map_contains_key(Map *map, void *key) {
-    Entry *entry = _map_entry_of(map, key);
+bool tmap_contains_key(TMap *map, void *key) {
+    Entry *entry = tmap_entry_of(map, key);
     return entry != NULL;
 }
 
-bool map_contains_value(Map *map, void *value) {
-    Entry *cur = _entry_first(map->root);
+bool tmap_contains_value(TMap *map, void *value) {
+    Entry *cur = entry_first(map->root);
     while (cur) {
         if (cur->val == value) {
             return true;
         }
-        cur = _entry_next(cur);
+        cur = entry_next(cur);
     }
     return false;
 }
 
-void *map_remove(Map *map, void *key) {
-    Entry *entry = _map_entry_of(map, key);
+void *tmap_remove(TMap *map, void *key) {
+    Entry *entry = tmap_entry_of(map, key);
     if (!entry) {
         return NULL;
     }
 
     void *old = entry->val;
     if (entry->left && entry->right) {
-        Entry *next = _entry_next(entry);
+        Entry *next = entry_next(entry);
         entry->key = next->key;
         entry->val = next->val;
         entry = next;
@@ -404,13 +403,13 @@ void *map_remove(Map *map, void *key) {
         }
 
         if (entry->color == BLACK) {
-            _map_balance_remove(map, rp);
+            tmap_balance_remove(map, rp);
         }
     } else if (!entry->parent) {
         map->root = NULL;
     } else {
         if (entry->color == BLACK) {
-            _map_balance_remove(map, entry);
+            tmap_balance_remove(map, entry);
         }
         if (entry->parent) {
             if (entry == entry->parent->left) {
@@ -425,12 +424,12 @@ void *map_remove(Map *map, void *key) {
     return old;
 }
 
-void map_clear(Map *map) {
+void tmap_clear(TMap *map) {
     Seq *seq = seq_new();
-    Entry *cur = _entry_last(map->root);
+    Entry *cur = entry_last(map->root);
     while (cur) {
         seq_prepend(seq, cur);
-        cur = _entry_prev(cur);
+        cur = entry_prev(cur);
     }
     seq_foreach(seq, free);
     seq_free(seq);
@@ -438,17 +437,17 @@ void map_clear(Map *map) {
     map->size = 0;
 }
 
-void map_foreach(Map *map, void(*visit)(void *, void *)) {
-    Entry *cur = _entry_first(map->root);
+void tmap_foreach(TMap *map, void (*visit)(void *, void *)) {
+    Entry *cur = entry_first(map->root);
     while (cur) {
-        Entry *next = _entry_next(cur);
+        Entry *next = entry_next(cur);
         visit(cur->key, cur->val);
         cur = next;
     }
 }
 
-void map_free(Map *map) {
-    map_clear(map);
+void tmap_free(TMap *map) {
+    tmap_clear(map);
     free(map);
 }
 

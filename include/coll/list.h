@@ -5,10 +5,10 @@
 #ifndef LIBCOLL_LIST_H
 #define LIBCOLL_LIST_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
-typedef struct _list List;
+typedef struct coll_list List;
 
 List *list_new();
 
@@ -48,11 +48,11 @@ void *list_insert_after(List *list, void *data, void *pos);
 
 void *list_insert_at(List *list, void *data, size_t index);
 
-void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *));
+void *list_insert_sorted(List *list, void *data, int (*cmp)(void *, void *));
 
 void *list_assign(List *list, size_t index, void *data);
 
-void list_foreach(List *list, void(*visit)(void *));
+void list_foreach(List *list, void (*visit)(void *));
 
 void list_reverse(List *list);
 
@@ -60,4 +60,4 @@ void list_clear(List *list);
 
 void list_free(List *list);
 
-#endif //LIBCOLL_LIST_H
+#endif  // LIBCOLL_LIST_H

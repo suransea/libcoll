@@ -2,22 +2,23 @@
 // Created by sea on 2019/11/27.
 //
 
+#include "coll/list.h"
+
 #include <stdlib.h>
-#include "list.h"
 
-typedef struct _l_node Node;
+typedef struct coll_list_node Node;
 
-struct _l_node {
-  void *data;
-  Node *prev, *next;
+struct coll_list_node {
+    void *data;
+    Node *prev, *next;
 };
 
-struct _list {
-  Node *head;
-  size_t len;
+struct coll_list {
+    Node *head;
+    size_t len;
 };
 
-static void _list_insert(List *list, Node *node, Node *pos) {
+static void list_insert_node(List *list, Node *node, Node *pos) {
     Node *next = pos->next;
     pos->next = node;
     node->prev = pos;
@@ -26,14 +27,14 @@ static void _list_insert(List *list, Node *node, Node *pos) {
     ++(list->len);
 }
 
-static void _list_remove(List *list, Node *node) {
+static void list_remove_node(List *list, Node *node) {
     node->prev->next = node->next;
     node->next->prev = node->prev;
     free(node);
     --(list->len);
 }
 
-static Node *_list_pos(List *list, void *data) {
+static Node *list_node_of(List *list, void *data) {
     Node *cur = list->head->next;
     while (cur != list->head) {
         if (cur->data == data) {
@@ -44,7 +45,7 @@ static Node *_list_pos(List *list, void *data) {
     return NULL;
 }
 
-static Node *_list_at(List *list, size_t index) {
+static Node *list_node_at(List *list, size_t index) {
     size_t index_r = list->len - index - 1;
     if (index_r < index) {
         Node *cur = list->head->prev;
@@ -72,14 +73,14 @@ List *list_new() {
 void *list_append(List *list, void *data) {
     Node *node = malloc(sizeof(Node));
     node->data = data;
-    _list_insert(list, node, list->head->prev);
+    list_insert_node(list, node, list->head->prev);
     return data;
 }
 
 void *list_prepend(List *list, void *data) {
     Node *node = malloc(sizeof(Node));
     node->data = data;
-    _list_insert(list, node, list->head);
+    list_insert_node(list, node, list->head);
     return data;
 }
 
@@ -101,7 +102,7 @@ void *list_at(List *list, size_t index) {
     if (index >= list->len) {
         return NULL;
     }
-    return _list_at(list, index)->data;
+    return list_node_at(list, index)->data;
 }
 
 size_t list_size(List *list) {
@@ -142,9 +143,9 @@ size_t list_find(List *list, bool (*pred)(void *)) {
 }
 
 void *list_remove(List *list, void *data) {
-    Node *node = _list_pos(list, data);
+    Node *node = list_node_of(list, data);
     if (node) {
-        _list_remove(list, node);
+        list_remove_node(list, node);
         return data;
     }
     return NULL;
@@ -153,8 +154,8 @@ void *list_remove(List *list, void *data) {
 size_t list_remove_all(List *list, void *data) {
     Node *node;
     size_t count = 0;
-    while ((node = _list_pos(list, data)) != NULL) {
-        _list_remove(list, node);
+    while ((node = list_node_of(list, data)) != NULL) {
+        list_remove_node(list, node);
         ++count;
     }
     return count;
@@ -165,7 +166,7 @@ void *list_remove_if(List *list, bool (*pred)(void *)) {
     while (cur != list->head) {
         if (pred(cur->data)) {
             void *data = cur->data;
-            _list_remove(list, cur);
+            list_remove_node(list, cur);
             return data;
         }
         cur = cur->next;
@@ -178,7 +179,7 @@ void *list_remove_first(List *list) {
         return NULL;
     }
     void *data = list_first(list);
-    _list_remove(list, list->head->next);
+    list_remove_node(list, list->head->next);
     return data;
 }
 
@@ -187,39 +188,39 @@ void *list_remove_last(List *list) {
         return NULL;
     }
     void *data = list_last(list);
-    _list_remove(list, list->head->prev);
+    list_remove_node(list, list->head->prev);
     return data;
 }
 
 void *list_remove_at(List *list, size_t index) {
-    Node *node = _list_at(list, index);
+    Node *node = list_node_at(list, index);
     if (node) {
         void *data = node->data;
-        _list_remove(list, node);
+        list_remove_node(list, node);
         return data;
     }
     return NULL;
 }
 
 void *list_insert_before(List *list, void *data, void *pos) {
-    Node *p = _list_pos(list, pos);
+    Node *p = list_node_of(list, pos);
     if (!p) {
         return NULL;
     }
     Node *node = malloc(sizeof(Node));
     node->data = data;
-    _list_insert(list, node, p->prev);
+    list_insert_node(list, node, p->prev);
     return node->data;
 }
 
 void *list_insert_after(List *list, void *data, void *pos) {
-    Node *p = _list_pos(list, pos);
+    Node *p = list_node_of(list, pos);
     if (!p) {
         return NULL;
     }
     Node *node = malloc(sizeof(Node));
     node->data = data;
-    _list_insert(list, node, p);
+    list_insert_node(list, node, p);
     return node->data;
 }
 
@@ -229,17 +230,17 @@ void *list_insert_at(List *list, void *data, size_t index) {
     } else if (index == list->len) {
         return list_append(list, data);
     }
-    Node *pos = _list_at(list, index);
+    Node *pos = list_node_at(list, index);
     if (!pos) {
         return NULL;
     }
     Node *node = malloc(sizeof(Node));
     node->data = data;
-    _list_insert(list, node, pos->prev);
+    list_insert_node(list, node, pos->prev);
     return node->data;
 }
 
-void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *)) {
+void *list_insert_sorted(List *list, void *data, int (*cmp)(void *, void *)) {
     Node *cur = list->head->next;
 
     if (cur == list->head) {
@@ -256,11 +257,11 @@ void *list_insert_sorted(List *list, void *data, int(*cmp)(void *, void *)) {
     }
 
     if ((cur->next == list->head) && (result > 0)) {
-        _list_insert(list, node, cur);
+        list_insert_node(list, node, cur);
         return data;
     }
 
-    _list_insert(list, node, cur->prev);
+    list_insert_node(list, node, cur->prev);
     return data;
 }
 
@@ -268,13 +269,13 @@ void *list_assign(List *list, size_t index, void *data) {
     if (index >= list->len) {
         return NULL;
     }
-    Node *pos = _list_at(list, index);
+    Node *pos = list_node_at(list, index);
     void *old = pos->data;
     pos->data = data;
     return old;
 }
 
-void list_foreach(List *list, void(*visit)(void *)) {
+void list_foreach(List *list, void (*visit)(void *)) {
     Node *cur = list->head->next;
     while (cur != list->head) {
         visit(cur->data);
@@ -302,7 +303,7 @@ void list_clear(List *list) {
     Node *cur = list->head->next;
     while (cur != list->head) {
         Node *next = cur->next;
-        _list_remove(list, cur);
+        list_remove_node(list, cur);
         cur = next;
     }
 }

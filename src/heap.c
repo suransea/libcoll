@@ -2,48 +2,50 @@
 // Created by sea on 2019/12/4.
 //
 
-#include <stdlib.h>
-#include "heap.h"
-#include "vector.h"
+#include "coll/heap.h"
 
-struct _heap {
-  Vector *vector;
-  int (*cmp)(void *, void *);
+#include <stdlib.h>
+
+#include "coll/vector.h"
+
+struct coll_heap {
+    Vector *vector;
+    int (*cmp)(void *, void *);
 };
 
-static inline void _swap(Heap *heap, size_t x, size_t y) {
+static inline void swap(Heap *heap, size_t x, size_t y) {
     void *tmp = vector_at(heap->vector, x);
     vector_assign(heap->vector, x, vector_at(heap->vector, y));
     vector_assign(heap->vector, y, tmp);
 }
 
-static inline int _cmp(Heap *heap, size_t x, size_t y) {
+static inline int cmp(Heap *heap, size_t x, size_t y) {
     return heap->cmp(vector_at(heap->vector, x), vector_at(heap->vector, y));
 }
 
-static void _heapify_up(Heap *heap, size_t pos) {
+static void heapify_up(Heap *heap, size_t pos) {
     size_t parent = (pos - 1) / 2;
     while (pos > 0) {
-        if (_cmp(heap, pos, parent) < 0) {
+        if (cmp(heap, pos, parent) < 0) {
             break;
         }
-        _swap(heap, pos, parent);
+        swap(heap, pos, parent);
         pos = parent;
         parent = (pos - 1) / 2;
     }
 }
 
-static void _heapify_down(Heap *heap, size_t pos) {
+static void heapify_down(Heap *heap, size_t pos) {
     size_t size = vector_size(heap->vector);
     size_t l;
     while ((l = pos * 2 + 1) < size) {
-        if (l < size - 1 && _cmp(heap, l, l + 1) < 0) {
-            ++l; // right child
+        if (l < size - 1 && cmp(heap, l, l + 1) < 0) {
+            ++l;  // right child
         }
-        if (_cmp(heap, pos, l) >= 0) {
+        if (cmp(heap, pos, l) >= 0) {
             break;
         }
-        _swap(heap, pos, l);
+        swap(heap, pos, l);
         pos = l;
     }
 }
@@ -58,7 +60,7 @@ Heap *heap_new(int (*cmp)(void *, void *)) {
 void heap_push(Heap *heap, void *data) {
     size_t pos = vector_size(heap->vector);
     vector_append(heap->vector, data);
-    _heapify_up(heap, pos);
+    heapify_up(heap, pos);
 }
 
 void *heap_pop(Heap *heap) {
@@ -66,9 +68,9 @@ void *heap_pop(Heap *heap) {
         return NULL;
     }
     size_t size = vector_size(heap->vector);
-    _swap(heap, 0, size - 1);
+    swap(heap, 0, size - 1);
     void *data = vector_remove_last(heap->vector);
-    _heapify_down(heap, 0);
+    heapify_down(heap, 0);
     return data;
 }
 
@@ -87,7 +89,7 @@ bool heap_empty(Heap *heap) {
     return vector_size(heap->vector) == 0;
 }
 
-void heap_foreach(Heap *heap, void(*visit)(void *)) {
+void heap_foreach(Heap *heap, void (*visit)(void *)) {
     vector_foreach(heap->vector, visit);
 }
 

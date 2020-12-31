@@ -5,10 +5,10 @@
 #ifndef LIBCOLL_DEQUE_H
 #define LIBCOLL_DEQUE_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
-typedef struct _deque Deque;
+typedef struct coll_deque Deque;
 
 Deque *deque_new(size_t cap);
 
@@ -48,7 +48,7 @@ void *deque_remove_first(Deque *deque);
 
 void *deque_remove_last(Deque *deque);
 
-void deque_foreach(Deque *deque, void(*visit)(void *));
+void deque_foreach(Deque *deque, void (*visit)(void *));
 
 bool deque_empty(Deque *deque);
 
@@ -56,4 +56,4 @@ void deque_clear(Deque *deque);
 
 void deque_free(Deque *deque);
 
-#endif //LIBCOLL_DEQUE_H
+#endif  // LIBCOLL_DEQUE_H

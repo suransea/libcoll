@@ -2,57 +2,46 @@
 // Created by sea on 2019/11/28.
 //
 
-#include <stdlib.h>
-#include "queue.h"
+#include "coll/queue.h"
 
-struct _queue {
-  List *list;
-};
+#include "coll/deque.h"
 
-Queue *queue_new() {
-    Queue *queue = malloc(sizeof(Queue));
-    queue->list = list_new();
-    return queue;
+Queue *queue_new(size_t cap) {
+    return deque_new(cap);
 }
 
 void queue_push(Queue *queue, void *data) {
-    list_append(queue->list, data);
+    deque_append(queue, data);
 }
 
 void *queue_pop(Queue *queue) {
-    if (list_size(queue->list) == 0) {
-        return NULL;
-    }
-    void *data = list_first(queue->list);
-    list_remove_first(queue->list);
-    return data;
+    return deque_remove_first(queue);
 }
 
 void *queue_front(Queue *queue) {
-    return list_first(queue->list);
+    return deque_first(queue);
 }
 
 void *queue_back(Queue *queue) {
-    return list_last(queue->list);
+    return deque_last(queue);
 }
 
 bool queue_empty(Queue *queue) {
-    return list_size(queue->list) == 0;
+    return deque_empty(queue);
 }
 
-void queue_foreach(Queue *queue, void(*visit)(void *)) {
-    list_foreach(queue->list, visit);
+void queue_foreach(Queue *queue, void (*visit)(void *)) {
+    deque_foreach(queue, visit);
 }
 
 void queue_clear(Queue *queue) {
-    list_clear(queue->list);
+    deque_clear(queue);
 }
 
 size_t queue_size(Queue *queue) {
-    return list_size(queue->list);
+    return deque_size(queue);
 }
 
 void queue_free(Queue *queue) {
-    list_free(queue->list);
-    free(queue);
+    deque_free(queue);
 }

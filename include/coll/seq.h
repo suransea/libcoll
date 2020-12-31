@@ -5,10 +5,10 @@
 #ifndef LIBCOLL_SEQ_H
 #define LIBCOLL_SEQ_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
-typedef struct _seq Seq;
+typedef struct coll_seq Seq;
 
 Seq *seq_new();
 
@@ -48,11 +48,11 @@ void *seq_insert_before(Seq *seq, void *data, void *pos);
 
 void *seq_insert_after(Seq *seq, void *data, void *pos);
 
-void *seq_insert_sorted(Seq *seq, void *data, int(*cmp)(void *, void *));
+void *seq_insert_sorted(Seq *seq, void *data, int (*cmp)(void *, void *));
 
 void *seq_assign(Seq *seq, size_t index, void *data);
 
-void seq_foreach(Seq *seq, void(*visit)(void *));
+void seq_foreach(Seq *seq, void (*visit)(void *));
 
 void seq_clear(Seq *seq);
 
@@ -60,4 +60,4 @@ void seq_reverse(Seq *seq);
 
 void seq_free(Seq *seq);
 
-#endif //LIBCOLL_SEQ_H
+#endif  //LIBCOLL_SEQ_H

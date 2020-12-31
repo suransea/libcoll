@@ -2,17 +2,18 @@
 // Created by sea on 2019/11/28.
 //
 
+#include "coll/vector.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "vector.h"
 
-struct _vector {
-  void **data;
-  size_t len;
-  size_t cap;
+struct coll_vector {
+    void **data;
+    size_t len;
+    size_t cap;
 };
 
-static void _vector_resize(Vector *vector) {
+static void vector_resize(Vector *vector) {
     size_t cap_new = vector->cap * 2;
     void *tmp = realloc(vector->data, cap_new * sizeof(void *));
     vector->data = tmp;
@@ -35,7 +36,7 @@ void *vector_append(Vector *vector, void *data) {
         return NULL;
     }
     if (vector->cap == vector->len) {
-        _vector_resize(vector);
+        vector_resize(vector);
     }
     vector->data[vector->len] = data;
     ++(vector->len);
@@ -155,7 +156,7 @@ void *vector_assign(Vector *vector, size_t index, void *data) {
     return old;
 }
 
-void vector_foreach(Vector *vector, void(*visit)(void *)) {
+void vector_foreach(Vector *vector, void (*visit)(void *)) {
     for (size_t i = 0; i < vector->len; ++i) {
         visit(vector->data[i]);
     }

@@ -2,23 +2,24 @@
 // Created by sea on 2019/12/2.
 //
 
+#include "coll/seq.h"
+
 #include <stdlib.h>
-#include "seq.h"
 
-typedef struct _s_node Node;
+typedef struct coll_seq_node Node;
 
-struct _seq {
-  Node *root;
-  size_t len;
+struct coll_seq {
+    Node *head;
+    size_t len;
 };
 
-struct _s_node {
-  void *data;
-  Node *next;
+struct coll_seq_node {
+    void *data;
+    Node *next;
 };
 
-static Node *_seq_last(Seq *seq) {
-    Node *cur = seq->root;
+static Node *seq_last_node(Seq *seq) {
+    Node *cur = seq->head;
     if (!cur) {
         return NULL;
     }
@@ -28,8 +29,8 @@ static Node *_seq_last(Seq *seq) {
     return cur;
 }
 
-static Node *_seq_at(Seq *seq, size_t index) {
-    Node *cur = seq->root;
+static Node *seq_node_at(Seq *seq, size_t index) {
+    Node *cur = seq->head;
     for (size_t i = 0; i < index; ++i) {
         cur = cur->next;
     }
@@ -39,7 +40,7 @@ static Node *_seq_at(Seq *seq, size_t index) {
 Seq *seq_new() {
     Seq *seq = malloc(sizeof(Seq));
     seq->len = 0;
-    seq->root = NULL;
+    seq->head = NULL;
     return seq;
 }
 
@@ -50,13 +51,13 @@ void *seq_append(Seq *seq, void *data) {
     Node *node = malloc(sizeof(Node));
     node->data = data;
     node->next = NULL;
-    if (seq->root) {
-        Node *last = _seq_last(seq);
+    if (seq->head) {
+        Node *last = seq_last_node(seq);
         last->next = node;
         ++(seq->len);
         return data;
     }
-    seq->root = node;
+    seq->head = node;
     ++(seq->len);
     return data;
 }
@@ -67,22 +68,22 @@ void *seq_prepend(Seq *seq, void *data) {
     }
     Node *node = malloc(sizeof(Node));
     node->data = data;
-    node->next = seq->root;
-    seq->root = node;
+    node->next = seq->head;
+    seq->head = node;
     ++(seq->len);
     return data;
 }
 
 void *seq_first(Seq *seq) {
-    if (seq && seq->root) {
-        return seq->root->data;
+    if (seq && seq->head) {
+        return seq->head->data;
     }
     return NULL;
 }
 
 void *seq_last(Seq *seq) {
-    if (seq && seq->root) {
-        Node *last = _seq_last(seq);
+    if (seq && seq->head) {
+        Node *last = seq_last_node(seq);
         return last->data;
     }
     return NULL;
@@ -92,12 +93,12 @@ void *seq_at(Seq *seq, size_t index) {
     if (index >= seq->len) {
         return NULL;
     }
-    return _seq_at(seq, index)->data;
+    return seq_node_at(seq, index)->data;
 }
 
 size_t seq_index_of(Seq *seq, void *data) {
     size_t index = 0;
-    Node *cur = seq->root;
+    Node *cur = seq->head;
     while (cur) {
         if (cur->data == data) {
             return index;
@@ -110,7 +111,7 @@ size_t seq_index_of(Seq *seq, void *data) {
 
 size_t seq_find(Seq *seq, bool (*pred)(void *)) {
     size_t index = 0;
-    Node *cur = seq->root;
+    Node *cur = seq->head;
     while (cur) {
         if (pred(cur->data)) {
             return index;
@@ -133,14 +134,14 @@ bool seq_empty(Seq *seq) {
 }
 
 void *seq_remove(Seq *seq, void *data) {
-    Node *prev = NULL, *cur = seq->root;
+    Node *prev = NULL, *cur = seq->head;
     while (cur) {
         Node *next = cur->next;
         if (cur->data == data) {
             --(seq->len);
             free(cur);
             if (!prev) {
-                seq->root = next;
+                seq->head = next;
                 return data;
             }
             prev->next = next;
@@ -154,12 +155,12 @@ void *seq_remove(Seq *seq, void *data) {
 
 size_t seq_remove_all(Seq *seq, void *data) {
     size_t count = 0;
-    Node *prev = NULL, *cur = seq->root;
+    Node *prev = NULL, *cur = seq->head;
     while (cur) {
         Node *next = cur->next;
         if (cur->data == data) {
             if (!prev) {
-                seq->root = next;
+                seq->head = next;
             } else {
                 prev->next = next;
             }
@@ -175,7 +176,7 @@ size_t seq_remove_all(Seq *seq, void *data) {
 }
 
 void *seq_remove_if(Seq *seq, bool (*pred)(void *)) {
-    Node *prev = NULL, *cur = seq->root;
+    Node *prev = NULL, *cur = seq->head;
     while (cur) {
         Node *next = cur->next;
         if (pred(cur->data)) {
@@ -183,7 +184,7 @@ void *seq_remove_if(Seq *seq, bool (*pred)(void *)) {
             void *data = cur->data;
             free(cur);
             if (!prev) {
-                seq->root = next;
+                seq->head = next;
                 return data;
             }
             prev->next = next;
@@ -199,7 +200,7 @@ void *seq_remove_at(Seq *seq, size_t index) {
     if (!seq || index >= seq->len) {
         return NULL;
     }
-    Node *prev = NULL, *cur = seq->root;
+    Node *prev = NULL, *cur = seq->head;
     for (size_t i = 0; i < index; ++i) {
         prev = cur;
         cur = cur->next;
@@ -207,7 +208,7 @@ void *seq_remove_at(Seq *seq, size_t index) {
     if (prev) {
         prev->next = cur->next;
     } else {
-        seq->root = cur->next;
+        seq->head = cur->next;
     }
     void *data = cur->data;
     free(cur);
@@ -219,10 +220,10 @@ void *seq_remove_first(Seq *seq) {
     if (!seq || seq->len == 0) {
         return NULL;
     }
-    void *data = seq->root->data;
-    Node *next = seq->root->next;
-    free(seq->root);
-    seq->root = next;
+    void *data = seq->head->data;
+    Node *next = seq->head->next;
+    free(seq->head);
+    seq->head = next;
     --(seq->len);
     return data;
 }
@@ -231,7 +232,7 @@ void *seq_remove_last(Seq *seq) {
     if (!seq || seq->len == 0) {
         return NULL;
     }
-    Node *prev = NULL, *cur = seq->root;
+    Node *prev = NULL, *cur = seq->head;
     while (cur->next) {
         prev = cur;
         cur = cur->next;
@@ -239,7 +240,7 @@ void *seq_remove_last(Seq *seq) {
     if (prev) {
         prev->next = NULL;
     } else {
-        seq->root = NULL;
+        seq->head = NULL;
     }
     void *data = cur->data;
     free(cur);
@@ -253,7 +254,7 @@ void *seq_insert_at(Seq *seq, void *data, size_t index) {
     } else if (index == seq->len) {
         return seq_append(seq, data);
     }
-    Node *prev = NULL, *cur = seq->root;
+    Node *prev = NULL, *cur = seq->head;
     for (size_t i = 0; i < index; ++i) {
         prev = cur;
         cur = cur->next;
@@ -264,7 +265,7 @@ void *seq_insert_at(Seq *seq, void *data, size_t index) {
     if (prev) {
         prev->next = node;
     } else {
-        seq->root = node;
+        seq->head = node;
     }
     ++(seq->len);
     return data;
@@ -274,7 +275,7 @@ void *seq_insert_before(Seq *seq, void *data, void *pos) {
     if (!seq) {
         return NULL;
     }
-    Node *prev = NULL, *cur = seq->root;
+    Node *prev = NULL, *cur = seq->head;
     while (cur) {
         if (cur->data == pos) {
             Node *node = malloc(sizeof(Node));
@@ -283,7 +284,7 @@ void *seq_insert_before(Seq *seq, void *data, void *pos) {
             if (prev) {
                 prev->next = node;
             } else {
-                seq->root = node;
+                seq->head = node;
             }
             ++(seq->len);
             return data;
@@ -298,7 +299,7 @@ void *seq_insert_after(Seq *seq, void *data, void *pos) {
     if (!seq) {
         return NULL;
     }
-    Node *cur = seq->root;
+    Node *cur = seq->head;
     while (cur) {
         if (cur->data == pos) {
             Node *node = malloc(sizeof(Node));
@@ -313,12 +314,12 @@ void *seq_insert_after(Seq *seq, void *data, void *pos) {
     return NULL;
 }
 
-void *seq_insert_sorted(Seq *seq, void *data, int(*cmp)(void *, void *)) {
+void *seq_insert_sorted(Seq *seq, void *data, int (*cmp)(void *, void *)) {
     if (!seq) {
         return NULL;
     }
 
-    Node *prev = NULL, *cur = seq->root;
+    Node *prev = NULL, *cur = seq->head;
 
     if (!cur) {
         return seq_prepend(seq, data);
@@ -346,8 +347,8 @@ void *seq_insert_sorted(Seq *seq, void *data, int(*cmp)(void *, void *)) {
         node->next = cur;
         return data;
     } else {
-        seq->root = node;
-        node->next = seq->root;
+        seq->head = node;
+        node->next = seq->head;
         return data;
     }
 }
@@ -356,14 +357,14 @@ void *seq_assign(Seq *seq, size_t index, void *data) {
     if (index >= seq->len) {
         return NULL;
     }
-    Node *pos = _seq_at(seq, index);
+    Node *pos = seq_node_at(seq, index);
     void *old = pos->data;
     pos->data = data;
     return old;
 }
 
-void seq_foreach(Seq *seq, void(*visit)(void *)) {
-    Node *cur = seq->root;
+void seq_foreach(Seq *seq, void (*visit)(void *)) {
+    Node *cur = seq->head;
     while (cur) {
         Node *next = cur->next;
         visit(cur->data);
@@ -372,20 +373,20 @@ void seq_foreach(Seq *seq, void(*visit)(void *)) {
 }
 
 void seq_clear(Seq *seq) {
-    while (seq->root) {
+    while (seq->head) {
         seq_remove_first(seq);
     }
 }
 
 void seq_reverse(Seq *seq) {
-    Node *prev = NULL, *cur = seq->root, *next;
+    Node *prev = NULL, *cur = seq->head, *next;
     while (cur) {
         next = cur->next;
         cur->next = prev;
         prev = cur;
         cur = next;
     }
-    seq->root = prev;
+    seq->head = prev;
 }
 
 void seq_free(Seq *seq) {

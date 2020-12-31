@@ -5,16 +5,18 @@ Collections implemented in ANSI C.
 - [Linearity](#linearity)
   - [List](#list)
   - [Vector](#vector)
+  - [Array](#array)
   - [Deque](#deque)
   - [Seq](#seq)
+  - [Tuple](#tuple)
 - [Association](#association)
-  - [Map](#map)
-  - [Dict](#dict)
-  - [Set](#set)
-  - [Pair](#pair)
+  - [TMap](#tmap)
+  - [HMap](#hmap)
 - [Adapter](#adapter)
   - [Stack](#stack)
   - [Queue](#queue)
+  - [TSet](#tset)
+  - [HSet](#hset)
   - [Heap](#heap)
 
 ## Linearity
@@ -57,6 +59,23 @@ O(1) | O(n-i) | O(n-i) | O(1) | O(n)
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
 * assign
 
+### Array
+
+A fixed array.
+
+#### Time Complexity
+
+| get | 
+| --- | 
+| O(1) |
+
+#### Operations
+
+* new, free
+* size, empty
+* at, first, last, index_of, find, foreach
+* assign
+
 ### Deque
 
 A double end queue supporting random access.
@@ -95,9 +114,13 @@ O(i) | O(i) | O(i) | O(n) | O(1)
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
 * assign, reverse
 
+### Tuple
+
+Tuples with 2 to 5 elements.
+
 ## Association
 
-### Map
+### TMap
 
 A map implemented with red-black tree.
 
@@ -116,9 +139,9 @@ O(log n) | O(log n) | O(log n)
 * remove, clear
 * contains_key, contains_value
 
-### Dict
+### HMap
 
-A dictionary implemented with hash table.
+A map implemented with hash table.
 
 #### Time Complexity
 
@@ -135,38 +158,11 @@ O(1) ~ O(n) | O(1) ~ O(n) | O(1) ~ O(n)
 * remove, clear
 * contains_key, contains_value
 
-### Set
-
-A set implemented with map.
-
-#### Time Complexity
-
-insert | remove
------- | ------
-O(log n) | O(log n)
-
-#### Operations
-
-* new, new_custom, free
-* size, empty
-* foreach
-* insert
-* remove, clear
-* contains
-
-### Pair
-
-A pair contains two pointers.
-
-#### Operations
-
-* new, free
-
 ## Adapter
 
 ### Stack
 
-A stack implemented with list.
+A stack implemented with vector.
 
 #### Operations
 
@@ -178,7 +174,7 @@ A stack implemented with list.
 
 ### Queue
 
-A queue implemented with list.
+A queue implemented with deque.
 
 #### Operations
 
@@ -187,6 +183,44 @@ A queue implemented with list.
 * front, back, foreach
 * push
 * pop, clear
+
+### TSet
+
+A set implemented with tree map.
+
+#### Time Complexity
+
+insert | remove
+------ | ------
+O(log(n)) | O(log(n))
+
+#### Operations
+
+* new, new_custom, free
+* size, empty
+* foreach
+* insert
+* remove, clear
+* contains
+
+### HSet
+
+A set implemented with hash map.
+
+#### Time Complexity
+
+insert | remove
+------ | ------
+O(1) ~ O(n) | O(1) ~ O(n)
+
+#### Operations
+
+* new, new_custom, free
+* size, empty
+* foreach
+* insert
+* remove, clear
+* contains
 
 ### Heap
 

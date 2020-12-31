@@ -2,57 +2,42 @@
 // Created by sea on 2019/11/28.
 //
 
-#include <stdlib.h>
-#include "stack.h"
-#include "list.h"
+#include "coll/stack.h"
 
-struct _stack {
-  List *list;
-};
+#include "coll/vector.h"
 
-Stack *stack_new() {
-    Stack *stack = malloc(sizeof(Stack));
-    stack->list = list_new();
-    return stack;
+Stack *stack_new(size_t cap) {
+    return vector_new(cap);
 }
 
 void stack_push(Stack *stack, void *data) {
-    list_prepend(stack->list, data);
+    vector_append(stack, data);
 }
 
 void *stack_pop(Stack *stack) {
-    if (list_size(stack->list) == 0) {
-        return NULL;
-    }
-    void *data = list_first(stack->list);
-    list_remove_first(stack->list);
-    return data;
+    return vector_remove_last(stack);
 }
 
 void *stack_peek(Stack *stack) {
-    if (list_size(stack->list) == 0) {
-        return NULL;
-    }
-    return list_first(stack->list);
+    return vector_last(stack);
 }
 
 size_t stack_size(Stack *stack) {
-    return list_size(stack->list);
+    return vector_size(stack);
 }
 
 bool stack_empty(Stack *stack) {
-    return list_empty(stack->list);
+    return vector_empty(stack);
 }
 
-void stack_foreach(Stack *stack, void(*visit)(void *)) {
-    list_foreach(stack->list, visit);
+void stack_foreach(Stack *stack, void (*visit)(void *)) {
+    vector_foreach(stack, visit);
 }
 
 void stack_clear(Stack *stack) {
-    list_clear(stack->list);
+    vector_clear(stack);
 }
 
 void stack_free(Stack *stack) {
-    list_free(stack->list);
-    free(stack);
+    vector_free(stack);
 }

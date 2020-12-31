@@ -5,13 +5,12 @@
 #ifndef LIBCOLL_QUEUE_H
 #define LIBCOLL_QUEUE_H
 
-#include <stddef.h>
 #include <stdbool.h>
-#include "list.h"
+#include <stddef.h>
 
-typedef struct _queue Queue;
+typedef struct coll_deque Queue;
 
-Queue *queue_new();
+Queue *queue_new(size_t cap);
 
 void queue_push(Queue *queue, void *data);
 
@@ -23,7 +22,7 @@ void *queue_back(Queue *queue);
 
 bool queue_empty(Queue *queue);
 
-void queue_foreach(Queue *queue, void(*visit)(void *));
+void queue_foreach(Queue *queue, void (*visit)(void *));
 
 void queue_clear(Queue *queue);
 
@@ -31,4 +30,4 @@ size_t queue_size(Queue *queue);
 
 void queue_free(Queue *queue);
 
-#endif //LIBCOLL_QUEUE_H
+#endif  //LIBCOLL_QUEUE_H

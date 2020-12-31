@@ -5,10 +5,10 @@
 #ifndef LIBCOLL_VECTOR_H
 #define LIBCOLL_VECTOR_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
-typedef struct _vector Vector;
+typedef struct coll_vector Vector;
 
 Vector *vector_new(size_t cap);
 
@@ -36,7 +36,7 @@ void *vector_insert_after(Vector *vector, void *data, void *pos);
 
 void *vector_assign(Vector *vector, size_t index, void *data);
 
-void vector_foreach(Vector *vector, void(*visit)(void *));
+void vector_foreach(Vector *vector, void (*visit)(void *));
 
 bool vector_empty(Vector *vector);
 
@@ -56,4 +56,4 @@ void vector_clear(Vector *vector);
 
 void vector_free(Vector *vector);
 
-#endif //LIBCOLL_VECTOR_H
+#endif  //LIBCOLL_VECTOR_H

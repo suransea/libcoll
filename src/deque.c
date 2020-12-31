@@ -2,29 +2,30 @@
 // Created by sea on 2019/11/29.
 //
 
+#include "coll/deque.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "deque.h"
 
-struct _deque {
-  void **data;
-  size_t len, cap, head, tail;
+struct coll_deque {
+    void **data;
+    size_t len, cap, head, tail;
 };
 
-static inline size_t _pos_prev(size_t pos, size_t cap) {
+static inline size_t pos_prev(size_t pos, size_t cap) {
     return pos == 0 ? cap - 1 : pos - 1;
 }
 
-static inline size_t _pos_next(size_t pos, size_t cap) {
+static inline size_t pos_next(size_t pos, size_t cap) {
     return pos == cap - 1 ? 0 : pos + 1;
 }
 
-static inline size_t _index_to_pos(Deque *deque, size_t index) {
+static inline size_t index_to_pos(Deque *deque, size_t index) {
     return (deque->head + index) % deque->cap;
 }
 
-static void _deque_reserve(Deque *d, size_t p, char direct) {
-    if (direct == 'l') {
+static void deque_reserve(Deque *d, size_t p, bool left) {
+    if (left) {
         if (p >= d->head) {
             // ---head---pos---tail--- || ---tail---head---pos---
             if (d->head == 0) {
@@ -39,8 +40,8 @@ static void _deque_reserve(Deque *d, size_t p, char direct) {
             d->data[d->cap - 1] = d->data[0];
             memmove(d->data, d->data + 1, p * sizeof(void *));
         }
-        d->head = _pos_prev(d->head, d->cap);
-    } else if (direct == 'r') {
+        d->head = pos_prev(d->head, d->cap);
+    } else {
         if (p < d->tail) {
             // ---head---pos---tail--- || ---pos---tail---head---
             memmove(d->data + p + 1, d->data + p, (d->tail - p) * sizeof(void *));
@@ -50,12 +51,12 @@ static void _deque_reserve(Deque *d, size_t p, char direct) {
             d->data[0] = d->data[d->cap - 1];
             memmove(d->data + p + 1, d->data + p, (d->cap - p - 1) * sizeof(void *));
         }
-        d->tail = _pos_next(d->tail, d->cap);
+        d->tail = pos_next(d->tail, d->cap);
     }
 }
 
-static void _deque_release(Deque *d, size_t p, char direct) {
-    if (direct == 'l') {
+static void deque_release(Deque *d, size_t p, bool left) {
+    if (left) {
         if (p >= d->head) {
             // ---head---pos---tail--- || ---tail---head---pos---
             memmove(d->data + d->head + 1, d->data + d->head, (p - d->head) * sizeof(void *));
@@ -65,8 +66,8 @@ static void _deque_release(Deque *d, size_t p, char direct) {
             d->data[0] = d->data[d->cap - 1];
             memmove(d->data + d->head + 1, d->data + d->head, (d->cap - d->head - 1) * sizeof(void *));
         }
-        d->head = _pos_next(d->head, d->cap);
-    } else if (direct == 'r') {
+        d->head = pos_next(d->head, d->cap);
+    } else {
         if (p < d->tail) {
             // ---head---pos---tail--- || ---pos---tail---head---
             memmove(d->data + p, d->data + p + 1, (d->tail - p - 1) * sizeof(void *));
@@ -76,11 +77,11 @@ static void _deque_release(Deque *d, size_t p, char direct) {
             d->data[d->cap - 1] = d->data[0];
             memmove(d->data, d->data + 1, (d->tail - 1) * sizeof(void *));
         }
-        d->tail = _pos_prev(d->tail, d->cap);
+        d->tail = pos_prev(d->tail, d->cap);
     }
 }
 
-static void _deque_resize(Deque *deque) {
+static void deque_resize(Deque *deque) {
     size_t cap_new = deque->cap * 2;
     void **tmp = malloc(cap_new * sizeof(void *));
 
@@ -116,19 +117,19 @@ Deque *deque_new(size_t cap) {
 
 void *deque_append(Deque *deque, void *data) {
     if (deque->len == deque->cap) {
-        _deque_resize(deque);
+        deque_resize(deque);
     }
     deque->data[deque->tail] = data;
-    deque->tail = _pos_next(deque->tail, deque->cap);
+    deque->tail = pos_next(deque->tail, deque->cap);
     ++(deque->len);
     return data;
 }
 
 void *deque_prepend(Deque *deque, void *data) {
     if (deque->len == deque->cap) {
-        _deque_resize(deque);
+        deque_resize(deque);
     }
-    deque->head = _pos_prev(deque->head, deque->cap);
+    deque->head = pos_prev(deque->head, deque->cap);
     deque->data[deque->head] = data;
     ++(deque->len);
     return data;
@@ -149,19 +150,19 @@ void *deque_last(Deque *deque) {
     if (deque->len == 0) {
         return NULL;
     }
-    return deque->data[_pos_prev(deque->tail, deque->cap)];
+    return deque->data[pos_prev(deque->tail, deque->cap)];
 }
 
 void *deque_at(Deque *deque, size_t index) {
     if (index >= deque->len) {
         return NULL;
     }
-    return deque->data[_index_to_pos(deque, index)];
+    return deque->data[index_to_pos(deque, index)];
 }
 
 size_t deque_index_of(Deque *deque, void *data) {
     for (size_t i = 0; i < deque->len; ++i) {
-        if (deque->data[_index_to_pos(deque, i)] == data) {
+        if (deque->data[index_to_pos(deque, i)] == data) {
             return i;
         }
     }
@@ -170,7 +171,7 @@ size_t deque_index_of(Deque *deque, void *data) {
 
 size_t deque_find(Deque *deque, bool (*pred)(void *)) {
     for (size_t i = 0; i < deque->len; ++i) {
-        if (pred(deque->data[_index_to_pos(deque, i)])) {
+        if (pred(deque->data[index_to_pos(deque, i)])) {
             return i;
         }
     }
@@ -181,7 +182,7 @@ void *deque_assign(Deque *deque, size_t index, void *data) {
     if (index >= deque->len) {
         return NULL;
     }
-    size_t pos = _index_to_pos(data, index);
+    size_t pos = index_to_pos(data, index);
     void *old = deque->data[pos];
     deque->data[pos] = data;
     return old;
@@ -194,16 +195,16 @@ void *deque_insert_at(Deque *deque, void *data, size_t index) {
         return deque_append(deque, data);
     }
     if (deque->len == deque->cap) {
-        _deque_resize(deque);
+        deque_resize(deque);
     }
 
-    size_t pos = _index_to_pos(deque, index);
+    size_t pos = index_to_pos(deque, index);
 
     if (index < deque->len / 2) {
-        _deque_reserve(deque, pos, 'l');
+        deque_reserve(deque, pos, true);
         deque->data[--pos] = data;
     } else {
-        _deque_reserve(deque, pos, 'r');
+        deque_reserve(deque, pos, false);
         deque->data[pos] = data;
     }
     ++(deque->len);
@@ -251,13 +252,13 @@ void *deque_remove_at(Deque *deque, size_t index) {
         return NULL;
     }
 
-    size_t pos = _index_to_pos(deque, index);
+    size_t pos = index_to_pos(deque, index);
     void *data = deque->data[pos];
 
     if (index < deque->len / 2) {
-        _deque_release(deque, pos, 'l');
+        deque_release(deque, pos, true);
     } else {
-        _deque_release(deque, pos, 'r');
+        deque_release(deque, pos, false);
     }
     --(deque->len);
     return data;
@@ -268,7 +269,7 @@ void *deque_remove_first(Deque *deque) {
         return NULL;
     }
     void *data = deque->data[deque->head];
-    deque->head = _pos_next(deque->head, deque->cap);
+    deque->head = pos_next(deque->head, deque->cap);
     --(deque->len);
     return data;
 }
@@ -277,14 +278,14 @@ void *deque_remove_last(Deque *deque) {
     if (deque->len == 0) {
         return NULL;
     }
-    deque->tail = _pos_prev(deque->tail, deque->cap);
+    deque->tail = pos_prev(deque->tail, deque->cap);
     --(deque->len);
     return deque->data[deque->tail];
 }
 
-void deque_foreach(Deque *deque, void(*visit)(void *)) {
+void deque_foreach(Deque *deque, void (*visit)(void *)) {
     for (size_t i = 0; i < deque->len; ++i) {
-        visit(deque->data[_index_to_pos(deque, i)]);
+        visit(deque->data[index_to_pos(deque, i)]);
     }
 }
 
