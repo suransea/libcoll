@@ -7,27 +7,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct coll_tmap_entry Entry;  // map entry, node of red-black tree
+typedef struct coll_tmap_entry entry_t;  // map entry, node of red-black tree
 
-typedef unsigned char Color;  // map entry color
+typedef unsigned char color_t;  // map entry color
 
 #define RED 0x01u
 #define BLACK 0x00u
 
 struct coll_tmap_entry {
     void *key, *val;
-    Entry *left, *right, *parent;
-    Color color;
+    entry_t *left, *right, *parent;
+    color_t color;
 };
 
 struct coll_tmap {
-    Entry *root;
+    entry_t *root;
     size_t size;
     int (*cmp)(void *, void *);
 };
 
-static Entry *tmap_entry_of(TMap *map, void *key) {
-    Entry *cur = map->root;
+static entry_t *coll_tmap_entry_of(coll_tmap_t *map, void *key) {
+    entry_t *cur = map->root;
     while (cur) {
         int result = map->cmp(key, cur->key);
         if (result < 0) {
@@ -41,8 +41,8 @@ static Entry *tmap_entry_of(TMap *map, void *key) {
     return NULL;
 }
 
-static Entry *entry_new(void *key, void *value, void *parent) {
-    Entry *entry = malloc(sizeof(Entry));
+static entry_t *entry_new(void *key, void *value, void *parent) {
+    entry_t *entry = malloc(sizeof(entry_t));
     entry->key = key;
     entry->val = value;
     entry->color = BLACK;
@@ -52,7 +52,7 @@ static Entry *entry_new(void *key, void *value, void *parent) {
     return entry;
 }
 
-static Entry *entry_first(Entry *entry) {
+static entry_t *entry_first(entry_t *entry) {
     if (!entry) {
         return NULL;
     }
@@ -62,7 +62,7 @@ static Entry *entry_first(Entry *entry) {
     return entry;
 }
 
-static Entry *entry_last(Entry *entry) {
+static entry_t *entry_last(entry_t *entry) {
     if (!entry) {
         return NULL;
     }
@@ -72,7 +72,7 @@ static Entry *entry_last(Entry *entry) {
     return entry;
 }
 
-static Entry *entry_prev(Entry *entry) {
+static entry_t *entry_prev(entry_t *entry) {
     if (!entry) {
         return NULL;
     }
@@ -83,7 +83,7 @@ static Entry *entry_prev(Entry *entry) {
         }
         return entry;
     }
-    Entry *prev = entry;
+    entry_t *prev = entry;
     entry = entry->parent;
     while (entry && entry->left == prev) {
         prev = entry;
@@ -92,7 +92,7 @@ static Entry *entry_prev(Entry *entry) {
     return entry;
 }
 
-static Entry *entry_next(Entry *entry) {
+static entry_t *entry_next(entry_t *entry) {
     if (!entry) {
         return NULL;
     }
@@ -103,7 +103,7 @@ static Entry *entry_next(Entry *entry) {
         }
         return entry;
     }
-    Entry *prev = entry;
+    entry_t *prev = entry;
     entry = entry->parent;
     while (entry && entry->right == prev) {
         prev = entry;
@@ -112,11 +112,11 @@ static Entry *entry_next(Entry *entry) {
     return entry;
 }
 
-static void entry_rotate_left(TMap *map, Entry *entry) {
+static void entry_rotate_left(coll_tmap_t *map, entry_t *entry) {
     if (!entry) {
         return;
     }
-    Entry *r = entry->right;
+    entry_t *r = entry->right;
     entry->right = r->left;
     if (r->left) {
         r->left->parent = entry;
@@ -133,11 +133,11 @@ static void entry_rotate_left(TMap *map, Entry *entry) {
     entry->parent = r;
 }
 
-static void entry_rotate_right(TMap *map, Entry *entry) {
+static void entry_rotate_right(coll_tmap_t *map, entry_t *entry) {
     if (!entry) {
         return;
     }
-    Entry *l = entry->left;
+    entry_t *l = entry->left;
     entry->left = l->right;
     if (l->right) {
         l->right->parent = entry;
@@ -156,23 +156,23 @@ static void entry_rotate_right(TMap *map, Entry *entry) {
 
 // inline functions for null safe
 
-static inline Entry *left(Entry *entry) {
+static inline entry_t *left(entry_t *entry) {
     return entry ? entry->left : NULL;
 }
 
-static inline Entry *right(Entry *entry) {
+static inline entry_t *right(entry_t *entry) {
     return entry ? entry->right : NULL;
 }
 
-static inline Entry *parent(Entry *entry) {
+static inline entry_t *parent(entry_t *entry) {
     return entry ? entry->parent : NULL;
 }
 
-static inline Color color(Entry *entry) {
+static inline color_t color(entry_t *entry) {
     return entry ? entry->color : BLACK;
 }
 
-static inline void dye(Entry *entry, Color color) {
+static inline void dye(entry_t *entry, color_t color) {
     if (entry) {
         entry->color = color;
     }
@@ -180,11 +180,11 @@ static inline void dye(Entry *entry, Color color) {
 
 // inline functions end
 
-static void tmap_balance_insert(TMap *map, Entry *entry) {
+static void coll_tmap_balance_insert(coll_tmap_t *map, entry_t *entry) {
     dye(entry, RED);
     while (entry && entry != map->root && entry->parent->color == RED) {
         if (parent(entry) == left(parent(parent(entry)))) {
-            Entry *e = right(parent(parent(entry)));
+            entry_t *e = right(parent(parent(entry)));
             if (color(e) == RED) {
                 dye(parent(entry), BLACK);
                 dye(e, BLACK);
@@ -200,7 +200,7 @@ static void tmap_balance_insert(TMap *map, Entry *entry) {
                 entry_rotate_right(map, parent(parent(entry)));
             }
         } else {
-            Entry *e = left(parent(parent(entry)));
+            entry_t *e = left(parent(parent(entry)));
             if (color(e) == RED) {
                 dye(parent(entry), BLACK);
                 dye(e, BLACK);
@@ -220,10 +220,10 @@ static void tmap_balance_insert(TMap *map, Entry *entry) {
     dye(map->root, BLACK);
 }
 
-static void tmap_balance_remove(TMap *map, Entry *entry) {
+static void coll_tmap_balance_remove(coll_tmap_t *map, entry_t *entry) {
     while (entry != map->root && color(entry) == BLACK) {
         if (entry == left(parent(entry))) {
-            Entry *sib = right(parent(entry));  // sibling
+            entry_t *sib = right(parent(entry));  // sibling
 
             if (color(sib) == RED) {
                 dye(sib, BLACK);
@@ -249,7 +249,7 @@ static void tmap_balance_remove(TMap *map, Entry *entry) {
                 entry = map->root;
             }
         } else {
-            Entry *sib = left(parent(entry));
+            entry_t *sib = left(parent(entry));
 
             if (color(sib) == RED) {
                 dye(sib, BLACK);
@@ -279,26 +279,26 @@ static void tmap_balance_remove(TMap *map, Entry *entry) {
     dye(entry, BLACK);
 }
 
-TMap *tmap_new() {
-    return tmap_new_custom(cmp_ptr);
+coll_tmap_t *coll_tmap_new() {
+    return coll_tmap_new_custom(coll_cmp_ptr);
 }
 
-TMap *tmap_new_custom(int (*cmp)(void *, void *)) {
-    TMap *map = malloc(sizeof(TMap));
+coll_tmap_t *coll_tmap_new_custom(int (*cmp)(void *, void *)) {
+    coll_tmap_t *map = malloc(sizeof(coll_tmap_t));
     map->size = 0;
     map->cmp = cmp;
     map->root = NULL;
     return map;
 }
 
-void *tmap_insert(TMap *map, void *key, void *value) {
-    Entry *cur = map->root;
+void *coll_tmap_insert(coll_tmap_t *map, void *key, void *value) {
+    entry_t *cur = map->root;
     if (!cur) {
         map->root = entry_new(key, value, NULL);
         ++(map->size);
         return NULL;
     }
-    Entry *parent = NULL;
+    entry_t *parent = NULL;
     int result = 0;
     while (cur) {
         parent = cur;
@@ -313,60 +313,60 @@ void *tmap_insert(TMap *map, void *key, void *value) {
             return old;
         }
     }
-    Entry *entry = entry_new(key, value, parent);
+    entry_t *entry = entry_new(key, value, parent);
     if (result < 0) {
         parent->left = entry;
     } else {
         parent->right = entry;
     }
-    tmap_balance_insert(map, entry);
+    coll_tmap_balance_insert(map, entry);
     ++(map->size);
     return NULL;
 }
 
-void *tmap_value_of(TMap *map, void *key) {
-    Entry *entry = tmap_entry_of(map, key);
+void *coll_tmap_value_of(coll_tmap_t *map, void *key) {
+    entry_t *entry = coll_tmap_entry_of(map, key);
     if (entry) {
         return entry->val;
     }
     return NULL;
 }
 
-Seq *tmap_keys(TMap *map) {
-    Seq *seq = seq_new();
-    Entry *cur = entry_last(map->root);
+coll_seq_t *coll_tmap_keys(coll_tmap_t *map) {
+    coll_seq_t *seq = coll_seq_new();
+    entry_t *cur = entry_last(map->root);
     while (cur) {
-        seq_prepend(seq, cur->key);
+        coll_seq_prepend(seq, cur->key);
         cur = entry_prev(cur);
     }
     return seq;
 }
 
-Seq *tmap_values(TMap *map) {
-    Seq *seq = seq_new();
-    Entry *cur = entry_last(map->root);
+coll_seq_t *coll_tmap_values(coll_tmap_t *map) {
+    coll_seq_t *seq = coll_seq_new();
+    entry_t *cur = entry_last(map->root);
     while (cur) {
-        seq_prepend(seq, cur->val);
+        coll_seq_prepend(seq, cur->val);
         cur = entry_prev(cur);
     }
     return seq;
 }
 
-size_t tmap_size(TMap *map) {
+size_t coll_tmap_size(coll_tmap_t *map) {
     return map->size;
 }
 
-bool tmap_empty(TMap *map) {
+bool coll_tmap_empty(coll_tmap_t *map) {
     return map->size == 0;
 }
 
-bool tmap_contains_key(TMap *map, void *key) {
-    Entry *entry = tmap_entry_of(map, key);
+bool coll_tmap_contains_key(coll_tmap_t *map, void *key) {
+    entry_t *entry = coll_tmap_entry_of(map, key);
     return entry != NULL;
 }
 
-bool tmap_contains_value(TMap *map, void *value) {
-    Entry *cur = entry_first(map->root);
+bool coll_tmap_contains_value(coll_tmap_t *map, void *value) {
+    entry_t *cur = entry_first(map->root);
     while (cur) {
         if (cur->val == value) {
             return true;
@@ -376,22 +376,22 @@ bool tmap_contains_value(TMap *map, void *value) {
     return false;
 }
 
-void *tmap_remove(TMap *map, void *key) {
-    Entry *entry = tmap_entry_of(map, key);
+void *coll_tmap_remove(coll_tmap_t *map, void *key) {
+    entry_t *entry = coll_tmap_entry_of(map, key);
     if (!entry) {
         return NULL;
     }
 
     void *old = entry->val;
     if (entry->left && entry->right) {
-        Entry *next = entry_next(entry);
+        entry_t *next = entry_next(entry);
         entry->key = next->key;
         entry->val = next->val;
         entry = next;
     }
 
     // replacement
-    Entry *rp = entry->left ? entry->left : entry->right;
+    entry_t *rp = entry->left ? entry->left : entry->right;
     if (rp) {
         rp->parent = entry->parent;
         if (!entry->parent) {
@@ -403,13 +403,13 @@ void *tmap_remove(TMap *map, void *key) {
         }
 
         if (entry->color == BLACK) {
-            tmap_balance_remove(map, rp);
+            coll_tmap_balance_remove(map, rp);
         }
     } else if (!entry->parent) {
         map->root = NULL;
     } else {
         if (entry->color == BLACK) {
-            tmap_balance_remove(map, entry);
+            coll_tmap_balance_remove(map, entry);
         }
         if (entry->parent) {
             if (entry == entry->parent->left) {
@@ -424,56 +424,56 @@ void *tmap_remove(TMap *map, void *key) {
     return old;
 }
 
-void tmap_clear(TMap *map) {
-    Seq *seq = seq_new();
-    Entry *cur = entry_last(map->root);
+void coll_tmap_clear(coll_tmap_t *map) {
+    coll_seq_t *seq = coll_seq_new();
+    entry_t *cur = entry_last(map->root);
     while (cur) {
-        seq_prepend(seq, cur);
+        coll_seq_prepend(seq, cur);
         cur = entry_prev(cur);
     }
-    seq_foreach(seq, free);
-    seq_free(seq);
+    coll_seq_foreach(seq, free);
+    coll_seq_free(seq);
     map->root = NULL;
     map->size = 0;
 }
 
-void tmap_foreach(TMap *map, void (*visit)(void *, void *)) {
-    Entry *cur = entry_first(map->root);
+void coll_tmap_foreach(coll_tmap_t *map, void (*visit)(void *, void *)) {
+    entry_t *cur = entry_first(map->root);
     while (cur) {
-        Entry *next = entry_next(cur);
+        entry_t *next = entry_next(cur);
         visit(cur->key, cur->val);
         cur = next;
     }
 }
 
-void tmap_free(TMap *map) {
-    tmap_clear(map);
+void coll_tmap_free(coll_tmap_t *map) {
+    coll_tmap_clear(map);
     free(map);
 }
 
 
 // compare functions
 
-int cmp_ptr(void *x, void *y) {
+int coll_cmp_ptr(void *x, void *y) {
     size_t m = (size_t) x, n = (size_t) y;
     return m < n ? -1 : (m > n ? 1 : 0);
 }
 
-int cmp_int(void *x, void *y) {
+int coll_cmp_int(void *x, void *y) {
     int m = *(int *) x, n = *(int *) y;
     return m < n ? -1 : (m > n ? 1 : 0);
 }
 
-int cmp_char(void *x, void *y) {
+int coll_cmp_char(void *x, void *y) {
     char m = *(char *) x, n = *(char *) y;
     return m < n ? -1 : (m > n ? 1 : 0);
 }
 
-int cmp_str(void *x, void *y) {
+int coll_cmp_str(void *x, void *y) {
     return strcmp(x, y);
 }
 
-int cmp_double(void *x, void *y) {
+int coll_cmp_double(void *x, void *y) {
     double m = *(double *) x, n = *(double *) y;
     return m < n ? -1 : (m > n ? 1 : 0);
 }

@@ -10,57 +10,57 @@
 
 #include "seq.h"
 
-typedef struct coll_hmap HMap;
+typedef struct coll_hmap coll_hmap_t;
 
-HMap *hmap_new(size_t cap);
+coll_hmap_t *coll_hmap_new(size_t cap);
 
-HMap *hmap_new_custom(size_t cap, unsigned (*hash)(void *key), bool (*equal)(void *, void *));
+coll_hmap_t *coll_hmap_new_custom(size_t cap, unsigned (*hash)(void *key), bool (*equal)(void *, void *));
 
-void *hmap_insert(HMap *map, void *key, void *value);
+void *coll_hmap_insert(coll_hmap_t *map, void *key, void *value);
 
-void *hmap_value_of(HMap *map, void *key);
+void *coll_hmap_value_of(coll_hmap_t *map, void *key);
 
-Seq *hmap_keys(HMap *map);
+coll_seq_t *coll_hmap_keys(coll_hmap_t *map);
 
-Seq *hmap_values(HMap *map);
+coll_seq_t *coll_hmap_values(coll_hmap_t *map);
 
-size_t hmap_size(HMap *map);
+size_t coll_hmap_size(coll_hmap_t *map);
 
-bool hmap_empty(HMap *map);
+bool coll_hmap_empty(coll_hmap_t *map);
 
-bool hmap_contains_key(HMap *map, void *key);
+bool coll_hmap_contains_key(coll_hmap_t *map, void *key);
 
-bool hmap_contains_value(HMap *map, void *value);
+bool coll_hmap_contains_value(coll_hmap_t *map, void *value);
 
-void *hmap_remove(HMap *map, void *key);
+void *coll_hmap_remove(coll_hmap_t *map, void *key);
 
-void hmap_clear(HMap *map);
+void coll_hmap_clear(coll_hmap_t *map);
 
-void hmap_foreach(HMap *map, void (*visit)(void *key, void *value));
+void coll_hmap_foreach(coll_hmap_t *map, void (*visit)(void *key, void *value));
 
-void hmap_free(HMap *map);
+void coll_hmap_free(coll_hmap_t *map);
 
 
 // hash and equal functions
 
-unsigned hash_ptr(void *);
+unsigned coll_hash_ptr(void *);
 
-unsigned hash_int(void *);
+unsigned coll_hash_int(void *);
 
-unsigned hash_char(void *);
+unsigned coll_hash_char(void *);
 
-unsigned hash_str(void *);
+unsigned coll_hash_str(void *);
 
-unsigned hash_double(void *);
+unsigned coll_hash_double(void *);
 
-bool equal_ptr(void *, void *);
+bool coll_equal_ptr(void *, void *);
 
-bool equal_int(void *, void *);
+bool coll_equal_int(void *, void *);
 
-bool equal_char(void *, void *);
+bool coll_equal_char(void *, void *);
 
-bool equal_str(void *, void *);
+bool coll_equal_str(void *, void *);
 
-bool equal_double(void *, void *);
+bool coll_equal_double(void *, void *);
 
-#endif  // LIBCOLL_HMAP_H
+#endif  //LIBCOLL_HMAP_H

@@ -8,24 +8,24 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct coll_heap Heap;
+typedef struct coll_heap coll_heap_t;
 
-Heap *heap_new(int (*cmp)(void *, void *));
+coll_heap_t *coll_heap_new(int (*cmp)(void *, void *));
 
-void heap_push(Heap *heap, void *data);
+void coll_heap_push(coll_heap_t *heap, void *data);
 
-void *heap_pop(Heap *heap);
+void *coll_heap_pop(coll_heap_t *heap);
 
-void *heap_top(Heap *heap);
+void *coll_heap_top(coll_heap_t *heap);
 
-size_t heap_size(Heap *heap);
+size_t coll_heap_size(coll_heap_t *heap);
 
-bool heap_empty(Heap *heap);
+bool coll_heap_empty(coll_heap_t *heap);
 
-void heap_foreach(Heap *heap, void (*visit)(void *));
+void coll_heap_foreach(coll_heap_t *heap, void (*visit)(void *));
 
-void heap_clear(Heap *heap);
+void coll_heap_clear(coll_heap_t *heap);
 
-void heap_free(Heap *heap);
+void coll_heap_free(coll_heap_t *heap);
 
-#endif  // LIBCOLL_HEAP_H
+#endif  //LIBCOLL_HEAP_H

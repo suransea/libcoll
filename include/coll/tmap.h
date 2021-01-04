@@ -10,47 +10,47 @@
 
 #include "seq.h"
 
-typedef struct coll_tmap TMap;
+typedef struct coll_tmap coll_tmap_t;
 
-TMap *tmap_new();
+coll_tmap_t *coll_tmap_new();
 
-TMap *tmap_new_custom(int (*cmp)(void *, void *));
+coll_tmap_t *coll_tmap_new_custom(int (*cmp)(void *, void *));
 
-void *tmap_insert(TMap *map, void *key, void *value);
+void *coll_tmap_insert(coll_tmap_t *map, void *key, void *value);
 
-void *tmap_value_of(TMap *map, void *key);
+void *coll_tmap_value_of(coll_tmap_t *map, void *key);
 
-Seq *tmap_keys(TMap *map);
+coll_seq_t *coll_tmap_keys(coll_tmap_t *map);
 
-Seq *tmap_values(TMap *map);
+coll_seq_t *coll_tmap_values(coll_tmap_t *map);
 
-size_t tmap_size(TMap *map);
+size_t coll_tmap_size(coll_tmap_t *map);
 
-bool tmap_empty(TMap *map);
+bool coll_tmap_empty(coll_tmap_t *map);
 
-bool tmap_contains_key(TMap *map, void *key);
+bool coll_tmap_contains_key(coll_tmap_t *map, void *key);
 
-bool tmap_contains_value(TMap *map, void *value);
+bool coll_tmap_contains_value(coll_tmap_t *map, void *value);
 
-void *tmap_remove(TMap *map, void *key);
+void *coll_tmap_remove(coll_tmap_t *map, void *key);
 
-void tmap_clear(TMap *map);
+void coll_tmap_clear(coll_tmap_t *map);
 
-void tmap_foreach(TMap *map, void (*visit)(void *key, void *value));
+void coll_tmap_foreach(coll_tmap_t *map, void (*visit)(void *key, void *value));
 
-void tmap_free(TMap *map);
+void coll_tmap_free(coll_tmap_t *map);
 
 
 // compare functions
 
-int cmp_ptr(void *, void *);
+int coll_cmp_ptr(void *, void *);
 
-int cmp_int(void *, void *);
+int coll_cmp_int(void *, void *);
 
-int cmp_char(void *, void *);
+int coll_cmp_char(void *, void *);
 
-int cmp_str(void *, void *);
+int coll_cmp_str(void *, void *);
 
-int cmp_double(void *, void *);
+int coll_cmp_double(void *, void *);
 
 #endif  // LIBCOLL_TMAP_H

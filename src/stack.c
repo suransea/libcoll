@@ -6,38 +6,38 @@
 
 #include "coll/vector.h"
 
-Stack *stack_new(size_t cap) {
-    return vector_new(cap);
+coll_stack_t *coll_stack_new(size_t cap) {
+    return coll_vector_new(cap);
 }
 
-void stack_push(Stack *stack, void *data) {
-    vector_append(stack, data);
+void coll_stack_push(coll_stack_t *stack, void *data) {
+    coll_vector_append(stack, data);
 }
 
-void *stack_pop(Stack *stack) {
-    return vector_remove_last(stack);
+void *coll_stack_pop(coll_stack_t *stack) {
+    return coll_vector_remove_last(stack);
 }
 
-void *stack_peek(Stack *stack) {
-    return vector_last(stack);
+void *coll_stack_peek(coll_stack_t *stack) {
+    return coll_vector_last(stack);
 }
 
-size_t stack_size(Stack *stack) {
-    return vector_size(stack);
+size_t coll_stack_size(coll_stack_t *stack) {
+    return coll_vector_size(stack);
 }
 
-bool stack_empty(Stack *stack) {
-    return vector_empty(stack);
+bool coll_stack_empty(coll_stack_t *stack) {
+    return coll_vector_empty(stack);
 }
 
-void stack_foreach(Stack *stack, void (*visit)(void *)) {
-    vector_foreach(stack, visit);
+void coll_stack_foreach(coll_stack_t *stack, void (*visit)(void *)) {
+    coll_vector_foreach(stack, visit);
 }
 
-void stack_clear(Stack *stack) {
-    vector_clear(stack);
+void coll_stack_clear(coll_stack_t *stack) {
+    coll_vector_clear(stack);
 }
 
-void stack_free(Stack *stack) {
-    vector_free(stack);
+void coll_stack_free(coll_stack_t *stack) {
+    coll_vector_free(stack);
 }

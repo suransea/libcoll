@@ -8,56 +8,56 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct coll_seq Seq;
+typedef struct coll_seq coll_seq_t;
 
-Seq *seq_new();
+coll_seq_t *coll_seq_new();
 
-void *seq_append(Seq *seq, void *data);
+void *coll_seq_append(coll_seq_t *seq, void *data);
 
-void *seq_prepend(Seq *seq, void *data);
+void *coll_seq_prepend(coll_seq_t *seq, void *data);
 
-void *seq_first(Seq *seq);
+void *coll_seq_first(coll_seq_t *seq);
 
-void *seq_last(Seq *seq);
+void *coll_seq_last(coll_seq_t *seq);
 
-void *seq_at(Seq *seq, size_t index);
+void *coll_seq_at(coll_seq_t *seq, size_t index);
 
-size_t seq_index_of(Seq *seq, void *data);
+size_t coll_seq_index_of(coll_seq_t *seq, void *data);
 
-size_t seq_find(Seq *seq, bool (*pred)(void *));
+size_t coll_seq_find(coll_seq_t *seq, bool (*pred)(void *));
 
-size_t seq_size(Seq *seq);
+size_t coll_seq_size(coll_seq_t *seq);
 
-bool seq_empty(Seq *seq);
+bool coll_seq_empty(coll_seq_t *seq);
 
-void *seq_remove(Seq *seq, void *data);
+void *coll_seq_remove(coll_seq_t *seq, void *data);
 
-size_t seq_remove_all(Seq *seq, void *data);
+size_t coll_seq_remove_all(coll_seq_t *seq, void *data);
 
-void *seq_remove_if(Seq *seq, bool (*pred)(void *));
+void *coll_seq_remove_if(coll_seq_t *seq, bool (*pred)(void *));
 
-void *seq_remove_at(Seq *seq, size_t index);
+void *coll_seq_remove_at(coll_seq_t *seq, size_t index);
 
-void *seq_remove_first(Seq *seq);
+void *coll_seq_remove_first(coll_seq_t *seq);
 
-void *seq_remove_last(Seq *seq);
+void *coll_seq_remove_last(coll_seq_t *seq);
 
-void *seq_insert_at(Seq *seq, void *data, size_t index);
+void *coll_seq_insert_at(coll_seq_t *seq, void *data, size_t index);
 
-void *seq_insert_before(Seq *seq, void *data, void *pos);
+void *coll_seq_insert_before(coll_seq_t *seq, void *data, void *pos);
 
-void *seq_insert_after(Seq *seq, void *data, void *pos);
+void *coll_seq_insert_after(coll_seq_t *seq, void *data, void *pos);
 
-void *seq_insert_sorted(Seq *seq, void *data, int (*cmp)(void *, void *));
+void *coll_seq_insert_sorted(coll_seq_t *seq, void *data, int (*cmp)(void *, void *));
 
-void *seq_assign(Seq *seq, size_t index, void *data);
+void *coll_seq_assign(coll_seq_t *seq, size_t index, void *data);
 
-void seq_foreach(Seq *seq, void (*visit)(void *));
+void coll_seq_foreach(coll_seq_t *seq, void (*visit)(void *));
 
-void seq_clear(Seq *seq);
+void coll_seq_clear(coll_seq_t *seq);
 
-void seq_reverse(Seq *seq);
+void coll_seq_reverse(coll_seq_t *seq);
 
-void seq_free(Seq *seq);
+void coll_seq_free(coll_seq_t *seq);
 
 #endif  //LIBCOLL_SEQ_H

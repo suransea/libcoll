@@ -10,26 +10,26 @@
 
 #include "tmap.h"
 
-typedef struct coll_tmap TSet;
+typedef struct coll_tmap coll_tset_t;
 
-TSet *tset_new();
+coll_tset_t *coll_tset_new();
 
-TSet *tset_new_custom(int (*cmp)(void *, void *));
+coll_tset_t *coll_tset_new_custom(int (*cmp)(void *, void *));
 
-bool tset_insert(TSet *set, void *data);
+bool coll_tset_insert(coll_tset_t *set, void *data);
 
-bool tset_remove(TSet *set, void *data);
+bool coll_tset_remove(coll_tset_t *set, void *data);
 
-bool tset_contains(TSet *set, void *data);
+bool coll_tset_contains(coll_tset_t *set, void *data);
 
-size_t tset_size(TSet *set);
+size_t coll_tset_size(coll_tset_t *set);
 
-bool tset_empty(TSet *set);
+bool coll_tset_empty(coll_tset_t *set);
 
-void tset_foreach(TSet *set, void (*visit)(void *));
+void coll_tset_foreach(coll_tset_t *set, void (*visit)(void *));
 
-void tset_clear(TSet *set);
+void coll_tset_clear(coll_tset_t *set);
 
-void tset_free(TSet *set);
+void coll_tset_free(coll_tset_t *set);
 
 #endif  //LIBCOLL_TSET_H

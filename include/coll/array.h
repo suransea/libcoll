@@ -8,28 +8,28 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct coll_array Array;
+typedef struct coll_array coll_array_t;
 
-Array *array_new(size_t len);
+coll_array_t *coll_array_new(size_t len);
 
-size_t array_size(Array *array);
+size_t coll_array_size(coll_array_t *array);
 
-void *array_at(Array *array, size_t index);
+void *coll_array_at(coll_array_t *array, size_t index);
 
-void *array_first(Array *array);
+void *coll_array_first(coll_array_t *array);
 
-void *array_last(Array *array);
+void *coll_array_last(coll_array_t *array);
 
-size_t array_index_of(Array *array, void *data);
+size_t coll_array_index_of(coll_array_t *array, void *data);
 
-size_t array_find(Array *array, bool (*pred)(void *));
+size_t coll_array_find(coll_array_t *array, bool (*pred)(void *));
 
-void *array_assign(Array *array, size_t index, void *data);
+void *coll_array_assign(coll_array_t *array, size_t index, void *data);
 
-void array_foreach(Array *array, void (*visit)(void *));
+void coll_array_foreach(coll_array_t *array, void (*visit)(void *));
 
-bool array_empty(Array *array);
+bool coll_array_empty(coll_array_t *array);
 
-void array_free(Array *array);
+void coll_array_free(coll_array_t *array);
 
 #endif  //LIBCOLL_ARRAY_H

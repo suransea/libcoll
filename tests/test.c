@@ -26,184 +26,184 @@ bool equal_s(void *data) {
     return strcmp(data, "s") == 0;
 }
 
-void print_list(List *list) {
-    printf("\nlen: %zu\n", list_size(list));
-    list_foreach(list, print_str);
+void print_list(coll_list_t *list) {
+    printf("\nlen: %zu\n", coll_list_size(list));
+    coll_list_foreach(list, print_str);
     printf("\n");
 }
 
 test_func(list)
-    List *list = list_new();
-    list_insert_sorted(list, "a", cmp_str);
-    list_insert_sorted(list, "b", cmp_str);
-    list_insert_sorted(list, "r", cmp_str);
-    list_insert_sorted(list, "w", cmp_str);
-    list_insert_sorted(list, "s", cmp_str);
-    list_insert_sorted(list, "k", cmp_str);
-    list_insert_sorted(list, "s", cmp_str);
-    list_insert_sorted(list, "s", cmp_str);
+    coll_list_t *list = coll_list_new();
+    coll_list_insert_sorted(list, "a", coll_cmp_str);
+    coll_list_insert_sorted(list, "b", coll_cmp_str);
+    coll_list_insert_sorted(list, "r", coll_cmp_str);
+    coll_list_insert_sorted(list, "w", coll_cmp_str);
+    coll_list_insert_sorted(list, "s", coll_cmp_str);
+    coll_list_insert_sorted(list, "k", coll_cmp_str);
+    coll_list_insert_sorted(list, "s", coll_cmp_str);
+    coll_list_insert_sorted(list, "s", coll_cmp_str);
     print_list(list);
 
-    assert_str_eq("r", list_at(list, 3));
-    assert_str_eq("a", list_first(list));
-    assert_str_eq("w", list_last(list));
+    assert_str_eq("r", coll_list_at(list, 3));
+    assert_str_eq("a", coll_list_first(list));
+    assert_str_eq("w", coll_list_last(list));
 
-    assert_str_eq("a", list_remove_first(list));
+    assert_str_eq("a", coll_list_remove_first(list));
     print_list(list);
 
-    assert_str_eq("w", list_remove_last(list));
+    assert_str_eq("w", coll_list_remove_last(list));
     print_list(list);
 
-    assert_str_eq("k", list_remove_at(list, 1));
+    assert_str_eq("k", coll_list_remove_at(list, 1));
     print_list(list);
 
-    assert_eq(NULL, list_remove(list, "a"));
+    assert_eq(NULL, coll_list_remove(list, "a"));
     print_list(list);
 
-    list_insert_after(list, "k", "b");
+    coll_list_insert_after(list, "k", "b");
     print_list(list);
 
-    list_insert_before(list, "g", "k");
+    coll_list_insert_before(list, "g", "k");
     print_list(list);
 
-    list_insert_at(list, "f", 2);
+    coll_list_insert_at(list, "f", 2);
     print_list(list);
 
-    printf("remove:%s ", list_remove_if(list, equal_s));
+    printf("remove:%s ", coll_list_remove_if(list, equal_s));
     print_list(list);
 
-    printf("count:%zu ", list_remove_all(list, "b"));
+    printf("count:%zu ", coll_list_remove_all(list, "b"));
     print_list(list);
 
-    printf("index:%zu ", list_find(list, equal_s));
-    printf("index:%zu ", list_index_of(list, "g"));
+    printf("index:%zu ", coll_list_find(list, equal_s));
+    printf("index:%zu ", coll_list_index_of(list, "g"));
 
-    list_reverse(list);
+    coll_list_reverse(list);
     print_list(list);
 
-    printf("empty:%d ", list_empty(list));
-    list_clear(list);
-    printf("empty:%d ", list_empty(list));
+    printf("empty:%d ", coll_list_empty(list));
+    coll_list_clear(list);
+    printf("empty:%d ", coll_list_empty(list));
 
-    list_free(list);
+    coll_list_free(list);
 test_func_end
 
 void print_kv(void *k, void *v) {
     printf("\n%s: %s\n", k, v);
 }
 
-void print_hmap(HMap *hmap) {
-    printf("\nempty: %d, size: %zu\n", hmap_empty(hmap), hmap_size(hmap));
-    hmap_foreach(hmap, print_kv);
+void print_hmap(coll_hmap_t *hmap) {
+    printf("\nempty: %d, size: %zu\n", coll_hmap_empty(hmap), coll_hmap_size(hmap));
+    coll_hmap_foreach(hmap, print_kv);
 }
 
 test_func(hmap)
-    HMap *map = hmap_new_custom(0, hash_str, equal_str);
+    coll_hmap_t *map = coll_hmap_new_custom(0, coll_hash_str, coll_equal_str);
     print_hmap(map);
-    hmap_insert(map, "name", "Alice");
-    hmap_insert(map, "age", "10");
-    hmap_insert(map, "age", "11");
-    hmap_insert(map, "a", "d");
-    hmap_insert(map, "b", "e");
-    hmap_insert(map, "c", "f");
+    coll_hmap_insert(map, "name", "Alice");
+    coll_hmap_insert(map, "age", "10");
+    coll_hmap_insert(map, "age", "11");
+    coll_hmap_insert(map, "a", "d");
+    coll_hmap_insert(map, "b", "e");
+    coll_hmap_insert(map, "c", "f");
     print_hmap(map);
-    assert_str_eq("Alice", hmap_value_of(map, "name"));
-    assert_eq(NULL, hmap_value_of(map, "not_exist"));
-    hmap_remove(map, "age");
+    assert_str_eq("Alice", coll_hmap_value_of(map, "name"));
+    assert_eq(NULL, coll_hmap_value_of(map, "not_exist"));
+    coll_hmap_remove(map, "age");
     print_hmap(map);
-    hmap_free(map);
+    coll_hmap_free(map);
 test_func_end
 
-void print_tmap(TMap *map) {
-    printf("\nempty: %d, size: %zu\n", tmap_empty(map), tmap_size(map));
-    tmap_foreach(map, print_kv);
+void print_tmap(coll_tmap_t *map) {
+    printf("\nempty: %d, size: %zu\n", coll_tmap_empty(map), coll_tmap_size(map));
+    coll_tmap_foreach(map, print_kv);
 }
 
 test_func(tmap)
-    TMap *map = tmap_new_custom(cmp_str);
+    coll_tmap_t *map = coll_tmap_new_custom(coll_cmp_str);
     print_tmap(map);
-    tmap_insert(map, "name", "Alice");
-    tmap_insert(map, "age", "10");
-    tmap_insert(map, "age", "11");
-    tmap_insert(map, "a", "d");
-    tmap_insert(map, "b", "e");
-    tmap_insert(map, "c", "f");
+    coll_tmap_insert(map, "name", "Alice");
+    coll_tmap_insert(map, "age", "10");
+    coll_tmap_insert(map, "age", "11");
+    coll_tmap_insert(map, "a", "d");
+    coll_tmap_insert(map, "b", "e");
+    coll_tmap_insert(map, "c", "f");
     print_tmap(map);
-    assert_str_eq("Alice", tmap_value_of(map, "name"));
-    assert_eq(NULL, tmap_value_of(map, "not_exist"));
-    tmap_remove(map, "age");
+    assert_str_eq("Alice", coll_tmap_value_of(map, "name"));
+    assert_eq(NULL, coll_tmap_value_of(map, "not_exist"));
+    coll_tmap_remove(map, "age");
     print_tmap(map);
-    tmap_clear(map);
+    coll_tmap_clear(map);
     print_tmap(map);
-    tmap_free(map);
+    coll_tmap_free(map);
 test_func_end
 
 test_func(tset)
-    TSet *set = tset_new();
-    tset_insert(set, "a");
-    tset_insert(set, "a");
-    tset_insert(set, "a");
-    tset_insert(set, "a");
-    tset_insert(set, "b");
-    tset_foreach(set, print_str);
-    tset_free(set);
+    coll_tset_t *set = coll_tset_new();
+    coll_tset_insert(set, "a");
+    coll_tset_insert(set, "a");
+    coll_tset_insert(set, "a");
+    coll_tset_insert(set, "a");
+    coll_tset_insert(set, "b");
+    coll_tset_foreach(set, print_str);
+    coll_tset_free(set);
 test_func_end
 
 test_func(heap)
-    Heap *heap = heap_new(cmp_str);
-    heap_push(heap, "s");
-    heap_push(heap, "c");
-    heap_push(heap, "a");
-    heap_push(heap, "r");
-    heap_push(heap, "f");
-    heap_push(heap, "c");
+    coll_heap_t *heap = coll_heap_new(coll_cmp_str);
+    coll_heap_push(heap, "s");
+    coll_heap_push(heap, "c");
+    coll_heap_push(heap, "a");
+    coll_heap_push(heap, "r");
+    coll_heap_push(heap, "f");
+    coll_heap_push(heap, "c");
 
-    while (!heap_empty(heap)) {
-        printf("%s ", heap_pop(heap));
+    while (!coll_heap_empty(heap)) {
+        printf("%s ", coll_heap_pop(heap));
     }
-    heap_free(heap);
+    coll_heap_free(heap);
 test_func_end
 
 test_func(vector)
-    Vector *vector = vector_new(0);
-    vector_prepend(vector, "1");
-    vector_prepend(vector, "f");
-    vector_prepend(vector, "q");
-    vector_prepend(vector, "v");
-    vector_prepend(vector, "t");
-    vector_prepend(vector, "s");
-    vector_append(vector, "a");
-    vector_insert_at(vector, "g", 3);
-    vector_insert_after(vector, "h", "g");
-    vector_insert_before(vector, "i", "g");
-    vector_remove_first(vector);
-    vector_foreach(vector, print_str);
+    coll_vector_t *vector = coll_vector_new(0);
+    coll_vector_prepend(vector, "1");
+    coll_vector_prepend(vector, "f");
+    coll_vector_prepend(vector, "q");
+    coll_vector_prepend(vector, "v");
+    coll_vector_prepend(vector, "t");
+    coll_vector_prepend(vector, "s");
+    coll_vector_append(vector, "a");
+    coll_vector_insert_at(vector, "g", 3);
+    coll_vector_insert_after(vector, "h", "g");
+    coll_vector_insert_before(vector, "i", "g");
+    coll_vector_remove_first(vector);
+    coll_vector_foreach(vector, print_str);
     printf("\n");
 test_func_end
 
 test_func(seq)
-    Seq *seq = seq_new();
-    seq_prepend(seq, "a");
-    seq_prepend(seq, "b");
-    seq_prepend(seq, "c");
-    seq_prepend(seq, "d");
-    seq_prepend(seq, "e");
-    seq_prepend(seq, "f");
-    seq_reverse(seq);
-    seq_foreach(seq, print_str);
+    coll_seq_t *seq = coll_seq_new();
+    coll_seq_prepend(seq, "a");
+    coll_seq_prepend(seq, "b");
+    coll_seq_prepend(seq, "c");
+    coll_seq_prepend(seq, "d");
+    coll_seq_prepend(seq, "e");
+    coll_seq_prepend(seq, "f");
+    coll_seq_reverse(seq);
+    coll_seq_foreach(seq, print_str);
 test_func_end
 
 test_func(deque)
-    Deque *deque = deque_new(1);
-    deque_append(deque, "a");
-    deque_prepend(deque, "b");
-    deque_insert_at(deque, "c", 0);
-    deque_insert_at(deque, "d", 0);
-    deque_insert_at(deque, "e", 0);
-    deque_insert_after(deque, "g", "c");
-    deque_insert_before(deque, "f", "g");
-    deque_remove_at(deque, 5);
-    deque_foreach(deque, print_str);
+    coll_deque_t *deque = coll_deque_new(1);
+    coll_deque_append(deque, "a");
+    coll_deque_prepend(deque, "b");
+    coll_deque_insert_at(deque, "c", 0);
+    coll_deque_insert_at(deque, "d", 0);
+    coll_deque_insert_at(deque, "e", 0);
+    coll_deque_insert_after(deque, "g", "c");
+    coll_deque_insert_before(deque, "f", "g");
+    coll_deque_remove_at(deque, 5);
+    coll_deque_foreach(deque, print_str);
 test_func_end
 
 int main() {

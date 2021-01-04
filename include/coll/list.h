@@ -8,56 +8,56 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct coll_list List;
+typedef struct coll_list coll_list_t;
 
-List *list_new();
+coll_list_t *coll_list_new();
 
-void *list_append(List *list, void *data);
+void *coll_list_append(coll_list_t *list, void *data);
 
-void *list_prepend(List *list, void *data);
+void *coll_list_prepend(coll_list_t *list, void *data);
 
-void *list_first(List *list);
+void *coll_list_first(coll_list_t *list);
 
-void *list_last(List *list);
+void *coll_list_last(coll_list_t *list);
 
-void *list_at(List *list, size_t index);
+void *coll_list_at(coll_list_t *list, size_t index);
 
-size_t list_size(List *list);
+size_t coll_list_size(coll_list_t *list);
 
-bool list_empty(List *list);
+bool coll_list_empty(coll_list_t *list);
 
-size_t list_index_of(List *list, void *data);
+size_t coll_list_index_of(coll_list_t *list, void *data);
 
-size_t list_find(List *list, bool (*pred)(void *));
+size_t coll_list_find(coll_list_t *list, bool (*pred)(void *));
 
-void *list_remove(List *list, void *data);
+void *coll_list_remove(coll_list_t *list, void *data);
 
-size_t list_remove_all(List *list, void *data);
+size_t coll_list_remove_all(coll_list_t *list, void *data);
 
-void *list_remove_if(List *list, bool (*pred)(void *));
+void *coll_list_remove_if(coll_list_t *list, bool (*pred)(void *));
 
-void *list_remove_first(List *list);
+void *coll_list_remove_first(coll_list_t *list);
 
-void *list_remove_last(List *list);
+void *coll_list_remove_last(coll_list_t *list);
 
-void *list_remove_at(List *list, size_t index);
+void *coll_list_remove_at(coll_list_t *list, size_t index);
 
-void *list_insert_before(List *list, void *data, void *pos);
+void *coll_list_insert_before(coll_list_t *list, void *data, void *pos);
 
-void *list_insert_after(List *list, void *data, void *pos);
+void *coll_list_insert_after(coll_list_t *list, void *data, void *pos);
 
-void *list_insert_at(List *list, void *data, size_t index);
+void *coll_list_insert_at(coll_list_t *list, void *data, size_t index);
 
-void *list_insert_sorted(List *list, void *data, int (*cmp)(void *, void *));
+void *coll_list_insert_sorted(coll_list_t *list, void *data, int (*cmp)(void *, void *));
 
-void *list_assign(List *list, size_t index, void *data);
+void *coll_list_assign(coll_list_t *list, size_t index, void *data);
 
-void list_foreach(List *list, void (*visit)(void *));
+void coll_list_foreach(coll_list_t *list, void (*visit)(void *));
 
-void list_reverse(List *list);
+void coll_list_reverse(coll_list_t *list);
 
-void list_clear(List *list);
+void coll_list_clear(coll_list_t *list);
 
-void list_free(List *list);
+void coll_list_free(coll_list_t *list);
 
 #endif  // LIBCOLL_LIST_H

@@ -8,52 +8,52 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct coll_vector Vector;
+typedef struct coll_vector coll_vector_t;
 
-Vector *vector_new(size_t cap);
+coll_vector_t *coll_vector_new(size_t cap);
 
-void *vector_append(Vector *vector, void *data);
+void *coll_vector_append(coll_vector_t *vector, void *data);
 
-void *vector_prepend(Vector *vector, void *data);
+void *coll_vector_prepend(coll_vector_t *vector, void *data);
 
-size_t vector_size(Vector *vector);
+size_t coll_vector_size(coll_vector_t *vector);
 
-void *vector_at(Vector *vector, size_t index);
+void *coll_vector_at(coll_vector_t *vector, size_t index);
 
-void *vector_first(Vector *vector);
+void *coll_vector_first(coll_vector_t *vector);
 
-void *vector_last(Vector *vector);
+void *coll_vector_last(coll_vector_t *vector);
 
-size_t vector_index_of(Vector *vector, void *data);
+size_t coll_vector_index_of(coll_vector_t *vector, void *data);
 
-size_t vector_find(Vector *vector, bool (*pred)(void *));
+size_t coll_vector_find(coll_vector_t *vector, bool (*pred)(void *));
 
-void *vector_insert_at(Vector *vector, void *data, size_t index);
+void *coll_vector_insert_at(coll_vector_t *vector, void *data, size_t index);
 
-void *vector_insert_before(Vector *vector, void *data, void *pos);
+void *coll_vector_insert_before(coll_vector_t *vector, void *data, void *pos);
 
-void *vector_insert_after(Vector *vector, void *data, void *pos);
+void *coll_vector_insert_after(coll_vector_t *vector, void *data, void *pos);
 
-void *vector_assign(Vector *vector, size_t index, void *data);
+void *coll_vector_assign(coll_vector_t *vector, size_t index, void *data);
 
-void vector_foreach(Vector *vector, void (*visit)(void *));
+void coll_vector_foreach(coll_vector_t *vector, void (*visit)(void *));
 
-bool vector_empty(Vector *vector);
+bool coll_vector_empty(coll_vector_t *vector);
 
-void *vector_remove(Vector *vector, void *data);
+void *coll_vector_remove(coll_vector_t *vector, void *data);
 
-size_t vector_remove_all(Vector *vector, void *data);
+size_t coll_vector_remove_all(coll_vector_t *vector, void *data);
 
-void *vector_remove_if(Vector *vector, bool (*pred)(void *));
+void *coll_vector_remove_if(coll_vector_t *vector, bool (*pred)(void *));
 
-void *vector_remove_at(Vector *vector, size_t index);
+void *coll_vector_remove_at(coll_vector_t *vector, size_t index);
 
-void *vector_remove_first(Vector *vector);
+void *coll_vector_remove_first(coll_vector_t *vector);
 
-void *vector_remove_last(Vector *vector);
+void *coll_vector_remove_last(coll_vector_t *vector);
 
-void vector_clear(Vector *vector);
+void coll_vector_clear(coll_vector_t *vector);
 
-void vector_free(Vector *vector);
+void coll_vector_free(coll_vector_t *vector);
 
 #endif  //LIBCOLL_VECTOR_H

@@ -11,39 +11,39 @@ struct coll_array {
     size_t len;
 };
 
-Array *array_new(size_t len) {
-    Array *array = malloc(sizeof(Array));
+coll_array_t *coll_array_new(size_t len) {
+    coll_array_t *array = malloc(sizeof(coll_array_t));
     array->len = len;
     array->data = len == 0 ? NULL : calloc(len, sizeof(void *));
     return array;
 }
 
-size_t array_size(Array *array) {
+size_t coll_array_size(coll_array_t *array) {
     return array->len;
 }
 
-void *array_at(Array *array, size_t index) {
+void *coll_array_at(coll_array_t *array, size_t index) {
     if (!array || index >= array->len) {
         return NULL;
     }
     return array->data[index];
 }
 
-void *array_first(Array *array) {
+void *coll_array_first(coll_array_t *array) {
     if (!array || array->len == 0) {
         return NULL;
     }
     return array->data[0];
 }
 
-void *array_last(Array *array) {
+void *coll_array_last(coll_array_t *array) {
     if (!array || array->len == 0) {
         return NULL;
     }
     return array->data[array->len - 1];
 }
 
-size_t array_index_of(Array *array, void *data) {
+size_t coll_array_index_of(coll_array_t *array, void *data) {
     for (size_t i = 0; i < array->len; ++i) {
         if (array->data[i] == data) {
             return i;
@@ -52,7 +52,7 @@ size_t array_index_of(Array *array, void *data) {
     return array->len;
 }
 
-size_t array_find(Array *array, bool (*pred)(void *)) {
+size_t coll_array_find(coll_array_t *array, bool (*pred)(void *)) {
     for (size_t i = 0; i < array->len; ++i) {
         if (pred(array->data[i])) {
             return i;
@@ -61,7 +61,7 @@ size_t array_find(Array *array, bool (*pred)(void *)) {
     return array->len;
 }
 
-void *array_assign(Array *array, size_t index, void *data) {
+void *coll_array_assign(coll_array_t *array, size_t index, void *data) {
     if (index >= array->len) {
         return NULL;
     }
@@ -70,17 +70,17 @@ void *array_assign(Array *array, size_t index, void *data) {
     return old;
 }
 
-void array_foreach(Array *array, void (*visit)(void *)) {
+void coll_array_foreach(coll_array_t *array, void (*visit)(void *)) {
     for (size_t i = 0; i < array->len; ++i) {
         visit(array->data[i]);
     }
 }
 
-bool array_empty(Array *array) {
+bool coll_array_empty(coll_array_t *array) {
     return array->len == 0;
 }
 
-void array_free(Array *array) {
+void coll_array_free(coll_array_t *array) {
     free(array->data);
     free(array);
 }

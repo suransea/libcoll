@@ -13,37 +13,37 @@ struct coll_vector {
     size_t cap;
 };
 
-static void vector_resize(Vector *vector) {
+static void coll_vector_resize(coll_vector_t *vector) {
     size_t cap_new = vector->cap * 2;
     void *tmp = realloc(vector->data, cap_new * sizeof(void *));
     vector->data = tmp;
     vector->cap = cap_new;
 }
 
-Vector *vector_new(size_t cap) {
+coll_vector_t *coll_vector_new(size_t cap) {
     if (cap == 0) {
         cap = 1;
     }
-    Vector *vector = malloc(sizeof(Vector));
+    coll_vector_t *vector = malloc(sizeof(coll_vector_t));
     vector->data = malloc(cap * sizeof(void *));
     vector->cap = cap;
     vector->len = 0;
     return vector;
 }
 
-void *vector_append(Vector *vector, void *data) {
+void *coll_vector_append(coll_vector_t *vector, void *data) {
     if (!vector) {
         return NULL;
     }
     if (vector->cap == vector->len) {
-        vector_resize(vector);
+        coll_vector_resize(vector);
     }
     vector->data[vector->len] = data;
     ++(vector->len);
     return data;
 }
 
-void *vector_prepend(Vector *vector, void *data) {
+void *coll_vector_prepend(coll_vector_t *vector, void *data) {
     if (!vector) {
         return NULL;
     }
@@ -64,32 +64,32 @@ void *vector_prepend(Vector *vector, void *data) {
     return data;
 }
 
-size_t vector_size(Vector *vector) {
+size_t coll_vector_size(coll_vector_t *vector) {
     return vector->len;
 }
 
-void *vector_at(Vector *vector, size_t index) {
+void *coll_vector_at(coll_vector_t *vector, size_t index) {
     if (!vector || index >= vector->len) {
         return NULL;
     }
     return vector->data[index];
 }
 
-void *vector_first(Vector *vector) {
+void *coll_vector_first(coll_vector_t *vector) {
     if (!vector || vector->len == 0) {
         return NULL;
     }
     return vector->data[0];
 }
 
-void *vector_last(Vector *vector) {
+void *coll_vector_last(coll_vector_t *vector) {
     if (!vector || vector->len == 0) {
         return NULL;
     }
     return vector->data[vector->len - 1];
 }
 
-size_t vector_index_of(Vector *vector, void *data) {
+size_t coll_vector_index_of(coll_vector_t *vector, void *data) {
     for (size_t i = 0; i < vector->len; ++i) {
         if (vector->data[i] == data) {
             return i;
@@ -98,7 +98,7 @@ size_t vector_index_of(Vector *vector, void *data) {
     return vector->len;
 }
 
-size_t vector_find(Vector *vector, bool (*pred)(void *)) {
+size_t coll_vector_find(coll_vector_t *vector, bool (*pred)(void *)) {
     for (size_t i = 0; i < vector->len; ++i) {
         if (pred(vector->data[i])) {
             return i;
@@ -107,11 +107,11 @@ size_t vector_find(Vector *vector, bool (*pred)(void *)) {
     return vector->len;
 }
 
-void *vector_insert_at(Vector *vector, void *data, size_t index) {
+void *coll_vector_insert_at(coll_vector_t *vector, void *data, size_t index) {
     if (!vector || index > vector->len) {
         return NULL;
     } else if (index == vector->len) {
-        return vector_append(vector, data);
+        return coll_vector_append(vector, data);
     }
     if (vector->cap == vector->len) {
         size_t cap_new = vector->cap * 2;
@@ -131,23 +131,23 @@ void *vector_insert_at(Vector *vector, void *data, size_t index) {
     return data;
 }
 
-void *vector_insert_before(Vector *vector, void *data, void *pos) {
-    size_t index = vector_index_of(vector, pos);
+void *coll_vector_insert_before(coll_vector_t *vector, void *data, void *pos) {
+    size_t index = coll_vector_index_of(vector, pos);
     if (index >= vector->len) {
         return NULL;
     }
-    return vector_insert_at(vector, data, index);
+    return coll_vector_insert_at(vector, data, index);
 }
 
-void *vector_insert_after(Vector *vector, void *data, void *pos) {
-    size_t index = vector_index_of(vector, pos);
+void *coll_vector_insert_after(coll_vector_t *vector, void *data, void *pos) {
+    size_t index = coll_vector_index_of(vector, pos);
     if (index >= vector->len) {
         return NULL;
     }
-    return vector_insert_at(vector, data, index + 1);
+    return coll_vector_insert_at(vector, data, index + 1);
 }
 
-void *vector_assign(Vector *vector, size_t index, void *data) {
+void *coll_vector_assign(coll_vector_t *vector, size_t index, void *data) {
     if (index >= vector->len) {
         return NULL;
     }
@@ -156,37 +156,37 @@ void *vector_assign(Vector *vector, size_t index, void *data) {
     return old;
 }
 
-void vector_foreach(Vector *vector, void (*visit)(void *)) {
+void coll_vector_foreach(coll_vector_t *vector, void (*visit)(void *)) {
     for (size_t i = 0; i < vector->len; ++i) {
         visit(vector->data[i]);
     }
 }
 
-bool vector_empty(Vector *vector) {
+bool coll_vector_empty(coll_vector_t *vector) {
     return vector->len == 0;
 }
 
-void *vector_remove(Vector *vector, void *data) {
-    size_t index = vector_index_of(vector, data);
-    return vector_remove_at(vector, index);
+void *coll_vector_remove(coll_vector_t *vector, void *data) {
+    size_t index = coll_vector_index_of(vector, data);
+    return coll_vector_remove_at(vector, index);
 }
 
-size_t vector_remove_all(Vector *vector, void *data) {
+size_t coll_vector_remove_all(coll_vector_t *vector, void *data) {
     size_t index;
     size_t count = 0;
-    while ((index = vector_index_of(vector, data)) < vector->len) {
-        vector_remove_at(vector, index);
+    while ((index = coll_vector_index_of(vector, data)) < vector->len) {
+        coll_vector_remove_at(vector, index);
         ++count;
     }
     return count;
 }
 
-void *vector_remove_if(Vector *vector, bool (*pred)(void *)) {
-    size_t index = vector_find(vector, pred);
-    return vector_remove_at(vector, index);
+void *coll_vector_remove_if(coll_vector_t *vector, bool (*pred)(void *)) {
+    size_t index = coll_vector_find(vector, pred);
+    return coll_vector_remove_at(vector, index);
 }
 
-void *vector_remove_at(Vector *vector, size_t index) {
+void *coll_vector_remove_at(coll_vector_t *vector, size_t index) {
     if (!vector || index >= vector->len) {
         return NULL;
     }
@@ -198,12 +198,12 @@ void *vector_remove_at(Vector *vector, size_t index) {
     return data;
 }
 
-void *vector_remove_first(Vector *vector) {
-    return vector_remove_at(vector, 0);
+void *coll_vector_remove_first(coll_vector_t *vector) {
+    return coll_vector_remove_at(vector, 0);
 }
 
-void *vector_remove_last(Vector *vector) {
-    if (!vector || vector_empty(vector)) {
+void *coll_vector_remove_last(coll_vector_t *vector) {
+    if (!vector || coll_vector_empty(vector)) {
         return NULL;
     }
     void *data = vector->data[vector->len - 1];
@@ -211,11 +211,11 @@ void *vector_remove_last(Vector *vector) {
     return data;
 }
 
-void vector_clear(Vector *vector) {
+void coll_vector_clear(coll_vector_t *vector) {
     vector->len = 0;
 }
 
-void vector_free(Vector *vector) {
+void coll_vector_free(coll_vector_t *vector) {
     free(vector->data);
     free(vector);
 }

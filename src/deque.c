@@ -20,11 +20,11 @@ static inline size_t pos_next(size_t pos, size_t cap) {
     return pos == cap - 1 ? 0 : pos + 1;
 }
 
-static inline size_t index_to_pos(Deque *deque, size_t index) {
+static inline size_t index_to_pos(coll_deque_t *deque, size_t index) {
     return (deque->head + index) % deque->cap;
 }
 
-static void deque_reserve(Deque *d, size_t p, bool left) {
+static void coll_deque_reserve(coll_deque_t *d, size_t p, bool left) {
     if (left) {
         if (p >= d->head) {
             // ---head---pos---tail--- || ---tail---head---pos---
@@ -55,7 +55,7 @@ static void deque_reserve(Deque *d, size_t p, bool left) {
     }
 }
 
-static void deque_release(Deque *d, size_t p, bool left) {
+static void coll_deque_release(coll_deque_t *d, size_t p, bool left) {
     if (left) {
         if (p >= d->head) {
             // ---head---pos---tail--- || ---tail---head---pos---
@@ -81,7 +81,7 @@ static void deque_release(Deque *d, size_t p, bool left) {
     }
 }
 
-static void deque_resize(Deque *deque) {
+static void coll_deque_resize(coll_deque_t *deque) {
     size_t cap_new = deque->cap * 2;
     void **tmp = malloc(cap_new * sizeof(void *));
 
@@ -104,20 +104,20 @@ static void deque_resize(Deque *deque) {
     deque->cap = cap_new;
 }
 
-Deque *deque_new(size_t cap) {
+coll_deque_t *coll_deque_new(size_t cap) {
     if (cap == 0) {
         cap = 1;
     }
-    Deque *deque = malloc(sizeof(Deque));
+    coll_deque_t *deque = malloc(sizeof(coll_deque_t));
     deque->data = malloc(cap * sizeof(void *));
     deque->cap = cap;
     deque->len = deque->head = deque->tail = 0;
     return deque;
 }
 
-void *deque_append(Deque *deque, void *data) {
+void *coll_deque_append(coll_deque_t *deque, void *data) {
     if (deque->len == deque->cap) {
-        deque_resize(deque);
+        coll_deque_resize(deque);
     }
     deque->data[deque->tail] = data;
     deque->tail = pos_next(deque->tail, deque->cap);
@@ -125,9 +125,9 @@ void *deque_append(Deque *deque, void *data) {
     return data;
 }
 
-void *deque_prepend(Deque *deque, void *data) {
+void *coll_deque_prepend(coll_deque_t *deque, void *data) {
     if (deque->len == deque->cap) {
-        deque_resize(deque);
+        coll_deque_resize(deque);
     }
     deque->head = pos_prev(deque->head, deque->cap);
     deque->data[deque->head] = data;
@@ -135,32 +135,32 @@ void *deque_prepend(Deque *deque, void *data) {
     return data;
 }
 
-size_t deque_size(Deque *deque) {
+size_t coll_deque_size(coll_deque_t *deque) {
     return deque->len;
 }
 
-void *deque_first(Deque *deque) {
+void *coll_deque_first(coll_deque_t *deque) {
     if (deque->len == 0) {
         return NULL;
     }
     return deque->data[deque->head];
 }
 
-void *deque_last(Deque *deque) {
+void *coll_deque_last(coll_deque_t *deque) {
     if (deque->len == 0) {
         return NULL;
     }
     return deque->data[pos_prev(deque->tail, deque->cap)];
 }
 
-void *deque_at(Deque *deque, size_t index) {
+void *coll_deque_at(coll_deque_t *deque, size_t index) {
     if (index >= deque->len) {
         return NULL;
     }
     return deque->data[index_to_pos(deque, index)];
 }
 
-size_t deque_index_of(Deque *deque, void *data) {
+size_t coll_deque_index_of(coll_deque_t *deque, void *data) {
     for (size_t i = 0; i < deque->len; ++i) {
         if (deque->data[index_to_pos(deque, i)] == data) {
             return i;
@@ -169,7 +169,7 @@ size_t deque_index_of(Deque *deque, void *data) {
     return deque->len;
 }
 
-size_t deque_find(Deque *deque, bool (*pred)(void *)) {
+size_t coll_deque_find(coll_deque_t *deque, bool (*pred)(void *)) {
     for (size_t i = 0; i < deque->len; ++i) {
         if (pred(deque->data[index_to_pos(deque, i)])) {
             return i;
@@ -178,7 +178,7 @@ size_t deque_find(Deque *deque, bool (*pred)(void *)) {
     return deque->len;
 }
 
-void *deque_assign(Deque *deque, size_t index, void *data) {
+void *coll_deque_assign(coll_deque_t *deque, size_t index, void *data) {
     if (index >= deque->len) {
         return NULL;
     }
@@ -188,66 +188,66 @@ void *deque_assign(Deque *deque, size_t index, void *data) {
     return old;
 }
 
-void *deque_insert_at(Deque *deque, void *data, size_t index) {
+void *coll_deque_insert_at(coll_deque_t *deque, void *data, size_t index) {
     if (index > deque->len) {
         return NULL;
     } else if (index == deque->len) {
-        return deque_append(deque, data);
+        return coll_deque_append(deque, data);
     }
     if (deque->len == deque->cap) {
-        deque_resize(deque);
+        coll_deque_resize(deque);
     }
 
     size_t pos = index_to_pos(deque, index);
 
     if (index < deque->len / 2) {
-        deque_reserve(deque, pos, true);
+        coll_deque_reserve(deque, pos, true);
         deque->data[--pos] = data;
     } else {
-        deque_reserve(deque, pos, false);
+        coll_deque_reserve(deque, pos, false);
         deque->data[pos] = data;
     }
     ++(deque->len);
     return data;
 }
 
-void *deque_insert_before(Deque *deque, void *data, void *pos) {
-    size_t index = deque_index_of(deque, pos);
+void *coll_deque_insert_before(coll_deque_t *deque, void *data, void *pos) {
+    size_t index = coll_deque_index_of(deque, pos);
     if (index >= deque->len) {
         return NULL;
     }
-    return deque_insert_at(deque, data, index);
+    return coll_deque_insert_at(deque, data, index);
 }
 
-void *deque_insert_after(Deque *deque, void *data, void *pos) {
-    size_t index = deque_index_of(deque, pos);
+void *coll_deque_insert_after(coll_deque_t *deque, void *data, void *pos) {
+    size_t index = coll_deque_index_of(deque, pos);
     if (index >= deque->len) {
         return NULL;
     }
-    return deque_insert_at(deque, data, index + 1);
+    return coll_deque_insert_at(deque, data, index + 1);
 }
 
-void *deque_remove(Deque *deque, void *data) {
-    size_t index = deque_index_of(deque, data);
-    return deque_remove_at(deque, index);
+void *coll_deque_remove(coll_deque_t *deque, void *data) {
+    size_t index = coll_deque_index_of(deque, data);
+    return coll_deque_remove_at(deque, index);
 }
 
-size_t deque_remove_all(Deque *deque, void *data) {
+size_t coll_deque_remove_all(coll_deque_t *deque, void *data) {
     size_t index;
     size_t count = 0;
-    while ((index = deque_index_of(deque, data)) < deque->len) {
-        deque_remove_at(deque, index);
+    while ((index = coll_deque_index_of(deque, data)) < deque->len) {
+        coll_deque_remove_at(deque, index);
         ++count;
     }
     return count;
 }
 
-void *deque_remove_if(Deque *deque, bool (*pred)(void *)) {
-    size_t index = deque_find(deque, pred);
-    return deque_remove_at(deque, index);
+void *coll_deque_remove_if(coll_deque_t *deque, bool (*pred)(void *)) {
+    size_t index = coll_deque_find(deque, pred);
+    return coll_deque_remove_at(deque, index);
 }
 
-void *deque_remove_at(Deque *deque, size_t index) {
+void *coll_deque_remove_at(coll_deque_t *deque, size_t index) {
     if (!deque || index >= deque->len) {
         return NULL;
     }
@@ -256,15 +256,15 @@ void *deque_remove_at(Deque *deque, size_t index) {
     void *data = deque->data[pos];
 
     if (index < deque->len / 2) {
-        deque_release(deque, pos, true);
+        coll_deque_release(deque, pos, true);
     } else {
-        deque_release(deque, pos, false);
+        coll_deque_release(deque, pos, false);
     }
     --(deque->len);
     return data;
 }
 
-void *deque_remove_first(Deque *deque) {
+void *coll_deque_remove_first(coll_deque_t *deque) {
     if (deque->len == 0) {
         return NULL;
     }
@@ -274,7 +274,7 @@ void *deque_remove_first(Deque *deque) {
     return data;
 }
 
-void *deque_remove_last(Deque *deque) {
+void *coll_deque_remove_last(coll_deque_t *deque) {
     if (deque->len == 0) {
         return NULL;
     }
@@ -283,22 +283,22 @@ void *deque_remove_last(Deque *deque) {
     return deque->data[deque->tail];
 }
 
-void deque_foreach(Deque *deque, void (*visit)(void *)) {
+void coll_deque_foreach(coll_deque_t *deque, void (*visit)(void *)) {
     for (size_t i = 0; i < deque->len; ++i) {
         visit(deque->data[index_to_pos(deque, i)]);
     }
 }
 
-bool deque_empty(Deque *deque) {
+bool coll_deque_empty(coll_deque_t *deque) {
     return deque->len == 0;
 }
 
-void deque_clear(Deque *deque) {
+void coll_deque_clear(coll_deque_t *deque) {
     deque->len = 0;
     deque->tail = deque->head;
 }
 
-void deque_free(Deque *deque) {
+void coll_deque_free(coll_deque_t *deque) {
     free(deque->data);
     free(deque);
 }

@@ -7,18 +7,18 @@
 
 typedef struct {
     void *_0, *_1;
-} Pair;
+} coll_pair_t;
 
 typedef struct {
     void *_0, *_1, *_2;
-} Triple;
+} coll_triple_t;
 
 typedef struct {
     void *_0, *_1, *_2, *_3;
-} Tuple4;
+} coll_tuple4_t;
 
 typedef struct {
     void *_0, *_1, *_2, *_3, *_4;
-} Tuple5;
+} coll_tuple5_t;
 
 #endif  //LIBCOLL_TUPLE_H

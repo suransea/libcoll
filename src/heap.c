@@ -9,21 +9,21 @@
 #include "coll/vector.h"
 
 struct coll_heap {
-    Vector *vector;
+    coll_vector_t *vector;
     int (*cmp)(void *, void *);
 };
 
-static inline void swap(Heap *heap, size_t x, size_t y) {
-    void *tmp = vector_at(heap->vector, x);
-    vector_assign(heap->vector, x, vector_at(heap->vector, y));
-    vector_assign(heap->vector, y, tmp);
+static inline void swap(coll_heap_t *heap, size_t x, size_t y) {
+    void *tmp = coll_vector_at(heap->vector, x);
+    coll_vector_assign(heap->vector, x, coll_vector_at(heap->vector, y));
+    coll_vector_assign(heap->vector, y, tmp);
 }
 
-static inline int cmp(Heap *heap, size_t x, size_t y) {
-    return heap->cmp(vector_at(heap->vector, x), vector_at(heap->vector, y));
+static inline int cmp(coll_heap_t *heap, size_t x, size_t y) {
+    return heap->cmp(coll_vector_at(heap->vector, x), coll_vector_at(heap->vector, y));
 }
 
-static void heapify_up(Heap *heap, size_t pos) {
+static void heapify_up(coll_heap_t *heap, size_t pos) {
     size_t parent = (pos - 1) / 2;
     while (pos > 0) {
         if (cmp(heap, pos, parent) < 0) {
@@ -35,8 +35,8 @@ static void heapify_up(Heap *heap, size_t pos) {
     }
 }
 
-static void heapify_down(Heap *heap, size_t pos) {
-    size_t size = vector_size(heap->vector);
+static void heapify_down(coll_heap_t *heap, size_t pos) {
+    size_t size = coll_vector_size(heap->vector);
     size_t l;
     while ((l = pos * 2 + 1) < size) {
         if (l < size - 1 && cmp(heap, l, l + 1) < 0) {
@@ -50,54 +50,54 @@ static void heapify_down(Heap *heap, size_t pos) {
     }
 }
 
-Heap *heap_new(int (*cmp)(void *, void *)) {
-    Heap *heap = malloc(sizeof(Heap));
-    heap->vector = vector_new(8);
+coll_heap_t *coll_heap_new(int (*cmp)(void *, void *)) {
+    coll_heap_t *heap = malloc(sizeof(coll_heap_t));
+    heap->vector = coll_vector_new(8);
     heap->cmp = cmp;
     return heap;
 }
 
-void heap_push(Heap *heap, void *data) {
-    size_t pos = vector_size(heap->vector);
-    vector_append(heap->vector, data);
+void coll_heap_push(coll_heap_t *heap, void *data) {
+    size_t pos = coll_vector_size(heap->vector);
+    coll_vector_append(heap->vector, data);
     heapify_up(heap, pos);
 }
 
-void *heap_pop(Heap *heap) {
-    if (vector_empty(heap->vector)) {
+void *coll_heap_pop(coll_heap_t *heap) {
+    if (coll_vector_empty(heap->vector)) {
         return NULL;
     }
-    size_t size = vector_size(heap->vector);
+    size_t size = coll_vector_size(heap->vector);
     swap(heap, 0, size - 1);
-    void *data = vector_remove_last(heap->vector);
+    void *data = coll_vector_remove_last(heap->vector);
     heapify_down(heap, 0);
     return data;
 }
 
-void *heap_top(Heap *heap) {
-    if (vector_empty(heap->vector)) {
+void *coll_heap_top(coll_heap_t *heap) {
+    if (coll_vector_empty(heap->vector)) {
         return NULL;
     }
-    return vector_at(heap->vector, 0);
+    return coll_vector_at(heap->vector, 0);
 }
 
-size_t heap_size(Heap *heap) {
-    return vector_size(heap->vector);
+size_t coll_heap_size(coll_heap_t *heap) {
+    return coll_vector_size(heap->vector);
 }
 
-bool heap_empty(Heap *heap) {
-    return vector_size(heap->vector) == 0;
+bool coll_heap_empty(coll_heap_t *heap) {
+    return coll_vector_size(heap->vector) == 0;
 }
 
-void heap_foreach(Heap *heap, void (*visit)(void *)) {
-    vector_foreach(heap->vector, visit);
+void coll_heap_foreach(coll_heap_t *heap, void (*visit)(void *)) {
+    coll_vector_foreach(heap->vector, visit);
 }
 
-void heap_clear(Heap *heap) {
-    vector_clear(heap->vector);
+void coll_heap_clear(coll_heap_t *heap) {
+    coll_vector_clear(heap->vector);
 }
 
-void heap_free(Heap *heap) {
-    vector_free(heap->vector);
+void coll_heap_free(coll_heap_t *heap) {
+    coll_vector_free(heap->vector);
     free(heap);
 }

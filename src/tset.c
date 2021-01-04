@@ -6,44 +6,44 @@
 
 #define NON_NULL ((void *) 1)
 
-TSet *tset_new() {
-    return tmap_new();
+coll_tset_t *coll_tset_new() {
+    return coll_tmap_new();
 }
 
-TSet *tset_new_custom(int (*cmp)(void *, void *)) {
-    return tmap_new_custom(cmp);
+coll_tset_t *coll_tset_new_custom(int (*cmp)(void *, void *)) {
+    return coll_tmap_new_custom(cmp);
 }
 
-bool tset_insert(TSet *set, void *data) {
-    return NULL == tmap_insert(set, data, NON_NULL);
+bool coll_tset_insert(coll_tset_t *set, void *data) {
+    return NULL == coll_tmap_insert(set, data, NON_NULL);
 }
 
-bool tset_remove(TSet *set, void *data) {
-    return NON_NULL == tmap_remove(set, data);
+bool coll_tset_remove(coll_tset_t *set, void *data) {
+    return NON_NULL == coll_tmap_remove(set, data);
 }
 
-bool tset_contains(TSet *set, void *data) {
-    return tmap_contains_key(set, data);
+bool coll_tset_contains(coll_tset_t *set, void *data) {
+    return coll_tmap_contains_key(set, data);
 }
 
-size_t tset_size(TSet *set) {
-    return tmap_size(set);
+size_t coll_tset_size(coll_tset_t *set) {
+    return coll_tmap_size(set);
 }
 
-bool tset_empty(TSet *set) {
-    return tmap_empty(set);
+bool coll_tset_empty(coll_tset_t *set) {
+    return coll_tmap_empty(set);
 }
 
-void tset_foreach(TSet *set, void (*visit)(void *)) {
-    Seq *seq = tmap_keys(set);
-    seq_foreach(seq, visit);
-    seq_free(seq);
+void coll_tset_foreach(coll_tset_t *set, void (*visit)(void *)) {
+    coll_seq_t *seq = coll_tmap_keys(set);
+    coll_seq_foreach(seq, visit);
+    coll_seq_free(seq);
 }
 
-void tset_clear(TSet *set) {
-    tmap_clear(set);
+void coll_tset_clear(coll_tset_t *set) {
+    coll_tmap_clear(set);
 }
 
-void tset_free(TSet *set) {
-    tmap_free(set);
+void coll_tset_free(coll_tset_t *set) {
+    coll_tmap_free(set);
 }

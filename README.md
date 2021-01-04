@@ -3,25 +3,25 @@
 Collections implemented in ANSI C.
 
 - [Linearity](#linearity)
-  - [List](#list)
-  - [Vector](#vector)
-  - [Array](#array)
-  - [Deque](#deque)
-  - [Seq](#seq)
-  - [Tuple](#tuple)
+  - [list](#list)
+  - [vector](#vector)
+  - [array](#array)
+  - [deque](#deque)
+  - [seq](#seq)
+  - [tuple](#tuple)
 - [Association](#association)
-  - [TMap](#tmap)
-  - [HMap](#hmap)
+  - [tmap](#tmap)
+  - [hmap](#hmap)
 - [Adapter](#adapter)
-  - [Stack](#stack)
-  - [Queue](#queue)
-  - [TSet](#tset)
-  - [HSet](#hset)
-  - [Heap](#heap)
+  - [stack](#stack)
+  - [queue](#queue)
+  - [tset](#tset)
+  - [hset](#hset)
+  - [heap](#heap)
 
 ## Linearity
 
-### List
+### list
 
 A doubly circular linked list.
 
@@ -40,7 +40,7 @@ O(min(i, n-i)) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
 * assign, reverse
 
-### Vector
+### vector
 
 A growable array.
 
@@ -59,7 +59,7 @@ O(1) | O(n-i) | O(n-i) | O(1) | O(n)
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
 * assign
 
-### Array
+### array
 
 A fixed array.
 
@@ -76,7 +76,7 @@ A fixed array.
 * at, first, last, index_of, find, foreach
 * assign
 
-### Deque
+### deque
 
 A double end queue supporting random access.
 
@@ -95,7 +95,7 @@ O(1) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
 * assign
 
-### Seq
+### seq
 
 A sequence implements a singly linked list.
 
@@ -114,13 +114,13 @@ O(i) | O(i) | O(i) | O(n) | O(1)
 * remove, remove_all, remove_if, remove_first, remove_last, remove_at, clear
 * assign, reverse
 
-### Tuple
+### tuple
 
 Tuples with 2 to 5 elements.
 
 ## Association
 
-### TMap
+### tmap
 
 A map implemented with red-black tree.
 
@@ -139,7 +139,7 @@ O(log n) | O(log n) | O(log n)
 * remove, clear
 * contains_key, contains_value
 
-### HMap
+### hmap
 
 A map implemented with hash table.
 
@@ -160,7 +160,7 @@ O(1) ~ O(n) | O(1) ~ O(n) | O(1) ~ O(n)
 
 ## Adapter
 
-### Stack
+### stack
 
 A stack implemented with vector.
 
@@ -172,7 +172,7 @@ A stack implemented with vector.
 * push
 * pop, clear
 
-### Queue
+### queue
 
 A queue implemented with deque.
 
@@ -184,7 +184,7 @@ A queue implemented with deque.
 * push
 * pop, clear
 
-### TSet
+### tset
 
 A set implemented with tree map.
 
@@ -203,7 +203,7 @@ O(log(n)) | O(log(n))
 * remove, clear
 * contains
 
-### HSet
+### hset
 
 A set implemented with hash map.
 
@@ -222,7 +222,7 @@ O(1) ~ O(n) | O(1) ~ O(n)
 * remove, clear
 * contains
 
-### Heap
+### heap
 
 A binary heap implemented with vector.
 

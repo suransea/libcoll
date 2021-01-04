@@ -8,26 +8,26 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct coll_deque Queue;
+typedef struct coll_deque coll_queue_t;
 
-Queue *queue_new(size_t cap);
+coll_queue_t *coll_queue_new(size_t cap);
 
-void queue_push(Queue *queue, void *data);
+void coll_queue_push(coll_queue_t *queue, void *data);
 
-void *queue_pop(Queue *queue);
+void *coll_queue_pop(coll_queue_t *queue);
 
-void *queue_front(Queue *queue);
+void *coll_queue_front(coll_queue_t *queue);
 
-void *queue_back(Queue *queue);
+void *coll_queue_back(coll_queue_t *queue);
 
-bool queue_empty(Queue *queue);
+bool coll_queue_empty(coll_queue_t *queue);
 
-void queue_foreach(Queue *queue, void (*visit)(void *));
+void coll_queue_foreach(coll_queue_t *queue, void (*visit)(void *));
 
-void queue_clear(Queue *queue);
+void coll_queue_clear(coll_queue_t *queue);
 
-size_t queue_size(Queue *queue);
+size_t coll_queue_size(coll_queue_t *queue);
 
-void queue_free(Queue *queue);
+void coll_queue_free(coll_queue_t *queue);
 
 #endif  //LIBCOLL_QUEUE_H

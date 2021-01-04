@@ -10,26 +10,26 @@
 
 #include "hmap.h"
 
-typedef struct coll_hmap HSet;
+typedef struct coll_hmap coll_hset_t;
 
-HSet *hset_new(size_t cap);
+coll_hset_t *coll_hset_new(size_t cap);
 
-HSet *hset_new_custom(size_t cap, unsigned (*hash)(void *), bool (*equal)(void *, void *));
+coll_hset_t *coll_hset_new_custom(size_t cap, unsigned (*hash)(void *), bool (*equal)(void *, void *));
 
-bool hset_insert(HSet *set, void *data);
+bool coll_hset_insert(coll_hset_t *set, void *data);
 
-bool hset_remove(HSet *set, void *data);
+bool coll_hset_remove(coll_hset_t *set, void *data);
 
-bool hset_contains(HSet *set, void *data);
+bool coll_hset_contains(coll_hset_t *set, void *data);
 
-size_t hset_size(HSet *set);
+size_t coll_hset_size(coll_hset_t *set);
 
-bool hset_empty(HSet *set);
+bool coll_hset_empty(coll_hset_t *set);
 
-void hset_foreach(HSet *set, void (*visit)(void *));
+void coll_hset_foreach(coll_hset_t *set, void (*visit)(void *));
 
-void hset_clear(HSet *set);
+void coll_hset_clear(coll_hset_t *set);
 
-void hset_free(HSet *set);
+void coll_hset_free(coll_hset_t *set);
 
 #endif  //LIBCOLL_HSET_H

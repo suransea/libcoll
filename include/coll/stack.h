@@ -8,24 +8,24 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct coll_vector Stack;
+typedef struct coll_vector coll_stack_t;
 
-Stack *stack_new(size_t cap);
+coll_stack_t *coll_stack_new(size_t cap);
 
-void stack_push(Stack *stack, void *data);
+void coll_stack_push(coll_stack_t *stack, void *data);
 
-void *stack_pop(Stack *stack);
+void *coll_stack_pop(coll_stack_t *stack);
 
-void *stack_peek(Stack *stack);
+void *coll_stack_peek(coll_stack_t *stack);
 
-size_t stack_size(Stack *stack);
+size_t coll_stack_size(coll_stack_t *stack);
 
-bool stack_empty(Stack *stack);
+bool coll_stack_empty(coll_stack_t *stack);
 
-void stack_foreach(Stack *stack, void (*visit)(void *));
+void coll_stack_foreach(coll_stack_t *stack, void (*visit)(void *));
 
-void stack_clear(Stack *stack);
+void coll_stack_clear(coll_stack_t *stack);
 
-void stack_free(Stack *stack);
+void coll_stack_free(coll_stack_t *stack);
 
 #endif  //LIBCOLL_STACK_H
