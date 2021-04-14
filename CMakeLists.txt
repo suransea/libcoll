@@ -10,12 +10,5 @@ include_directories(include)
 add_library(${PROJECT_NAME} ${SOURCE})
 
 
-# TESTS
-
-link_libraries(
-        coll
-)
-
-aux_source_directory(tests TEST_SRC)
-
-add_executable(tests ${TEST_SRC})
+# TEST
+add_subdirectory(test)
