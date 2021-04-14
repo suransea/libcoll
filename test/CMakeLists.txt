@@ -4,4 +4,4 @@ link_libraries(
 
 aux_source_directory(. TEST_SRC)
 
-add_executable(tests ${TEST_SRC})
+add_executable(test ${TEST_SRC})
