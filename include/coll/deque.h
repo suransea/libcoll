@@ -8,9 +8,14 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+struct coll_deque {
+    void **data;
+    size_t len, cap, head, tail;
+};
+
 typedef struct coll_deque coll_deque_t;
 
-coll_deque_t *coll_deque_new(size_t cap);
+void coll_deque_init(coll_deque_t *deque, size_t cap);
 
 void *coll_deque_append(coll_deque_t *deque, void *data);
 

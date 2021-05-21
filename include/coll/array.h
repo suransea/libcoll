@@ -8,9 +8,14 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+struct coll_array {
+    void **data;
+    size_t len;
+};
+
 typedef struct coll_array coll_array_t;
 
-coll_array_t *coll_array_new(size_t len);
+void coll_array_init(coll_array_t *array, size_t len);
 
 size_t coll_array_size(coll_array_t *array);
 

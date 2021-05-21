@@ -4,10 +4,8 @@
 
 #include "coll/stack.h"
 
-#include "coll/vector.h"
-
-coll_stack_t *coll_stack_new(size_t cap) {
-    return coll_vector_new(cap);
+void coll_stack_init(coll_stack_t *stack, size_t cap) {
+    coll_vector_init(stack, cap);
 }
 
 void coll_stack_push(coll_stack_t *stack, void *data) {

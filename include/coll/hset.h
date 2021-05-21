@@ -8,13 +8,13 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "hmap.h"
+#include "coll/hmap.h"
 
 typedef struct coll_hmap coll_hset_t;
 
-coll_hset_t *coll_hset_new(size_t cap);
+void coll_hset_init(coll_hset_t *set, size_t cap);
 
-coll_hset_t *coll_hset_new_custom(size_t cap, unsigned (*hash)(void *), bool (*equal)(void *, void *));
+void coll_hset_new_custom(coll_hset_t *set, size_t cap, unsigned (*hash)(void *), bool (*equal)(void *, void *));
 
 bool coll_hset_insert(coll_hset_t *set, void *data);
 

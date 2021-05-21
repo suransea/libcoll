@@ -10,19 +10,38 @@
 
 #include "seq.h"
 
+typedef unsigned char coll_entry_color_t;  // map entry color
+
+#define COLL_ENTRY_COLOR_RED 0x01u
+#define COLL_ENTRY_COLOR_BLACK 0x00u
+
+typedef struct coll_tmap_entry coll_tmap_entry_t;  // map entry, node of red-black tree
+
+struct coll_tmap_entry {
+    void *key, *val;
+    coll_tmap_entry_t *left, *right, *parent;
+    coll_entry_color_t color;
+};
+
+struct coll_tmap {
+    coll_tmap_entry_t *root;
+    size_t size;
+    int (*cmp)(void *, void *);
+};
+
 typedef struct coll_tmap coll_tmap_t;
 
-coll_tmap_t *coll_tmap_new();
+void coll_tmap_init(coll_tmap_t *map);
 
-coll_tmap_t *coll_tmap_new_custom(int (*cmp)(void *, void *));
+void coll_tmap_init_custom(coll_tmap_t *map, int (*cmp)(void *, void *));
 
 void *coll_tmap_insert(coll_tmap_t *map, void *key, void *value);
 
 void *coll_tmap_value_of(coll_tmap_t *map, void *key);
 
-coll_seq_t *coll_tmap_keys(coll_tmap_t *map);
+coll_seq_t coll_tmap_keys(coll_tmap_t *map);
 
-coll_seq_t *coll_tmap_values(coll_tmap_t *map);
+coll_seq_t coll_tmap_values(coll_tmap_t *map);
 
 size_t coll_tmap_size(coll_tmap_t *map);
 

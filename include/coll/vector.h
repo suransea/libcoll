@@ -8,9 +8,15 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+struct coll_vector {
+    void **data;
+    size_t len;
+    size_t cap;
+};
+
 typedef struct coll_vector coll_vector_t;
 
-coll_vector_t *coll_vector_new(size_t cap);
+void coll_vector_init(coll_vector_t *vector, size_t cap);
 
 void *coll_vector_append(coll_vector_t *vector, void *data);
 

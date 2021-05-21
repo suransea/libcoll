@@ -8,16 +8,6 @@
 
 typedef struct coll_seq_node node_t;
 
-struct coll_seq {
-    node_t *head;
-    size_t len;
-};
-
-struct coll_seq_node {
-    void *data;
-    node_t *next;
-};
-
 static node_t *coll_seq_last_node(coll_seq_t *seq) {
     node_t *cur = seq->head;
     if (!cur) {
@@ -37,11 +27,9 @@ static node_t *coll_seq_node_at(coll_seq_t *seq, size_t index) {
     return cur;
 }
 
-coll_seq_t *coll_seq_new() {
-    coll_seq_t *seq = malloc(sizeof(coll_seq_t));
+void coll_seq_init(coll_seq_t *seq) {
     seq->len = 0;
     seq->head = NULL;
-    return seq;
 }
 
 void *coll_seq_append(coll_seq_t *seq, void *data) {
@@ -391,5 +379,4 @@ void coll_seq_reverse(coll_seq_t *seq) {
 
 void coll_seq_free(coll_seq_t *seq) {
     coll_seq_clear(seq);
-    free(seq);
 }

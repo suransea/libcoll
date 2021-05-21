@@ -6,12 +6,12 @@
 
 #define NON_NULL ((void *) 1)
 
-coll_tset_t *coll_tset_new() {
-    return coll_tmap_new();
+void coll_tset_init(coll_tset_t *set) {
+    coll_tmap_init(set);
 }
 
-coll_tset_t *coll_tset_new_custom(int (*cmp)(void *, void *)) {
-    return coll_tmap_new_custom(cmp);
+void coll_tset_new_custom(coll_tset_t *set, int (*cmp)(void *, void *)) {
+    coll_tmap_init_custom(set, cmp);
 }
 
 bool coll_tset_insert(coll_tset_t *set, void *data) {
@@ -35,9 +35,9 @@ bool coll_tset_empty(coll_tset_t *set) {
 }
 
 void coll_tset_foreach(coll_tset_t *set, void (*visit)(void *)) {
-    coll_seq_t *seq = coll_tmap_keys(set);
-    coll_seq_foreach(seq, visit);
-    coll_seq_free(seq);
+    coll_seq_t seq = coll_tmap_keys(set);
+    coll_seq_foreach(&seq, visit);
+    coll_seq_free(&seq);
 }
 
 void coll_tset_clear(coll_tset_t *set) {

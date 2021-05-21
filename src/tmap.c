@@ -7,24 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct coll_tmap_entry entry_t;  // map entry, node of red-black tree
+typedef struct coll_tmap_entry entry_t;
 
-typedef unsigned char color_t;  // map entry color
+typedef coll_entry_color_t color_t;
 
-#define RED 0x01u
-#define BLACK 0x00u
-
-struct coll_tmap_entry {
-    void *key, *val;
-    entry_t *left, *right, *parent;
-    color_t color;
-};
-
-struct coll_tmap {
-    entry_t *root;
-    size_t size;
-    int (*cmp)(void *, void *);
-};
+#define RED COLL_ENTRY_COLOR_RED
+#define BLACK COLL_ENTRY_COLOR_BLACK
 
 static entry_t *coll_tmap_entry_of(coll_tmap_t *map, void *key) {
     entry_t *cur = map->root;
@@ -279,16 +267,14 @@ static void coll_tmap_balance_remove(coll_tmap_t *map, entry_t *entry) {
     dye(entry, BLACK);
 }
 
-coll_tmap_t *coll_tmap_new() {
-    return coll_tmap_new_custom(coll_cmp_ptr);
+void coll_tmap_init(coll_tmap_t *map) {
+    coll_tmap_init_custom(map, coll_cmp_ptr);
 }
 
-coll_tmap_t *coll_tmap_new_custom(int (*cmp)(void *, void *)) {
-    coll_tmap_t *map = malloc(sizeof(coll_tmap_t));
+void coll_tmap_init_custom(coll_tmap_t *map, int (*cmp)(void *, void *)) {
     map->size = 0;
     map->cmp = cmp;
     map->root = NULL;
-    return map;
 }
 
 void *coll_tmap_insert(coll_tmap_t *map, void *key, void *value) {
@@ -332,21 +318,23 @@ void *coll_tmap_value_of(coll_tmap_t *map, void *key) {
     return NULL;
 }
 
-coll_seq_t *coll_tmap_keys(coll_tmap_t *map) {
-    coll_seq_t *seq = coll_seq_new();
+coll_seq_t coll_tmap_keys(coll_tmap_t *map) {
+    coll_seq_t seq;
+    coll_seq_init(&seq);
     entry_t *cur = entry_last(map->root);
     while (cur) {
-        coll_seq_prepend(seq, cur->key);
+        coll_seq_prepend(&seq, cur->key);
         cur = entry_prev(cur);
     }
     return seq;
 }
 
-coll_seq_t *coll_tmap_values(coll_tmap_t *map) {
-    coll_seq_t *seq = coll_seq_new();
+coll_seq_t coll_tmap_values(coll_tmap_t *map) {
+    coll_seq_t seq;
+    coll_seq_init(&seq);
     entry_t *cur = entry_last(map->root);
     while (cur) {
-        coll_seq_prepend(seq, cur->val);
+        coll_seq_prepend(&seq, cur->val);
         cur = entry_prev(cur);
     }
     return seq;
@@ -425,14 +413,15 @@ void *coll_tmap_remove(coll_tmap_t *map, void *key) {
 }
 
 void coll_tmap_clear(coll_tmap_t *map) {
-    coll_seq_t *seq = coll_seq_new();
+    coll_seq_t seq;
+    coll_seq_init(&seq);
     entry_t *cur = entry_last(map->root);
     while (cur) {
-        coll_seq_prepend(seq, cur);
+        coll_seq_prepend(&seq, cur);
         cur = entry_prev(cur);
     }
-    coll_seq_foreach(seq, free);
-    coll_seq_free(seq);
+    coll_seq_foreach(&seq, free);
+    coll_seq_free(&seq);
     map->root = NULL;
     map->size = 0;
 }
@@ -448,7 +437,6 @@ void coll_tmap_foreach(coll_tmap_t *map, void (*visit)(void *, void *)) {
 
 void coll_tmap_free(coll_tmap_t *map) {
     coll_tmap_clear(map);
-    free(map);
 }
 
 

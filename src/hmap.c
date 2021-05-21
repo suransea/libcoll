@@ -9,20 +9,6 @@
 
 typedef struct coll_hmap_entry entry_t;
 
-struct coll_hmap_entry {
-    void *key, *val;
-    entry_t *next;
-    unsigned hash;
-};
-
-struct coll_hmap {
-    entry_t **entries;
-    size_t size;
-    size_t cap;
-    unsigned (*hash)(void *key);
-    bool (*equal)(void *, void *);
-};
-
 const static size_t MAX_CAP = 1u << 30u;  // for unsigned, maximum of powers of 2
 
 const static double LOAD_FACTOR = 0.75;
@@ -99,18 +85,16 @@ static entry_t *coll_hmap_entry_of(coll_hmap_t *map, void *key) {
     return NULL;
 }
 
-coll_hmap_t *coll_hmap_new(size_t cap) {
-    return coll_hmap_new_custom(cap, coll_hash_ptr, coll_equal_ptr);
+void coll_hmap_init(coll_hmap_t *map, size_t cap) {
+    coll_hmap_init_custom(map, cap, coll_hash_ptr, coll_equal_ptr);
 }
 
-coll_hmap_t *coll_hmap_new_custom(size_t cap, unsigned (*hash)(void *), bool (*equal)(void *, void *)) {
-    coll_hmap_t *map = malloc(sizeof(coll_hmap_t));
+void coll_hmap_init_custom(coll_hmap_t *map, size_t cap, unsigned (*hash)(void *), bool (*equal)(void *, void *)) {
     map->cap = prime_cap(cap);
     map->entries = calloc(map->cap, sizeof(entry_t *));
     map->size = 0;
     map->hash = hash;
     map->equal = equal;
-    return map;
 }
 
 void *coll_hmap_insert(coll_hmap_t *map, void *key, void *value) {
@@ -137,24 +121,26 @@ void *coll_hmap_value_of(coll_hmap_t *map, void *key) {
     return NULL;
 }
 
-coll_seq_t *coll_hmap_keys(coll_hmap_t *map) {
-    coll_seq_t *seq = coll_seq_new();
+coll_seq_t coll_hmap_keys(coll_hmap_t *map) {
+    coll_seq_t seq;
+    coll_seq_init(&seq);
     for (int i = 0; i < map->cap; ++i) {
         entry_t *entry = map->entries[i];
         while (entry) {
-            coll_seq_prepend(seq, entry->key);
+            coll_seq_prepend(&seq, entry->key);
             entry = entry->next;
         }
     }
     return seq;
 }
 
-coll_seq_t *coll_hmap_values(coll_hmap_t *map) {
-    coll_seq_t *seq = coll_seq_new();
+coll_seq_t coll_hmap_values(coll_hmap_t *map) {
+    coll_seq_t seq;
+    coll_seq_init(&seq);
     for (int i = 0; i < map->cap; ++i) {
         entry_t *entry = map->entries[i];
         while (entry) {
-            coll_seq_prepend(seq, entry->val);
+            coll_seq_prepend(&seq, entry->val);
             entry = entry->next;
         }
     }
@@ -235,7 +221,6 @@ void coll_hmap_foreach(coll_hmap_t *map, void (*visit)(void *, void *)) {
 void coll_hmap_free(coll_hmap_t *map) {
     coll_hmap_clear(map);
     free(map->entries);
-    free(map);
 }
 
 // hash and equal functions

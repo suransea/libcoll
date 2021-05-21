@@ -8,9 +8,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "coll/deque.h"
+
 typedef struct coll_deque coll_queue_t;
 
-coll_queue_t *coll_queue_new(size_t cap);
+void coll_queue_init(coll_queue_t *queue, size_t cap);
 
 void coll_queue_push(coll_queue_t *queue, void *data);
 

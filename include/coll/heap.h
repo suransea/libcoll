@@ -8,9 +8,16 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "coll/vector.h"
+
+struct coll_heap {
+    coll_vector_t vector;
+    int (*cmp)(void *, void *);
+};
+
 typedef struct coll_heap coll_heap_t;
 
-coll_heap_t *coll_heap_new(int (*cmp)(void *, void *));
+void coll_heap_init(coll_heap_t *heap, int (*cmp)(void *, void *));
 
 void coll_heap_push(coll_heap_t *heap, void *data);
 

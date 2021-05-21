@@ -7,12 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct coll_vector {
-    void **data;
-    size_t len;
-    size_t cap;
-};
-
 static void coll_vector_resize(coll_vector_t *vector) {
     size_t cap_new = vector->cap * 2;
     void *tmp = realloc(vector->data, cap_new * sizeof(void *));
@@ -20,15 +14,13 @@ static void coll_vector_resize(coll_vector_t *vector) {
     vector->cap = cap_new;
 }
 
-coll_vector_t *coll_vector_new(size_t cap) {
+void coll_vector_init(coll_vector_t *vector, size_t cap) {
     if (cap == 0) {
         cap = 1;
     }
-    coll_vector_t *vector = malloc(sizeof(coll_vector_t));
     vector->data = malloc(cap * sizeof(void *));
     vector->cap = cap;
     vector->len = 0;
-    return vector;
 }
 
 void *coll_vector_append(coll_vector_t *vector, void *data) {
@@ -217,5 +209,4 @@ void coll_vector_clear(coll_vector_t *vector) {
 
 void coll_vector_free(coll_vector_t *vector) {
     free(vector->data);
-    free(vector);
 }

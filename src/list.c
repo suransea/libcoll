@@ -8,16 +8,6 @@
 
 typedef struct coll_list_node node_t;
 
-struct coll_list_node {
-    void *data;
-    node_t *prev, *next;
-};
-
-struct coll_list {
-    node_t *head;
-    size_t len;
-};
-
 static void coll_list_insert_node(coll_list_t *list, node_t *node, node_t *pos) {
     node_t *next = pos->next;
     pos->next = node;
@@ -61,13 +51,11 @@ static node_t *coll_list_node_at(coll_list_t *list, size_t index) {
     return cur;
 }
 
-coll_list_t *coll_list_new() {
-    coll_list_t *list = malloc(sizeof(coll_list_t));
+void coll_list_init(coll_list_t *list) {
     list->len = 0;
     node_t *node = malloc(sizeof(node_t));
     list->head = node->prev = node->next = node;
     node->data = NULL;
-    return list;
 }
 
 void *coll_list_append(coll_list_t *list, void *data) {
@@ -311,5 +299,4 @@ void coll_list_clear(coll_list_t *list) {
 void coll_list_free(coll_list_t *list) {
     coll_list_clear(list);
     free(list->head);
-    free(list);
 }

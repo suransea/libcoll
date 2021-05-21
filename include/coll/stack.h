@@ -8,9 +8,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "coll/vector.h"
+
 typedef struct coll_vector coll_stack_t;
 
-coll_stack_t *coll_stack_new(size_t cap);
+void coll_stack_init(coll_stack_t *stack, size_t cap);
 
 void coll_stack_push(coll_stack_t *stack, void *data);
 

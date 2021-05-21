@@ -33,7 +33,7 @@ O(min(i, n-i)) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 
 #### Operations
 
-* new, free
+* init, free
 * size, empty
 * at, first, last, index_of, find, foreach
 * append, prepend, insert_at, insert_before, insert_after, insert_sorted
@@ -52,7 +52,7 @@ O(1) | O(n-i) | O(n-i) | O(1) | O(n)
 
 #### Operations
 
-* new, free
+* init, free
 * size, empty
 * at, first, last, index_of, find, foreach
 * append, prepend, insert_at, insert_before, insert_after
@@ -71,7 +71,7 @@ A fixed array.
 
 #### Operations
 
-* new, free
+* init, free
 * size, empty
 * at, first, last, index_of, find, foreach
 * assign
@@ -88,7 +88,7 @@ O(1) | O(min(i, n-i)) | O(min(i, n-i)) | O(1) | O(1)
 
 #### Operations
 
-* new, free
+* init, free
 * size, empty
 * at, first, last, index_of, find, foreach
 * append, prepend, insert_at, insert_before, insert_after
@@ -107,7 +107,7 @@ O(i) | O(i) | O(i) | O(n) | O(1)
 
 #### Operations
 
-* new, free
+* init, free
 * size, empty
 * at, first, last, index_of, find, foreach
 * append, prepend, insert_at, insert_before, insert_after, insert_sorted
@@ -132,7 +132,7 @@ O(log n) | O(log n) | O(log n)
 
 #### Operations
 
-* new, new_custom, free
+* init, init_custom, free
 * size, empty
 * value_of, foreach, keys, values
 * insert
@@ -151,7 +151,7 @@ O(1) ~ O(n) | O(1) ~ O(n) | O(1) ~ O(n)
 
 #### Operations
 
-* new, new_custom, free
+* init, init_custom, free
 * size, empty
 * value_of, foreach, keys, values
 * insert
@@ -166,7 +166,7 @@ A stack implemented with vector.
 
 #### Operations
 
-* new, free
+* init, free
 * size, empty
 * peek, foreach
 * push
@@ -178,7 +178,7 @@ A queue implemented with deque.
 
 #### Operations
 
-* new, free
+* init, free
 * size, empty
 * front, back, foreach
 * push
@@ -196,7 +196,7 @@ O(log(n)) | O(log(n))
 
 #### Operations
 
-* new, new_custom, free
+* init, init_custom, free
 * size, empty
 * foreach
 * insert
@@ -215,7 +215,7 @@ O(1) ~ O(n) | O(1) ~ O(n)
 
 #### Operations
 
-* new, new_custom, free
+* init, init_custom, free
 * size, empty
 * foreach
 * insert
@@ -228,7 +228,7 @@ A binary heap implemented with vector.
 
 #### Operations
 
-* new, free
+* init, free
 * size, empty
 * top, foreach
 * push

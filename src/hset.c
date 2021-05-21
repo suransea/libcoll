@@ -6,12 +6,12 @@
 
 #define NON_NULL ((void *) 1)
 
-coll_hset_t *coll_hset_new(size_t cap) {
-    return coll_hmap_new(cap);
+void coll_hset_init(coll_hset_t *set, size_t cap) {
+    coll_hmap_init(set, cap);
 }
 
-coll_hset_t *coll_hset_new_custom(size_t cap, unsigned (*hash)(void *), bool (*equal)(void *, void *)) {
-    return coll_hmap_new_custom(cap, hash, equal);
+void coll_hset_new_custom(coll_hset_t *set, size_t cap, unsigned (*hash)(void *), bool (*equal)(void *, void *)) {
+    coll_hmap_init_custom(set, cap, hash, equal);
 }
 
 bool coll_hset_insert(coll_hset_t *set, void *data) {
@@ -35,9 +35,9 @@ bool coll_hset_empty(coll_hset_t *set) {
 }
 
 void coll_hset_foreach(coll_hset_t *set, void (*visit)(void *)) {
-    coll_seq_t *seq = coll_hmap_keys(set);
-    coll_seq_foreach(seq, visit);
-    coll_seq_free(seq);
+    coll_seq_t seq = coll_hmap_keys(set);
+    coll_seq_foreach(&seq, visit);
+    coll_seq_free(&seq);
 }
 
 void coll_hset_clear(coll_hset_t *set) {

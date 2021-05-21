@@ -6,16 +6,9 @@
 
 #include <stdlib.h>
 
-struct coll_array {
-    void **data;
-    size_t len;
-};
-
-coll_array_t *coll_array_new(size_t len) {
-    coll_array_t *array = malloc(sizeof(coll_array_t));
+void coll_array_init(coll_array_t *array, size_t len) {
     array->len = len;
     array->data = len == 0 ? NULL : calloc(len, sizeof(void *));
-    return array;
 }
 
 size_t coll_array_size(coll_array_t *array) {
@@ -82,5 +75,4 @@ bool coll_array_empty(coll_array_t *array) {
 
 void coll_array_free(coll_array_t *array) {
     free(array->data);
-    free(array);
 }

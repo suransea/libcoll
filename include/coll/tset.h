@@ -8,13 +8,13 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "tmap.h"
+#include "coll/tmap.h"
 
 typedef struct coll_tmap coll_tset_t;
 
-coll_tset_t *coll_tset_new();
+void coll_tset_init(coll_tset_t *set);
 
-coll_tset_t *coll_tset_new_custom(int (*cmp)(void *, void *));
+void coll_tset_init_custom(coll_tset_t *set, int (*cmp)(void *, void *));
 
 bool coll_tset_insert(coll_tset_t *set, void *data);
 

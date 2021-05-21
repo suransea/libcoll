@@ -7,11 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct coll_deque {
-    void **data;
-    size_t len, cap, head, tail;
-};
-
 static inline size_t pos_prev(size_t pos, size_t cap) {
     return pos == 0 ? cap - 1 : pos - 1;
 }
@@ -104,15 +99,13 @@ static void coll_deque_resize(coll_deque_t *deque) {
     deque->cap = cap_new;
 }
 
-coll_deque_t *coll_deque_new(size_t cap) {
+void coll_deque_init(coll_deque_t *deque, size_t cap) {
     if (cap == 0) {
         cap = 1;
     }
-    coll_deque_t *deque = malloc(sizeof(coll_deque_t));
     deque->data = malloc(cap * sizeof(void *));
     deque->cap = cap;
     deque->len = deque->head = deque->tail = 0;
-    return deque;
 }
 
 void *coll_deque_append(coll_deque_t *deque, void *data) {
@@ -300,5 +293,4 @@ void coll_deque_clear(coll_deque_t *deque) {
 
 void coll_deque_free(coll_deque_t *deque) {
     free(deque->data);
-    free(deque);
 }

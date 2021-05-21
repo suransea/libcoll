@@ -8,21 +8,37 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "seq.h"
+#include "coll/seq.h"
+
+typedef struct coll_hmap_entry coll_hmap_entry_t;
+
+struct coll_hmap_entry {
+    void *key, *val;
+    coll_hmap_entry_t *next;
+    unsigned hash;
+};
+
+struct coll_hmap {
+    coll_hmap_entry_t **entries;
+    size_t size;
+    size_t cap;
+    unsigned (*hash)(void *key);
+    bool (*equal)(void *, void *);
+};
 
 typedef struct coll_hmap coll_hmap_t;
 
-coll_hmap_t *coll_hmap_new(size_t cap);
+void coll_hmap_init(coll_hmap_t *map, size_t cap);
 
-coll_hmap_t *coll_hmap_new_custom(size_t cap, unsigned (*hash)(void *key), bool (*equal)(void *, void *));
+void coll_hmap_init_custom(coll_hmap_t *map, size_t cap, unsigned (*hash)(void *key), bool (*equal)(void *, void *));
 
 void *coll_hmap_insert(coll_hmap_t *map, void *key, void *value);
 
 void *coll_hmap_value_of(coll_hmap_t *map, void *key);
 
-coll_seq_t *coll_hmap_keys(coll_hmap_t *map);
+coll_seq_t coll_hmap_keys(coll_hmap_t *map);
 
-coll_seq_t *coll_hmap_values(coll_hmap_t *map);
+coll_seq_t coll_hmap_values(coll_hmap_t *map);
 
 size_t coll_hmap_size(coll_hmap_t *map);
 

@@ -8,9 +8,21 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+typedef struct coll_seq_node coll_seq_node_t;
+
+struct coll_seq_node {
+    void *data;
+    coll_seq_node_t *next;
+};
+
+struct coll_seq {
+    coll_seq_node_t *head;
+    size_t len;
+};
+
 typedef struct coll_seq coll_seq_t;
 
-coll_seq_t *coll_seq_new();
+void coll_seq_init(coll_seq_t *seq);
 
 void *coll_seq_append(coll_seq_t *seq, void *data);
 

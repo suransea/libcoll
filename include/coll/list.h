@@ -8,9 +8,21 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+typedef struct coll_list_node coll_list_node_t;
+
+struct coll_list_node {
+    void *data;
+    coll_list_node_t *prev, *next;
+};
+
+struct coll_list {
+    coll_list_node_t *head;
+    size_t len;
+};
+
 typedef struct coll_list coll_list_t;
 
-coll_list_t *coll_list_new();
+void coll_list_init(coll_list_t *list);
 
 void *coll_list_append(coll_list_t *list, void *data);
 

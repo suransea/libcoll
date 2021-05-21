@@ -4,10 +4,8 @@
 
 #include "coll/queue.h"
 
-#include "coll/deque.h"
-
-coll_queue_t *coll_queue_new(size_t cap) {
-    return coll_deque_new(cap);
+void coll_queue_init(coll_queue_t *queue, size_t cap) {
+    coll_deque_init(queue, cap);
 }
 
 void coll_queue_push(coll_queue_t *queue, void *data) {
